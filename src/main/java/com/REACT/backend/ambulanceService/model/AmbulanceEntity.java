@@ -1,10 +1,8 @@
 package com.REACT.backend.ambulanceService.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
 
@@ -13,6 +11,8 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor @NoArgsConstructor @ToString
 @Builder
+
+@Table(name = "ambulance_entity")
 public class AmbulanceEntity {
 
     @Id
@@ -23,10 +23,11 @@ public class AmbulanceEntity {
 
     private String ambulanceDriverName;
 
+    @Enumerated(EnumType.STRING)
     private AmbulanceStatus status;
 
-    private double latitude;
-    private  double longitude;
+    @Column(columnDefinition = "GEOGRAPHY(Point,4326)")
+    private Point location;
 
     private Instant lastUpdated;
 

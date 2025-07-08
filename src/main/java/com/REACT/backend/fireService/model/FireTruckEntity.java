@@ -2,6 +2,7 @@ package com.REACT.backend.fireService.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
 
@@ -27,9 +28,8 @@ public class FireTruckEntity {
 
     private Instant lastUpdated;
 
-    private double latitude;
-
-    private double longitude;
+    @Column(columnDefinition = "GEOGRAPHY(Point,4326)")
+    private Point location;
 
     @ManyToOne
     @JoinColumn(name = "station_id")

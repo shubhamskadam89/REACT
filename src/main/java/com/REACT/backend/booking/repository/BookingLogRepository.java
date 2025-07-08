@@ -1,0 +1,27 @@
+package com.REACT.backend.booking.repository;
+
+import com.REACT.backend.booking.model.BookingLogEntity;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Long> {
+
+
+
+        @Modifying
+        @Transactional
+        @Query(value = "INSERT INTO booking_log_fire_trucks (booking_log_id, fire_truck_id) VALUES (:logId, :truckId)", nativeQuery = true)
+        void insertFireTruckToLog(@Param("logId") Long logId, @Param("truckId") Long truckId);
+
+        @Modifying
+        @Transactional
+        @Query(value = "INSERT INTO booking_log_police_allocations (booking_log_id, station_id, officers_assigned) VALUES (:logId, :stationId, :officers)", nativeQuery = true)
+        void insertPoliceAllocation(@Param("logId") Long logId, @Param("stationId") Long stationId, @Param("officers") Integer officers);
+
+
+}

@@ -2,6 +2,7 @@ package com.REACT.backend.policeService.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
 
@@ -20,9 +21,8 @@ public class PoliceStationEntity {
 
     private String stationName;
 
-    private double latitude;
-
-    private double longitude;
+    @Column(columnDefinition = "GEOGRAPHY(Point,4326)")
+    private Point location;
 
     private int availableOfficers;
 
