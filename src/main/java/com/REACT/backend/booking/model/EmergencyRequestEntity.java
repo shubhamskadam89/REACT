@@ -1,5 +1,6 @@
 package com.REACT.backend.booking.model;
 
+import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.users.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,14 @@ public class EmergencyRequestEntity {
     @JoinColumn(name = "requested_by_id")
     private AppUser requestedBy;
 
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private AppUser driver;
 
+
+    @ManyToOne
+    @JoinColumn(name = "ambulance_id")
+    private AmbulanceEntity ambulance;
     private boolean isForSelf;
 
     private String victimPhoneNumber;
@@ -48,6 +56,4 @@ public class EmergencyRequestEntity {
     private EmergencyRequestStatus emergencyRequestStatus = EmergencyRequestStatus.PENDING;
 
     private Instant createdAt = Instant.now();
-
-
 }

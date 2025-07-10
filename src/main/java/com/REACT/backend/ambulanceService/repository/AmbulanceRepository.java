@@ -24,17 +24,25 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
             @Param("lng") double longitude,
             @Param("radius") double radiusInMeters
     );
+
     @Query(value = """
-    SELECT * FROM ambulance_entity a
-    WHERE a.status = 'AVAILABLE'
-      AND ST_DWithin(a.location, ST_MakePoint(:lng, :lat)::geography, :radius)
-    ORDER BY ST_Distance(a.location, ST_MakePoint(:lng, :lat)::geography)
-""", nativeQuery = true)
+        SELECT * FROM ambulance_entity a
+        WHERE a.status = 'AVAILABLE'
+          AND ST_DWithin(a.location, ST_MakePoint(:lng, :lat)::geography, :radius)
+        ORDER BY ST_Distance(a.location, ST_MakePoint(:lng, :lat)::geography)
+        """, nativeQuery = true)
     List<AmbulanceEntity> findAvailableWithinRadius(
             @Param("lat") double lat,
             @Param("lng") double lng,
             @Param("radius") double radiusMeters
     );
 
+    /**
+     * Find ambulance assigned to a specific driver & request.
+     */
+    Optional<AmbulanceEntity> findByDriver_UserIdAndAssignedRequest_Id(
+            Long driverId,
+            Long requestId
+    );
 
 }

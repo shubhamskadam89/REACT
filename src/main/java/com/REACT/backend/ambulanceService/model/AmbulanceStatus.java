@@ -8,5 +8,6 @@ import lombok.ToString;
 public enum AmbulanceStatus {
     AVAILABLE,
     EN_ROUTE,
-    BUSY
+    BUSY,
+    PENDING_ACCEPTANCE
 }
