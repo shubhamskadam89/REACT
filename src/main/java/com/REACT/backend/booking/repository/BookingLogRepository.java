@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Long> {
 
@@ -22,6 +24,6 @@ public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Lo
         @Transactional
         @Query(value = "INSERT INTO booking_log_police_allocations (booking_log_id, station_id, officers_assigned) VALUES (:logId, :stationId, :officers)", nativeQuery = true)
         void insertPoliceAllocation(@Param("logId") Long logId, @Param("stationId") Long stationId, @Param("officers") Integer officers);
-
+        Optional<BookingLogEntity> findByEmergencyRequest_Id(Long emergencyRequestId);
 
 }
