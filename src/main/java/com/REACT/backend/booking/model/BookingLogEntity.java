@@ -1,7 +1,10 @@
 package com.REACT.backend.booking.model;
 
+import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+import com.REACT.backend.fireService.dto.FireTruckDto;
 import com.REACT.backend.fireService.model.FireTruckEntity;
+import com.REACT.backend.policeService.model.PoliceStationEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,32 +30,39 @@ public class BookingLogEntity {
     @JoinColumn(name = "emergency_request_id", unique = true)
     private EmergencyRequestEntity emergencyRequest;
 
-    @ManyToOne
-    @JoinColumn(name = "assigned_ambulance_id")
-    private AmbulanceEntity assignedAmbulance;
+
+    @JoinTable(
+            name = "booking_log_assigned_ambulances",
+            joinColumns = @JoinColumn(name = "booking_log_id"),
+            inverseJoinColumns = @JoinColumn(name = "ambulance_id")
+    )
+    @ManyToMany
+    private List<AmbulanceEntity> assignedAmbulance;
 
 
     /**
      * stationId → number of officers assigned from that station
      */
+
     @ElementCollection
-    @CollectionTable(
-            name = "booking_log_police_allocations",
-            joinColumns = @JoinColumn(name = "booking_log_id")
-    )
-    @MapKeyColumn(name = "station_id")
-    @Column(name = "officers_assigned")
-    private Map<Long, Integer> assignedPoliceMap;
+    @CollectionTable(name = "booking_log_police_map", joinColumns = @JoinColumn(name = "booking_log_id"))
+    @MapKeyJoinColumn(name = "station_id")
+    @Column(name = "officer_count")
+    private Map<PoliceStationEntity, Integer> assignedPoliceMap;
+
+
+
 
     /**
      * list of individual fire trucks dispatched
      */
-    @ManyToMany
+
     @JoinTable(
-            name = "booking_log_fire_trucks",
+            name = "booking_log_assigned_fire_trucks",
             joinColumns = @JoinColumn(name = "booking_log_id"),
             inverseJoinColumns = @JoinColumn(name = "fire_truck_id")
     )
+    @ManyToMany
     private List<FireTruckEntity> assignedFireTrucks;
 
     @Column(length = 1024)

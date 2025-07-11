@@ -1,18 +1,34 @@
 package com.REACT.backend.ambulanceService.dto;
 
+import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import lombok.*;
+
+import java.time.Instant;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class AmbulanceDto {
     private Long id;
-    private String ambulanceNumberPlate;
-    private String ambulanceDriverName;
-    private String status;
+    private String regNumber;
+    private String driverName;
+    private AmbulanceStatus status;
     private double latitude;
     private double longitude;
-}
+    private Instant lastUpdated;
 
+    public AmbulanceDto(AmbulanceEntity entity) {
+        this.id = entity.getId();
+        this.regNumber = entity.getAmbulanceNumberPlate();
+        this.driverName = entity.getAmbulanceDriverName();
+        this.status = entity.getStatus();
+        this.lastUpdated = entity.getLastUpdated();
+        if (entity.getLocation() != null) {
+            this.latitude = entity.getLocation().getY();
+            this.longitude = entity.getLocation().getX();
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package com.REACT.backend.booking.dto;
 
 import com.REACT.backend.users.AppUser;
+import jakarta.persistence.Entity;
 import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder

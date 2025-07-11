@@ -2,6 +2,10 @@ package com.REACT.backend.booking.service;
 
 import com.REACT.backend.booking.dto.BookingRequestDto;
 import com.REACT.backend.booking.dto.BookingResponseDto;
+import com.REACT.backend.booking.dto.BookingSummeryDto;
+
+import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 public interface BookingService {
     /**
@@ -12,4 +16,11 @@ public interface BookingService {
      * @return fully-populated response DTO
      */
     BookingResponseDto createBooking(BookingRequestDto requestDto, Long requestedById);
+
+    List<BookingSummeryDto> getBookingHistoryForUser(Long userId);
+
+    BookingResponseDto getBookingDetailsByBookingId(Long bookingId);
+
+    BookingResponseDto deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException;
+
 }
