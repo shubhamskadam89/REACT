@@ -12,9 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Long> {
-
-
-
         @Modifying
         @Transactional
         @Query(value = "INSERT INTO booking_log_fire_trucks (booking_log_id, fire_truck_id) VALUES (:logId, :truckId)", nativeQuery = true)
