@@ -6,9 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
@@ -29,6 +27,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserRepository userRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -36,16 +35,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         try {
             String jwt = jwtUtils.getJwtFromHeader(request);
-            log.debug("Token received from header: {}", jwt);
+            logger.debug("Token received from header: {}", jwt); // ✅ Log raw token
 
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String userEmail = jwtUtils.getEmailFromJwtToken(jwt);
-                log.debug("Decoded user email from token: {}", userEmail);
+                logger.debug("Decoded user email from token: {}", userEmail); // ✅ Log decoded subject
 
                 AppUser userDetails = userRepository.findByUserEmail(userEmail);
 
                 if (userDetails != null) {
-                    log.debug("User found in DB: {}", userDetails.getUserEmail());
+                    logger.debug("User found in DB: {}", userDetails.getUserEmail()); // ✅ Log DB lookup success
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
@@ -55,16 +54,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                             );
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.debug("Security context updated with user: {}", userDetails.getUserEmail());
+                    logger.debug("Security context updated with user: {}", userDetails.getUserEmail()); // ✅ Log security context
                 } else {
-                    log.warn("User not found in DB for email: {}", userEmail);
+                    logger.warn("User not found in DB for email: {}", userEmail);
                 }
             } else {
-                log.warn("Invalid or missing JWT token.");
+                logger.warn("Invalid or missing JWT token.");
             }
 
         } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.getMessage(), e);
+            logger.error("Cannot set user authentication: {}", e.getMessage(), e);
         }
 
         filterChain.doFilter(request, response);

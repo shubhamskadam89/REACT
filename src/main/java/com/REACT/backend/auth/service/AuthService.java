@@ -7,11 +7,9 @@ import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.repository.UserRepository;
 import com.REACT.backend.Jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -22,12 +20,10 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("User with same government id exist {}",request.getGovernmentId());
             throw new RuntimeException("User already exists with this Government ID");
         }
 
         if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("User with same phone number  exist {}",request.getPhoneNumber());
             throw new RuntimeException("Phone number already registered");
         }
 
@@ -56,12 +52,9 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-
         AppUser user = userRepo.findByUserEmail(request.getEmail());
-        log.debug("Login request from {}",request.getEmail());
 
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getUserPassword())) {
-            log.error("Invalid email or password");
             throw new RuntimeException("Invalid email or password");
         }
 
