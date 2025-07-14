@@ -47,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final EmergencyRequestRepository requestRepo;
     private final BookingLogRepository logRepo;
-    private static final int MAX_RADIUS_KM = 10;
+    private static final int MAX_RADIUS_KM = 50;
 
     @Transactional
     public BookingResponseDto createBooking(BookingRequestDto requestDto, Long requestedById) {
@@ -133,21 +133,8 @@ public class BookingServiceImpl implements BookingService {
         requestRepo.save(requestEntity);
 
         // 🧯 6. Update statuses
-        assignedAmbulances.forEach(amb -> {
-            amb.setStatus(AmbulanceStatus.EN_ROUTE);
-            amb.setLastUpdated(Instant.now());
-            ambulanceRepository.save(amb);
-        });
-
-        assignedFireTrucks.forEach(truck -> {
-            truck.setStatus(FireTruckStatus.EN_ROUTE);
-            truck.setLastUpdated(Instant.now());
-            fireTruckRepository.save(truck);
-        });
-
-        // Update police station availability
-
-
+        assignedAmbulances = changeAmbulanceStatus(assignedAmbulances,AmbulanceStatus.EN_ROUTE);
+        assignedFireTrucks = changeFireTruckStatus(assignedFireTrucks,FireTruckStatus.BUSY);
 
 
         // ✅ 7. Compute status messages
@@ -161,11 +148,14 @@ public class BookingServiceImpl implements BookingService {
 
 
 
-
-
         // 📖 8. Booking log
         BookingLogEntity log = BookingLogEntity.builder()
                 .createdAt(Instant.now())
+                .longitude(requestEntity.getLongitude())
+                .latitude(requestEntity.getLatitude())
+                .issueType(requestEntity.getIssueType())
+                .victimPhone(requestEntity.getVictimPhoneNumber())
+                .requestedBy(requestEntity.getRequestedBy())
                 .statusMessage("Ambulance: " + ambStatus + ", Police: " + policeStatus+ ", Fire: " + fireStatus)
                 .emergencyRequest(requestEntity)
                 .assignedAmbulance(assignedAmbulances) // keep for now
@@ -207,7 +197,7 @@ public class BookingServiceImpl implements BookingService {
 
     public List<AmbulanceEntity> findNearestAmbulances(double lat, double lng, int requiredCount) {
         List<AmbulanceEntity> assigned = new ArrayList<>();
-        for (int radius = 1000; radius <= MAX_RADIUS_KM * 1000; radius += 1000) {
+        for (int radius = 1000; radius <= MAX_RADIUS_KM * 1000; radius += 3000) {
             List<AmbulanceEntity> ambulances = ambulanceRepository.findAvailableWithinRadius(lat, lng, radius);
             System.out.println("🚑 Found " + ambulances.size() + " ambulances within radius " + radius);
 
@@ -223,13 +213,32 @@ public class BookingServiceImpl implements BookingService {
         return assigned;
     }
 
+    public List<AmbulanceEntity> changeAmbulanceStatus(List<AmbulanceEntity> statusToBeChanged, AmbulanceStatus newStatus) {
+        Instant now = Instant.now().plusSeconds(330 * 3600); //+5.30
+        for (AmbulanceEntity amb : statusToBeChanged) {
+            amb.setStatus(newStatus);
+            amb.setLastUpdated(now);
+        }
+        return statusToBeChanged;
+    }
+    public List<FireTruckEntity> changeFireTruckStatus(List<FireTruckEntity> statusToBeChanged, FireTruckStatus newStatus) {
+        Instant now = Instant.now().plusSeconds(330 * 3600); //+5.30
+        for (FireTruckEntity amb : statusToBeChanged) {
+            amb.setStatus(newStatus);
+            amb.setLastUpdated(Instant.now().plusSeconds(330*3600));
+        }
+        return statusToBeChanged;
+    }
+
+
+
     public List<PoliceStationEntity> getStationsByProximity(double lat, double lng) {
         return policeStationRepository.findAllByProximity(lat, lng);
     }
 
     public List<FireTruckEntity> findAvailableFireTrucks(double lat, double lng, int requiredCount) {
         List<FireTruckEntity> assigned = new ArrayList<>();
-        for (int radius = 1000; radius <= MAX_RADIUS_KM * 1000; radius += 1000) {
+        for (int radius = 1000; radius <= MAX_RADIUS_KM * 1000; radius += 3000) {
             List<FireTruckEntity> trucks = fireTruckRepository.findAvailableWithinRadius(lat, lng, radius);
             System.out.println("🚑 Found " + trucks.size() + " ambulances within radius " + radius);
             for (FireTruckEntity truck : trucks) {
@@ -264,6 +273,8 @@ public class BookingServiceImpl implements BookingService {
         return result;
     }
 
+
+
     private int calculateTotalOfficers(Map<PoliceStationEntity, Integer> map) {
         return map.values().stream().mapToInt(Integer::intValue).sum();
     }
@@ -292,17 +303,55 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    /**
+     *
+     * @param bookingId
+     * @param userId
+     * @return
+     * @throws AccessDeniedException
+     *
+     * <P>This function is built by step by step.
+     * As we need to make acquired services free but this services are {@code inter-related} to each other
+     * first release dependent entities {@code delete} then go far status change  of each entity then delete
+     * the entry and booking log
+     * </p>
+     */
+
+    @Transactional
     @Override
-    public BookingResponseDto deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException {
+    public void deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException {
         EmergencyRequestEntity entity = requestRepo.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
         if (!entity.getRequestedBy().getUserId().equals(userId)) {
             throw  new AccessDeniedException("You are now owner of this request");
         }
+        logRepo.findByEmergencyRequest(entity)
+                .ifPresent(log -> {
+                    log.setEmergencyRequest(null);
+                    logRepo.save(log);
+                });
+        
+        // release them
+        changeAmbulanceStatus(entity.getAssignedAmbulances(),AmbulanceStatus.AVAILABLE);
+        changeFireTruckStatus(entity.getAssignedFireTrucks(),FireTruckStatus.AVAILABLE);
+        releasePoliceOfficers(entity.getAssignedPoliceMap());
+
+        entity.getAssignedAmbulances().clear();
+        entity.getAssignedFireTrucks().clear();
+
+        if (entity.getAssignedPoliceMap() != null) entity.getAssignedPoliceMap().clear();
+
+        requestRepo.save(entity);
         requestRepo.delete(entity);
 
-        return mapToDetailedDto(requestRepo.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not Found")));
+    }
+
+
+    private void  releasePoliceOfficers(Map<PoliceStationEntity, Integer> map){
+        for(Map.Entry<PoliceStationEntity, Integer> policeStation : map.entrySet()){
+            int temp = policeStation.getKey().getAvailableOfficers() + policeStation.getValue();
+            policeStation.getKey().setAvailableOfficers(temp);
+        }
     }
 
 

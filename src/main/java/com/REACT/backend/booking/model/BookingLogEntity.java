@@ -5,6 +5,7 @@ import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.fireService.dto.FireTruckDto;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
+import com.REACT.backend.users.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +27,7 @@ public class BookingLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "emergency_request_id", unique = true)
     private EmergencyRequestEntity emergencyRequest;
 
@@ -38,6 +39,8 @@ public class BookingLogEntity {
     )
     @ManyToMany
     private List<AmbulanceEntity> assignedAmbulance;
+
+
 
 
     /**
@@ -69,4 +72,13 @@ public class BookingLogEntity {
     private String statusMessage;
 
     private Instant createdAt = Instant.now();
+
+    private String issueType;
+    private double latitude;
+    private double longitude;
+    private String victimPhone;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "requested_by_user_id")
+    private AppUser requestedBy;
+
 }

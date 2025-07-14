@@ -1,20 +1,17 @@
 package com.REACT.backend.fireService.dto;
 
-import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
-import com.REACT.backend.fireService.model.FireStationEntity;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.fireService.model.FireTruckStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
+
 import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FireTruckDto {
-
     private Long id;
     private String registrationNumber;
     private String driverName;
@@ -36,4 +33,6 @@ public class FireTruckDto {
             this.fireStation = new FireStationDto(entity.getStation());
         }
     }
+
+
 }

@@ -1,6 +1,8 @@
 package com.REACT.backend.fireService.repository;
 
+import com.REACT.backend.fireService.dto.FireTruckDto;
 import com.REACT.backend.fireService.model.FireTruckEntity;
+import com.REACT.backend.fireService.model.FireTruckStatus;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,9 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
             @Param("lng") double longitude,
             @Param("radius") double radiusInMeters
     );
+
+    List<FireTruckEntity> findByStatus(FireTruckStatus status);
+
+    List<FireTruckEntity> findByStation_Id(Long stationId);
+
 }

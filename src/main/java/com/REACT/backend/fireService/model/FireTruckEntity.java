@@ -13,6 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @ToString
+@Table(name = "")
 public class FireTruckEntity {
 
     @Id
@@ -34,4 +35,5 @@ public class FireTruckEntity {
     @ManyToOne
     @JoinColumn(name = "station_id")
     private FireStationEntity station;
+
 }

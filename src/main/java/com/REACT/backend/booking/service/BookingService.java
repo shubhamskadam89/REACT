@@ -21,6 +21,6 @@ public interface BookingService {
 
     BookingResponseDto getBookingDetailsByBookingId(Long bookingId);
 
-    BookingResponseDto deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException;
+    void deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException;
 
 }

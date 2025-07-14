@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString
+@Table(name = "fire_station_entity")
 public class FireStationEntity {
 
     @Id

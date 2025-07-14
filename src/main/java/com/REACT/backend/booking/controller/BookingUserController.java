@@ -3,6 +3,7 @@ package com.REACT.backend.booking.controller;
 import com.REACT.backend.booking.dto.ApiResponse;
 import com.REACT.backend.booking.dto.BookingResponseDto;
 import com.REACT.backend.booking.dto.BookingSummeryDto;
+import com.REACT.backend.booking.dto.DeleteResponseDto;
 import com.REACT.backend.booking.service.BookingService;
 import com.REACT.backend.users.AppUser;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -41,12 +43,17 @@ public class BookingUserController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/delete/{bookingId}")
-    public ResponseEntity<String> deleteBookingByID(@PathVariable Long bookingId) throws AccessDeniedException {
+    public ResponseEntity<DeleteResponseDto> deleteBookingByID(@PathVariable Long bookingId) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal(); // Cast it to your AppUser
 
-        BookingResponseDto response = bookingService.deleteBookingById(bookingId, user.getUserId());
-        return ResponseEntity.ok( "Booking deleted Successfully");
+        bookingService.deleteBookingById(bookingId, user.getUserId());
+        DeleteResponseDto returnResponse = DeleteResponseDto.builder()
+                .deletedId(bookingId)
+                .message("Emergency request deleted successfully")
+                .deletedAt(Instant.now())
+                .build();
+        return ResponseEntity.ok( returnResponse);
     }
 
 }

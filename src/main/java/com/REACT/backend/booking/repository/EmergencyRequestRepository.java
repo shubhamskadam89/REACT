@@ -2,6 +2,7 @@ package com.REACT.backend.booking.repository;
 
 import com.REACT.backend.booking.dto.BookingSummeryDto;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
+import com.REACT.backend.fireService.model.FireTruckEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
