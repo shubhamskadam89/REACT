@@ -1,10 +1,11 @@
 package com.REACT.backend.booking.model;
 
-import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
+
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
-import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+
 
 import com.REACT.backend.users.AppUser;
 import jakarta.persistence.*;
@@ -90,7 +91,7 @@ public class EmergencyRequestEntity {
             joinColumns = @JoinColumn(name = "emergency_request_id"),
             inverseJoinColumns = @JoinColumn(name = "fire_truck_id")
     )
-    private List<FireTruckEntity> assignedFireTrucks;
+    private List<FireTruckEntity> assignedFireTruckEntities;
 
 
 

@@ -24,6 +24,6 @@ public class FireStationEntity {
     @Column(columnDefinition = "GEOGRAPHY(Point,4326)")
     private Point location;
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-    private List<FireTruckEntity> fireTrucks;
+    @OneToMany(mappedBy = "fireStationEntity", cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<FireTruckEntity> fireTruckEntities;
 }

@@ -1,8 +1,7 @@
 package com.REACT.backend.booking.model;
 
-import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
+
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
-import com.REACT.backend.fireService.dto.FireTruckDto;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
 import jakarta.persistence.*;
@@ -63,7 +62,7 @@ public class BookingLogEntity {
             inverseJoinColumns = @JoinColumn(name = "fire_truck_id")
     )
     @ManyToMany
-    private List<FireTruckEntity> assignedFireTrucks;
+    private List<FireTruckEntity> assignedFireTruckEntities;
 
     @Column(length = 1024)
     private String statusMessage;

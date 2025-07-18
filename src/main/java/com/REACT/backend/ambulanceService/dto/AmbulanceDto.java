@@ -22,7 +22,7 @@ public class AmbulanceDto {
 
     public AmbulanceDto(AmbulanceEntity entity) {
         this.id = entity.getId();
-        this.regNumber = entity.getAmbulanceNumberPlate();
+        this.regNumber = entity.getAmbulanceRegNumber();
         this.driverName = entity.getAmbulanceDriverName();
         this.status = entity.getStatus();
         this.lastUpdated = entity.getLastUpdated();

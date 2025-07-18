@@ -16,7 +16,9 @@ import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.util.DispatchUtils;
 
 import com.REACT.backend.fireService.dto.FireTruckDto;
+
 import com.REACT.backend.fireService.model.FireTruckEntity;
+
 import com.REACT.backend.fireService.model.FireTruckStatus;
 import com.REACT.backend.fireService.repository.FireTruckRepository;
 
@@ -87,9 +89,9 @@ public class BookingServiceImpl implements BookingService {
 
 
         // 🔥 3. Assign fire trucks
-        List<FireTruckEntity> assignedFireTrucks = new ArrayList<>();
+        List<FireTruckEntity> assignedFireTruckEntities = new ArrayList<>();
         if (requestDto.isNeedFireBrigade()) {
-            assignedFireTrucks = findAvailableFireTrucks(
+            assignedFireTruckEntities = findAvailableFireTrucks(
                     requestDto.getLatitude(),
                     requestDto.getLongitude(),
                     requestDto.getRequestedFireTruckCount()
@@ -100,7 +102,7 @@ public class BookingServiceImpl implements BookingService {
 
         // 👮‍♂️ 4. Resolve user
         AppUser requestedBy = userRepository.findById(requestedById)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + requestedById));
+                .orElseThrow(()->new RuntimeException("No suh user exist"));
 
         // 📌 5. Save Emergency Request
         EmergencyRequestEntity requestEntity = EmergencyRequestEntity.builder()
@@ -126,7 +128,7 @@ public class BookingServiceImpl implements BookingService {
                 .createdAt(Instant.now())
                 //fulfillment fro request
                 .assignedAmbulances(assignedAmbulances)
-                .assignedFireTrucks(assignedFireTrucks)
+                .assignedFireTruckEntities(assignedFireTruckEntities)
                 .assignedPoliceMap(assignedPoliceMap)
                 .build();
 
@@ -139,7 +141,7 @@ public class BookingServiceImpl implements BookingService {
             ambulanceRepository.save(amb);
         });
 
-        assignedFireTrucks.forEach(truck -> {
+        assignedFireTruckEntities.forEach(truck -> {
             truck.setStatus(FireTruckStatus.EN_ROUTE);
             truck.setLastUpdated(Instant.now());
             fireTruckRepository.save(truck);
@@ -155,7 +157,7 @@ public class BookingServiceImpl implements BookingService {
                 assignedAmbulances.size(), requestDto.getRequestedAmbulanceCount()
         );
         String fireStatus = DispatchUtils.fireTruckStatus(
-                assignedFireTrucks.size(), requestDto.getRequestedFireTruckCount()
+                assignedFireTruckEntities.size(), requestDto.getRequestedFireTruckCount()
         );
 
 
@@ -169,7 +171,7 @@ public class BookingServiceImpl implements BookingService {
                 .statusMessage("Ambulance: " + ambStatus + ", Police: " + policeStatus+ ", Fire: " + fireStatus)
                 .emergencyRequest(requestEntity)
                 .assignedAmbulance(assignedAmbulances) // keep for now
-                .assignedFireTrucks(assignedFireTrucks)
+                .assignedFireTruckEntities(assignedFireTruckEntities)
                 .assignedPoliceMap(assignedPoliceMap)
                 .build();
 
@@ -195,7 +197,7 @@ public class BookingServiceImpl implements BookingService {
                 .policeStatus(policeStatus)
                 .assignedPoliceMap(policeDtoMap)
                 .fireTruckStatus(fireStatus)
-                .assignedFireTrucks(assignedFireTrucks
+                .assignedFireTrucks(assignedFireTruckEntities
                         .stream()
                         .map(FireTruckDto::new)
                         .toList()
@@ -336,8 +338,8 @@ public class BookingServiceImpl implements BookingService {
                                 Map.Entry::getValue
                         )))
                 .fireTruckStatus(DispatchUtils.fireTruckStatus(
-                        entity.getAssignedFireTrucks().size(), entity.getRequestedFireTruckCount()))
-                .assignedFireTrucks(entity.getAssignedFireTrucks().stream()
+                        entity.getAssignedFireTruckEntities().size(), entity.getRequestedFireTruckCount()))
+                .assignedFireTrucks(entity.getAssignedFireTruckEntities().stream()
                         .map(FireTruckDto::new)
                         .collect(Collectors.toList()))
                 .notes(entity.getNotes())

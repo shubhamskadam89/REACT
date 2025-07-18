@@ -1,7 +1,6 @@
 package com.REACT.backend.users;
 
 
-
 import jakarta.persistence.*;
 import lombok.*;
 @Entity

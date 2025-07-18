@@ -1,12 +1,9 @@
 package com.REACT.backend.booking.dto;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
-import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+
 import com.REACT.backend.fireService.dto.FireTruckDto;
-import com.REACT.backend.fireService.model.FireTruckEntity;
-import com.REACT.backend.policeService.model.PoliceStationEntity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import lombok.*;
 import java.util.List;
 import java.util.Map;

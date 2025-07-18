@@ -29,15 +29,6 @@ public class BookingController {
 
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/accept")
-    public ResponseEntity<?> acceptBooking(@RequestParam Long bookingId, @RequestParam Long driverId) {
-        try {
-            bookingService.acceptBooking(bookingId, driverId);
-            return ResponseEntity.ok("Booking accepted by driver " + driverId);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
 
 
 

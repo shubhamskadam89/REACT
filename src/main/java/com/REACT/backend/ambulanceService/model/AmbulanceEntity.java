@@ -1,6 +1,7 @@
 package com.REACT.backend.ambulanceService.model;
 
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
+import com.REACT.backend.hospitalService.model.Hospital;
 import com.REACT.backend.users.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,9 +12,9 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor @NoArgsConstructor @ToString
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 @Builder
-
 @Table(name = "ambulance_entity")
 public class AmbulanceEntity {
 
@@ -21,7 +22,7 @@ public class AmbulanceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ambulanceNumberPlate;
+    private String ambulanceRegNumber;
 
     private String ambulanceDriverName;
 
@@ -33,13 +34,14 @@ public class AmbulanceEntity {
 
     private Instant lastUpdated;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "driver_id")
     private AppUser driver;
 
-    @ManyToOne
-    @JoinColumn(name = "assigned_request_id")
-    private EmergencyRequestEntity assignedRequest;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Hospital hospital;
+
 
 
 

@@ -1,8 +1,6 @@
 package com.REACT.backend.auth.Controller;
 
-import com.REACT.backend.auth.dto.AuthResponse;
-import com.REACT.backend.auth.dto.LoginRequest;
-import com.REACT.backend.auth.dto.RegisterRequest;
+import com.REACT.backend.auth.dto.*;
 import com.REACT.backend.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +23,28 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/register/fire-driver")
+    public ResponseEntity<AuthResponse> registerFireDriver(@RequestBody FireDriverRegisterRequestDto request){
+        AuthResponse response = authService.registerFireDriver(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/register/ambulance-driver")
+    public ResponseEntity<AuthResponse> registerAmbulanceDriver(@RequestBody AmbulanceRegisterRequestDto request){
+        AuthResponse response = authService.registerAmbulanceDriver(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/register/police-officer")
+    public ResponseEntity<AuthResponse> registerPoliceOfficer(@RequestBody PoliceOfficerRegisterRequestDto request){
+        AuthResponse response = authService.registerPoliceOfficer(request);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
 }

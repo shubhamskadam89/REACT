@@ -37,12 +37,6 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
             @Param("radius") double radiusMeters
     );
 
-    /**
-     * Find ambulance assigned to a specific driver & request.
-     */
-    Optional<AmbulanceEntity> findByDriver_UserIdAndAssignedRequest_Id(
-            Long driverId,
-            Long requestId
-    );
+
 
 }
