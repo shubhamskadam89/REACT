@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<AppUser,Long> {
     AppUser findByUserType(String email);
 
 
+
 }

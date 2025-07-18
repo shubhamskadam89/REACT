@@ -33,6 +33,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String path = request.getRequestURI();
+        if (path.startsWith("/ws-location")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             String jwt = jwtUtils.getJwtFromHeader(request);
