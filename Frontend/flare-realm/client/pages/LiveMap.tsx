@@ -12,6 +12,7 @@ interface Coords {
 interface LiveMapProps {
   patientCoords: Coords;
   ambulanceCoords?: Coords;
+  fireTruckCoords?: Coords;
 }
 
 const homeSVG = `
@@ -31,7 +32,18 @@ const ambulanceSVG = `
   </svg>
 `;
 
-export default function LiveMap({ patientCoords, ambulanceCoords }: LiveMapProps) {
+const fireTruckSVG = `
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="#e53935" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="8" width="20" height="8" rx="2"/>
+    <circle cx="7" cy="20" r="2"/>
+    <circle cx="17" cy="20" r="2"/>
+    <rect x="16" y="10" width="4" height="4" rx="1" fill="#fff"/>
+    <rect x="4" y="10" width="6" height="4" rx="1" fill="#fff"/>
+    <rect x="10" y="6" width="4" height="4" rx="1" fill="#e53935"/>
+  </svg>
+`;
+
+export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoords }: LiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,8 +100,47 @@ export default function LiveMap({ patientCoords, ambulanceCoords }: LiveMapProps
         });
     }
 
+    // Fire Truck Marker and Path
+    if (fireTruckCoords) {
+      const fireTruckEl = document.createElement('div');
+      fireTruckEl.innerHTML = fireTruckSVG;
+      fireTruckEl.style.transform = 'translate(-50%, -100%)';
+      new mapboxgl.Marker({ element: fireTruckEl })
+        .setLngLat([fireTruckCoords.longitude, fireTruckCoords.latitude])
+        .setPopup(new mapboxgl.Popup().setText('Fire Truck'))
+        .addTo(map);
+
+      // Draw dotted red route from fire truck to patient
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${fireTruckCoords.longitude},${fireTruckCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
+        .then(res => res.json())
+        .then(data => {
+          const route = data.routes[0].geometry;
+
+          map.addSource('fireRoute', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: route
+            }
+          });
+
+          map.addLayer({
+            id: 'fireRoute',
+            type: 'line',
+            source: 'fireRoute',
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: {
+              'line-color': '#e53935',
+              'line-width': 3,
+              'line-dasharray': [2, 4]
+            }
+          });
+        });
+    }
+
     return () => map.remove();
-  }, [patientCoords, ambulanceCoords]);
+  }, [patientCoords, ambulanceCoords, fireTruckCoords]);
 
   return <div ref={mapContainer} className="w-full h-96 rounded-xl shadow" />;
 } 

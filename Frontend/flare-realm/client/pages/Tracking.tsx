@@ -139,6 +139,7 @@ export default function Tracking() {
         <LiveMap
           patientCoords={userCoords}
           ambulanceCoords={ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude ? { latitude: ambulances[0].latitude, longitude: ambulances[0].longitude } : undefined}
+          fireTruckCoords={fireTrucks.length > 0 && fireTrucks[0].latitude && fireTrucks[0].longitude ? { latitude: fireTrucks[0].latitude, longitude: fireTrucks[0].longitude } : undefined}
         />
         {/* TODO: Replace this image with Google Maps API integration. */}
         {/* Collapse button */}
@@ -229,44 +230,28 @@ export default function Tracking() {
                 </div>
                 {/* Distance and Time */}
                 <div className="bg-emergency-orange text-center py-2 rounded">
-                  <span className="text-black text-xs font-normal">
-                    Total Distance: {ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude
-                      ? `${getDistanceKm(
-                          ambulances[0].latitude,
-                          ambulances[0].longitude,
-                          userCoords.latitude,
-                          userCoords.longitude
-                        ).toFixed(2)} kms`
-                      : "-"} | Est. Time: 14 mins
-                  </span>
+                  {(() => {
+                    let distance = null, estTime = null;
+                    if (ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude) {
+                      distance = getDistanceKm(
+                        ambulances[0].latitude,
+                        ambulances[0].longitude,
+                        userCoords.latitude,
+                        userCoords.longitude
+                      );
+                      estTime = Math.round(distance * 10);
+                    }
+                    return (
+                      <span className="text-black text-xs font-normal">
+                        Total Distance: {distance !== null ? distance.toFixed(2) : "-"} kms | Est. Time: {estTime !== null ? estTime : "-"} mins
+                      </span>
+                    );
+                  })()}
                 </div>
               </div>
 
               {/* 2. Ambulance Details */}
-              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="text-black text-sm font-normal mb-3">
-                      Ambulance details:
-                    </h3>
-                    {ambulances.length === 0 ? (
-                      <div className="text-black text-xs font-normal mb-4">No ambulance assigned.</div>
-                    ) : ambulances.map((amb, idx) => (
-                      <div key={amb.id} className="text-black text-xs font-normal mb-2">
-                        <b>Reg:</b> {amb.regNumber}<br />
-                        <b>Driver:</b> {amb.driverName} <b>Status:</b> {amb.status}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {ambulances.length > 0 && (
-                  <div className="bg-orange-400 text-center py-2 rounded mt-2">
-                    <span className="text-black text-xs font-normal">
-                      Ambulance Status: {ambulanceStatus || "-"}
-                    </span>
-                  </div>
-                )}
-              </div>
+              
 
               {/* 3. Police Details */}
               <div className="bg-yellow-200 rounded-xl p-4 mb-3">
@@ -301,15 +286,27 @@ export default function Tracking() {
                     <div className="text-black text-xs font-normal mb-4">No fire truck assigned.</div>
                   ) : fireTrucks.map((truck, idx) => (
                     <div key={truck.id || idx} className="text-black text-xs font-normal mb-2">
-                      <b>Truck:</b> {truck.regNumber || truck.id} <b>Status:</b> {truck.status}
+                      <b>Truck id:</b> {truck.regNumber || truck.id}<br />
+                      <b>Status:</b> {truck.status}<br />
                     </div>
                   ))}
                 </div>
-                {fireTrucks.length > 0 && (
+                {fireTrucks.length > 0 && fireTrucks[0].latitude && fireTrucks[0].longitude && (
                   <div className="bg-orange-400 text-center py-2 rounded mt-2">
-                    <span className="text-black text-xs font-normal">
-                      Fire Brigade Status: {fireTruckStatus || "-"}
-                    </span>
+                    {(() => {
+                      let distance = getDistanceKm(
+                        fireTrucks[0].latitude,
+                        fireTrucks[0].longitude,
+                        userCoords.latitude,
+                        userCoords.longitude
+                      );
+                      let estTime = Math.round(distance * 10);
+                      return (
+                        <span className="text-black text-xs font-normal">
+                          Total Distance: {distance.toFixed(2)} kms | Est. Time: {estTime} mins
+                        </span>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
