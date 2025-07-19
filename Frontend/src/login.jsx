@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [token, setToken] = useState('')
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const response = await fetch('http://localhost:8080/auth/login', {
         method: 'POST',
@@ -20,21 +20,42 @@ function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
-      if (!response.ok) throw new Error('Invalid credentials')
+      if (!response.ok) throw new Error('Invalid credentials');
 
-      const data = await response.json()
-      setToken(data.token || data.jwt || '')
-      localStorage.setItem('jwt', data.token || data.jwt || '')
-      navigate('/landing')
+      const data = await response.json();
+      const token = data.token || data.jwt || '';
+      if (!token) throw new Error('No token received');
+
+      localStorage.setItem('jwt', token);
+
+      const decoded = jwtDecode(token);
+
+      // Check role and navigate accordingly
+      switch (decoded.role) {
+        case 'USER':
+          navigate('/landing');  // 👈 USER goes to landing
+          break;
+        case 'AMBULANCE_DRIVER':
+          navigate('/ambulance-dashboard');
+          break;
+        case 'FIRE_DRIVER':
+          navigate('/fire-dashboard');
+          break;
+        case 'POLICE_OFFICER':
+          navigate('/police-dashboard');
+          break;
+        default:
+          navigate('/landing');  // fallback
+      }      
+
     } catch (err) {
-      setError(err.message || 'Login failed')
-      setToken('')
+      setError(err.message || 'Login failed');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -69,11 +90,6 @@ function Login() {
             {loading ? 'Logging in...' : 'Login'}
           </button>
           {error && <div className="text-red-500 text-sm">{error}</div>}
-          {token && (
-            <div className="text-green-600 text-sm break-all">
-              JWT Token: {token}
-            </div>
-          )}
         </form>
         <div className="mt-4 text-center">
           <span className="text-gray-600">Don't have an account? </span>
@@ -81,7 +97,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
