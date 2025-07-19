@@ -37,6 +37,9 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
             @Param("radius") double radiusMeters
     );
 
+    List<AmbulanceEntity> findByHospitalId(Long hospitalId);
+
+
 
 
 }

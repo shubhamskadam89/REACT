@@ -13,6 +13,7 @@ import com.REACT.backend.policeService.repository.PoliceStationRepository;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.users.Role;
+import com.REACT.backend.users.UserType;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import com.REACT.backend.users.model.FireTruckDriver;
 import com.REACT.backend.users.model.PoliceOfficer;
@@ -66,7 +67,7 @@ public class AuthService {
                 .governmentId(request.getGovernmentId())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
-                .userType(request.getUserType())
+                .userType(UserType.CITIZEN)
                 .verified(true)
                 .build();
 
@@ -105,6 +106,7 @@ public class AuthService {
                 .lastUpdated(Instant.now().plusSeconds(330 * 3600))
                 .location(station.getLocation())
                 .fireStationEntity(station)
+
                 .vehicleRegNumber(request.getVehicleRegNumber())
                 .build();
 
@@ -113,6 +115,7 @@ public class AuthService {
                 .fireTruckEntity(fireTruckEntity)
                 .licenseNumber(request.getLicenseNumber())
                 .build();
+        fireTruckEntity.setDriver(fireTruckDriver);
 
         AppUser savedUser = userRepo.save(newUser);
         fireTruckDriverRepo.save(fireTruckDriver);
