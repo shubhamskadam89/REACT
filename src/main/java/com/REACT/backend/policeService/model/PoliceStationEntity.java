@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
 
-import java.time.Instant;
 
 @Entity
 @Getter
@@ -26,5 +25,4 @@ public class PoliceStationEntity {
 
     private int availableOfficers;
 
-    private Instant lastUpdated;
 }

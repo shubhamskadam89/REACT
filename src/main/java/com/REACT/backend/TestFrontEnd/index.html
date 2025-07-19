@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Unit Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <style>
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          background: #f0f4f8;
+          padding: 30px;
+        }
+
+        h1 {
+          text-align: center;
+          color: #1e3a8a;
+        }
+
+        .unit-container {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          margin-top: 30px;
+        }
+
+        .unit-card {
+          flex: 1;
+          background: #ffffff;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .unit-card h2 {
+          text-align: center;
+          margin-top: 0;
+          color: #111827;
+        }
+
+        button {
+          display: block;
+          margin: 10px auto 20px;
+          padding: 10px 25px;
+          background-color: #2563eb;
+          border: none;
+          color: white;
+          border-radius: 8px;
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        button:hover {
+          background-color: #1d4ed8;
+        }
+
+        .log-box {
+          background: #f1f5f9;
+          padding: 10px;
+          border-radius: 6px;
+          font-family: monospace;
+          font-size: 13px;
+          max-height: 250px;
+          overflow-y: auto;
+          border: 1px solid #e2e8f0;
+          margin-bottom: 10px;
+        }
+
+        .log-title {
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: #334155;
+        }
+    </style>
+</head>
+<body>
+<h1>🚨 Live Location Streaming Dashboard</h1>
+
+<div class="unit-container">
+    <!-- Ambulance -->
+    <div class="unit-card">
+        <h2>🚑 Ambulance</h2>
+        <button onclick="startStreaming('AMBULANCE')">Start Ambulance Stream</button>
+        <div class="log-title">📤 Sent</div>
+        <div id="ambulanceSentLog" class="log-box">None</div>
+        <div class="log-title">📡 Received</div>
+        <div id="ambulanceReceivedLog" class="log-box">Waiting...</div>
+    </div>
+
+    <!-- Fire Truck -->
+    <div class="unit-card">
+        <h2>🚒 Fire Truck</h2>
+        <button onclick="startStreaming('FIRE_TRUCK')">Start Fire Truck Stream</button>
+        <div class="log-title">📤 Sent</div>
+        <div id="fireSentLog" class="log-box">None</div>
+        <div class="log-title">📡 Received</div>
+        <div id="fireReceivedLog" class="log-box">Waiting...</div>
+    </div>
+</div>
+
+<script>
+    let stompClient = null;
+    let intervalIds = {};
+
+    const locationState = {
+      "AMBULANCE": { lat: 19.0760, lng: 72.8777, userId: 101 },
+      "FIRE_TRUCK": { lat: 19.0800, lng: 72.8800, userId: 202 }
+    };
+
+    const logIds = {
+      "AMBULANCE": {
+        sent: "ambulanceSentLog",
+        received: "ambulanceReceivedLog"
+      },
+      "FIRE_TRUCK": {
+        sent: "fireSentLog",
+        received: "fireReceivedLog"
+      }
+    };
+
+    function connect() {
+      const socket = new SockJS('http://localhost:8080/ws-location');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function () {
+        stompClient.subscribe('/topic/location', function (message) {
+          const data = JSON.parse(message.body);
+          const type = data.unitType;
+          if (logIds[type]) {
+            appendLog(logIds[type].received, data);
+          }
+        });
+      });
+    }
+
+    function startStreaming(unitType) {
+      if (!stompClient || !stompClient.connected) {
+        connect();
+        setTimeout(() => startStreaming(unitType), 1000);
+        return;
+      }
+
+      if (intervalIds[unitType]) {
+        alert(unitType + " is already streaming.");
+        return;
+      }
+
+      intervalIds[unitType] = setInterval(() => {
+        const state = locationState[unitType];
+        state.lat += 0.0001;
+        state.lng += 0.0001;
+
+        const payload = {
+          userId: state.userId,
+          unitType: unitType,
+          latitude: parseFloat(state.lat.toFixed(6)),
+          longitude: parseFloat(state.lng.toFixed(6))
+        };
+
+        stompClient.send("/app/location.send", {}, JSON.stringify(payload));
+        appendLog(logIds[unitType].sent, payload);
+      }, 3000);
+    }
+
+    function appendLog(divId, payload) {
+      const formatted = JSON.stringify(payload, null, 2);
+      const div = document.getElementById(divId);
+      div.innerHTML = `<div class="log-line">${formatted}</div>` + div.innerHTML;
+    }
+</script>
+</body>
+</html>
