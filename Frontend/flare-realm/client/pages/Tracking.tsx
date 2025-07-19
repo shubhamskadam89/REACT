@@ -1,0 +1,319 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import LiveMap from "./LiveMap";
+
+// SVG Icons
+const LocationIcon = ({ className = "w-5 h-6" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 20 26"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M2.92756 18.3319C-0.975854 14.1405 -0.975854 7.33483 2.92756 3.14353C6.83098 -1.04784 13.1691 -1.04784 17.0724 3.14353C20.9759 7.3349 20.9759 14.1406 17.0724 18.3319L10 26L2.92756 18.3319ZM10 6.21538C12.3241 6.21538 14.2114 8.24195 14.2114 10.7375C14.2114 13.233 12.3241 15.2596 10 15.2596C7.67591 15.2596 5.78857 13.233 5.78857 10.7375C5.78857 8.24195 7.67591 6.21538 10 6.21538Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const PhoneIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 35 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M18.4822 10.6595C18.4822 10.2215 18.8755 9.86866 19.3572 9.86866C21.9542 9.86866 24.0648 11.7735 24.0648 14.1164C24.0648 14.5545 23.6716 14.9073 23.1898 14.9073C22.7077 14.9073 22.3148 14.5545 22.3148 14.1164C22.3148 12.6451 20.9907 11.4504 19.3622 11.4504C18.8754 11.4504 18.4822 11.0931 18.4822 10.6595ZM18.7396 7.92988C18.9035 8.07882 19.1279 8.15087 19.3526 8.15539C22.9931 8.15539 25.9553 10.8298 25.9553 14.1122C25.9553 14.5503 26.3485 14.9031 26.8303 14.9031C27.3124 14.9031 27.7053 14.5503 27.7053 14.1122C27.7053 9.95808 23.957 6.57775 19.3526 6.57775C18.8704 6.57775 18.4776 6.93055 18.4776 7.36864C18.4822 7.5809 18.5757 7.78094 18.7396 7.92988ZM19.3668 4.86839C25.0102 4.86839 29.6005 9.01409 29.6005 14.1117C29.6005 14.5498 29.9937 14.9026 30.4755 14.9026C30.9576 14.9026 31.3505 14.5498 31.3505 14.1117C31.3505 8.14616 25.9738 3.29034 19.3665 3.2862C18.8844 3.2862 18.4915 3.639 18.4915 4.07709C18.4915 4.51486 18.8847 4.86839 19.3668 4.86839ZM19.3572 0C18.8751 0 18.4822 0.352796 18.4822 0.790887C18.4822 1.22898 18.8755 1.58177 19.3572 1.58177C27.0173 1.58177 33.2499 7.20264 33.2499 14.116C33.2499 14.5541 33.6432 14.9069 34.125 14.9069C34.6071 14.9069 35 14.5541 35 14.116C35.005 6.33057 27.9862 0 19.3572 0ZM32.4599 24.1422L25.3989 21.5276C24.8514 21.2598 24.2149 21.3447 23.7751 21.7486L22.7738 22.6671C22.2544 23.1391 21.2624 23.6153 19.5123 23.1943C15.7079 22.28 10.4951 17.7007 9.54996 14.448C9.10551 12.9131 9.66694 12.0117 10.2191 11.5271L11.2534 10.5747C11.6932 10.175 11.7775 9.59675 11.4781 9.11631L8.55366 2.9595C8.42744 2.58538 8.1558 2.32595 7.74868 2.17702C7.34157 2.03681 6.92984 2.06653 6.56931 2.25779L2.40468 4.40917C0.392631 5.22978 -0.328081 6.52242 0.135131 8.47406C1.60923 14.3927 4.67413 19.3542 9.50768 23.6409C14.8563 28.3775 20.3266 30.9456 27.257 31.9745C27.4159 31.9916 27.566 32 27.7157 32C29.0167 32 30.0367 31.3112 30.8229 29.9123L33.2609 25.9113C33.4714 25.5711 33.4903 25.2012 33.3264 24.8568C33.1667 24.4914 32.8716 24.2485 32.4599 24.1422Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const CollapseIcon = ({ className = "w-8 h-7" }: { className?: string }) => (
+  <div className="relative">
+    <svg
+      className="w-8 h-7"
+      viewBox="0 0 30 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <ellipse cx="15" cy="14" rx="15" ry="14" fill="#A09393" />
+    </svg>
+    <svg
+      className="absolute top-1.5 left-2 w-3 h-5 rotate-90"
+      viewBox="0 0 19 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 9.8181L2.11094 12L9.49964 4.36321L16.8891 12L19 9.8181L9.49993 0L0 9.8181Z"
+        fill="black"
+      />
+    </svg>
+  </div>
+);
+
+const CallDriverIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 11 11"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2.06773 9.82539C2.06773 5.60689 5.21815 2.2429 9.10665 2.2429C9.69728 2.2429 10.1404 1.76236 10.1404 1.12145C10.1402 0.480723 9.69727 0 9.10665 0C4.08575 0 0 4.43212 0 9.82559C0 10.4663 0.442965 10.947 1.03377 10.947C1.62459 10.947 2.06754 10.4663 2.06754 9.82559L2.06773 9.82539Z"
+      fill="black"
+    />
+    <path
+      d="M9.10661 5.07257C6.6454 5.07257 4.67639 7.20853 4.67639 9.87853C4.67639 10.5193 5.11936 11 5.71016 11C6.3008 11 6.74393 10.5194 6.74393 9.87853C6.74393 8.49019 7.82681 7.31527 9.10679 7.31527C9.69743 7.31527 10.1406 6.83473 10.1406 6.19382C10.1402 5.55309 9.69724 5.07257 9.10661 5.07257Z"
+      fill="black"
+    />
+  </svg>
+);
+
+export default function Tracking() {
+  const [isMapCollapsed, setIsMapCollapsed] = useState(false);
+  const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
+  const [userCoords, setUserCoords] = useState({ latitude: 18.5204, longitude: 73.8567 }); // default Pune
+  const [ambulances, setAmbulances] = useState([]);
+  const [policeMap, setPoliceMap] = useState({});
+  const [fireTrucks, setFireTrucks] = useState([]);
+  const [policeStatus, setPoliceStatus] = useState("");
+  const [fireTruckStatus, setFireTruckStatus] = useState("");
+  const [ambulanceStatus, setAmbulanceStatus] = useState("");
+  const [notes, setNotes] = useState("");
+
+  // Hardcoded hospital location
+  const hospitalCoords = { latitude: 18.5310, longitude: 73.8446 };
+
+  useEffect(() => {
+    const lastBooking = JSON.parse(localStorage.getItem('lastBooking') || '{}');
+    if (lastBooking.userLocation) setUserCoords(lastBooking.userLocation);
+    if (lastBooking.bookingResponse) {
+      setAmbulances(lastBooking.bookingResponse.assignedAmbulances || []);
+      setPoliceMap(lastBooking.bookingResponse.assignedPoliceMap || {});
+      setFireTrucks(lastBooking.bookingResponse.assignedFireTrucks || []);
+      setPoliceStatus(lastBooking.bookingResponse.policeStatus || "");
+      setFireTruckStatus(lastBooking.bookingResponse.fireTruckStatus || "");
+      setAmbulanceStatus(lastBooking.bookingResponse.ambulanceStatus || "");
+      setNotes(lastBooking.bookingResponse.notes || "");
+    } else if (lastBooking.ambulances) {
+      setAmbulances(lastBooking.ambulances);
+    }
+  }, []);
+
+  const handleCallHospital = () => {
+    alert("Calling Sunrise Hospital...");
+  };
+
+  const handleCallDriver = () => {
+    alert("Calling driver Mahesh Chaupal...");
+  };
+
+  const handlePayment = () => {
+    alert("Redirecting to payment...");
+  };
+
+  return (
+    <div className="min-h-screen bg-white font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl relative">
+      {/* Map Section */}
+      <div className={`relative transition-all duration-300 ${isMapCollapsed ? "h-16" : "h-96"}`}>
+        <LiveMap patientCoords={userCoords} hospitalCoords={hospitalCoords} />
+        {/* TODO: Replace this image with Google Maps API integration. */}
+        {/* Collapse button */}
+        
+        {/* Ambulance icons on map */}
+        <div className="absolute top-12 right-16">
+          <svg width="19" height="13" viewBox="0 0 19 13" fill="none">
+            <path
+              d="M18.1195 7.55766L17.1258 7.02365C16.4864 6.67922 15.9753 6.20314 15.6495 5.64617C14.2125 3.19121 11.3942 1.66701 8.29366 1.66701C3.72004 1.66701 0 4.98561 0 9.06552C0.00149652 9.95599 0.812777 10.6797 1.8111 10.6797H2.15336C2.36751 11.7492 3.41553 12.563 4.67459 12.563C5.93377 12.563 6.98182 11.7492 7.19583 10.6797H10.5978C10.8119 11.7492 11.8599 12.563 13.119 12.563C14.3782 12.563 15.4262 11.7492 15.6402 10.6797H17.1799C18.1842 10.6797 19 9.95062 19 9.05602V8.94842C19.0002 8.38212 18.6624 7.84944 18.1194 7.55747L18.1195 7.55766Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+
+        <div className="absolute top-24 left-16">
+          <svg width="19" height="13" viewBox="0 0 19 13" fill="none">
+            <path
+              d="M18.1195 7.55767L17.1258 7.02367C16.4864 6.67924 15.9753 6.20316 15.6495 5.64618C14.2125 3.19122 11.3942 1.66702 8.29366 1.66702C3.72004 1.66702 0 4.98562 0 9.06554C0.00149652 9.956 0.812777 10.6797 1.8111 10.6797H2.15336C2.36751 11.7492 3.41553 12.563 4.67459 12.563C5.93377 12.563 6.98182 11.7492 7.19583 10.6797H10.5978C10.8119 11.7492 11.8599 12.563 13.119 12.563C14.3782 12.563 15.4262 11.7492 15.6402 10.6797H17.1799C18.1842 10.6797 19 9.95064 19 9.05604V8.94844C19.0002 8.38213 18.6624 7.84946 18.1194 7.55749L18.1195 7.55767Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* Info Gray Panel */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col items-center">
+        <div className="w-full bg-gray-100 rounded-3xl overflow-y-auto max-h-[420px] transition-all duration-500 relative">
+          {/* Collapse/Expand Button for Info Panels */}
+          <button
+            onClick={() => setIsInfoCollapsed(v => !v)}
+            className="z-20 mb-1 w-10 h-6 flex items-center justify-center bg-gray-300 rounded-t-full shadow mx-auto mt-2 sticky top-0 left-0 right-0 bg-gray-100"
+          >
+            <svg
+              className={`w-6 h-6 transition-transform duration-300 ${isInfoCollapsed ? '' : 'rotate-180'}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {/* Collapsible Info Content */}
+          <div
+            className="transition-all duration-500"
+            style={{
+              maxHeight: isInfoCollapsed ? '0px' : '1000px',
+              opacity: isInfoCollapsed ? 0 : 1,
+              overflow: 'hidden',
+              pointerEvents: isInfoCollapsed ? 'none' : 'auto',
+            }}
+          >
+            <div className="p-4 pb-0">
+              {/* 1. Location & Hospital */}
+              <div className="bg-yellow-100 rounded-xl p-4 mb-3">
+                <div className="flex items-start gap-4 mb-4 relative">
+                  {/* User Location */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-2 h-2 bg-black rounded-full mt-2"></div>
+                    {/* Dashed line */}
+                    <div className="w-px h-8 border-l-2 border-dashed border-gray-400 my-1"></div>
+                    {/* Hospital Location Icon */}
+                    <LocationIcon className="w-5 h-6 text-black" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-black text-xs font-normal mb-1">
+                      Your location:
+                    </div>
+                    <div className="text-black text-xs font-normal mb-2">
+                      908, ABS Road, City
+                    </div>
+                    {/* Gray line below address */}
+                    <div className="w-full h-px bg-gray-300 mb-2"></div>
+                    <div className="text-black text-xs font-normal mb-1">
+                      Hospital details:
+                    </div>
+                    <div className="text-black text-xs font-normal mb-2">
+                      Sunrise Hospital<br />Address details<br />Bed/OT/ICU assigned
+                    </div>
+                    {/* Gray line below hospital address */}
+                    <div className="w-full h-px bg-gray-300"></div>
+                  </div>
+                  <button
+                    onClick={handleCallHospital}
+                    className="w-9 h-8 bg-emergency-green rounded-full flex items-center justify-center absolute right-0 top-0"
+                  >
+                    <PhoneIcon className="w-5 h-5 text-black" />
+                  </button>
+                </div>
+                {/* Distance and Time */}
+                <div className="bg-emergency-orange text-center py-2 rounded">
+                  <span className="text-black text-xs font-normal">
+                    Total Distance: 2.3 kms | Est. Time: 14 mins
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. Ambulance Details */}
+              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h3 className="text-black text-sm font-normal mb-3">
+                      Ambulance details:
+                    </h3>
+                    {ambulances.length === 0 ? (
+                      <div className="text-black text-xs font-normal mb-4">No ambulance assigned.</div>
+                    ) : ambulances.map((amb, idx) => (
+                      <div key={amb.id} className="text-black text-xs font-normal mb-2">
+                        <b>Reg:</b> {amb.regNumber}<br />
+                        <b>Driver:</b> {amb.driverName} <b>Status:</b> {amb.status}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {ambulances.length > 0 && (
+                  <div className="bg-orange-400 text-center py-2 rounded mt-2">
+                    <span className="text-black text-xs font-normal">
+                      Ambulance Status: {ambulanceStatus || "-"}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Police Details */}
+              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
+                <div className="flex-1">
+                  <h3 className="text-black text-sm font-normal mb-3">
+                    Police details:
+                  </h3>
+                  {Object.keys(policeMap).length === 0 ? (
+                    <div className="text-black text-xs font-normal mb-4">No police assigned.</div>
+                  ) : (Object.entries(policeMap) as [string, number][]).map(([station, count]) => (
+                    <div key={station} className="text-black text-xs font-normal mb-2">
+                      <b>Station:</b> {station} <b>Officers:</b> {count}
+                    </div>
+                  ))}
+                </div>
+                {Object.keys(policeMap).length > 0 && (
+                  <div className="bg-orange-400 text-center py-2 rounded mt-2">
+                    <span className="text-black text-xs font-normal">
+                      Police Status: {policeStatus || "-"}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* 4. Fire Brigade Details */}
+              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
+                <div className="flex-1">
+                  <h3 className="text-black text-sm font-normal mb-3">
+                    Fire Brigade details:
+                  </h3>
+                  {fireTrucks.length === 0 ? (
+                    <div className="text-black text-xs font-normal mb-4">No fire truck assigned.</div>
+                  ) : fireTrucks.map((truck, idx) => (
+                    <div key={truck.id || idx} className="text-black text-xs font-normal mb-2">
+                      <b>Truck:</b> {truck.regNumber || truck.id} <b>Status:</b> {truck.status}
+                    </div>
+                  ))}
+                </div>
+                {fireTrucks.length > 0 && (
+                  <div className="bg-orange-400 text-center py-2 rounded mt-2">
+                    <span className="text-black text-xs font-normal">
+                      Fire Brigade Status: {fireTruckStatus || "-"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Payment Panel (Sticky to bottom of gray panel) */}
+          <div className="p-2 sticky bottom-0 left-0 right-0 bg-gray-100 z-10">
+            <div className="bg-emergency-yellow flex items-center justify-between px-3 py-2 rounded-xl w-full shadow-md">
+              <span className="text-black text-base font-normal">
+                Total Amount: Rs. 1126.18
+              </span>
+              <button
+                onClick={handlePayment}
+                className="bg-emergency-blue px-4 py-1.5 rounded-xl flex items-center gap-2"
+              >
+                <span className="text-white text-sm font-normal">Pay Now</span>
+                <svg width="8" height="12" viewBox="0 0 8 13" fill="none">
+                  <path
+                    d="M1.4546 0.0305786L0 1.3638L5.09119 6.03035L0 10.6974L1.4546 12.0306L8 6.03053L1.4546 0.0305786Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
