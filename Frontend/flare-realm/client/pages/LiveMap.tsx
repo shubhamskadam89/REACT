@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
 
 interface Coords {
   latitude: number;
@@ -11,7 +11,7 @@ interface Coords {
 
 interface LiveMapProps {
   patientCoords: Coords;
-  hospitalCoords: Coords;
+  ambulanceCoords?: Coords;
 }
 
 const homeSVG = `
@@ -21,18 +21,21 @@ const homeSVG = `
   </svg>
 `;
 
-const hospitalSVG = `
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="#ff5252" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2"/>
-    <path d="M12 8v8M8 12h8"/>
+const ambulanceSVG = `
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="#ff9800" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="20" height="10" rx="2"/>
+    <circle cx="7" cy="19" r="2"/>
+    <circle cx="17" cy="19" r="2"/>
+    <rect x="16" y="9" width="4" height="4" rx="1" fill="#fff"/>
+    <rect x="4" y="9" width="6" height="4" rx="1" fill="#fff"/>
   </svg>
 `;
 
-export default function LiveMap({ patientCoords, hospitalCoords }: LiveMapProps) {
+export default function LiveMap({ patientCoords, ambulanceCoords }: LiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!patientCoords || !hospitalCoords) return;
+    if (!patientCoords) return;
 
     const map = new mapboxgl.Map({
       container: mapContainer.current!,
@@ -50,41 +53,43 @@ export default function LiveMap({ patientCoords, hospitalCoords }: LiveMapProps)
       .setPopup(new mapboxgl.Popup().setText('Patient Home'))
       .addTo(map);
 
-    // Hospital Marker (custom hospital icon)
-    const hospitalEl = document.createElement('div');
-    hospitalEl.innerHTML = hospitalSVG;
-    hospitalEl.style.transform = 'translate(-50%, -100%)';
-    new mapboxgl.Marker({ element: hospitalEl })
-      .setLngLat([hospitalCoords.longitude, hospitalCoords.latitude])
-      .setPopup(new mapboxgl.Popup().setText('Hospital'))
-      .addTo(map);
+    // Ambulance Marker (custom ambulance icon)
+    if (ambulanceCoords) {
+      const ambulanceEl = document.createElement('div');
+      ambulanceEl.innerHTML = ambulanceSVG;
+      ambulanceEl.style.transform = 'translate(-50%, -100%)';
+      new mapboxgl.Marker({ element: ambulanceEl })
+        .setLngLat([ambulanceCoords.longitude, ambulanceCoords.latitude])
+        .setPopup(new mapboxgl.Popup().setText('Ambulance'))
+        .addTo(map);
 
-    // Fetch directions
-    fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${patientCoords.longitude},${patientCoords.latitude};${hospitalCoords.longitude},${hospitalCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
-      .then(res => res.json())
-      .then(data => {
-        const route = data.routes[0].geometry;
+      // Draw route from ambulance to patient
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${ambulanceCoords.longitude},${ambulanceCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
+        .then(res => res.json())
+        .then(data => {
+          const route = data.routes[0].geometry;
 
-        map.addSource('route', {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
-            geometry: route
-          }
+          map.addSource('route', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: route
+            }
+          });
+
+          map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: 'route',
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': '#080500', 'line-width': 3 }
+          });
         });
-
-        map.addLayer({
-          id: 'route',
-          type: 'line',
-          source: 'route',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': '#00bcd4', 'line-width': 5 }
-        });
-      });
+    }
 
     return () => map.remove();
-  }, [patientCoords, hospitalCoords]);
+  }, [patientCoords, ambulanceCoords]);
 
   return <div ref={mapContainer} className="w-full h-96 rounded-xl shadow" />;
 } 

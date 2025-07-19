@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import LiveMap from "./LiveMap";
 
 // SVG Icons
@@ -79,6 +78,7 @@ export default function Tracking() {
   const [isMapCollapsed, setIsMapCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [userCoords, setUserCoords] = useState({ latitude: 18.5204, longitude: 73.8567 }); // default Pune
+  const [userAddress, setUserAddress] = useState("");
   const [ambulances, setAmbulances] = useState([]);
   const [policeMap, setPoliceMap] = useState({});
   const [fireTrucks, setFireTrucks] = useState([]);
@@ -90,9 +90,23 @@ export default function Tracking() {
   // Hardcoded hospital location
   const hospitalCoords = { latitude: 18.5310, longitude: 73.8446 };
 
+  // Helper to calculate distance between two lat/lng points (Haversine formula)
+  function getDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
   useEffect(() => {
     const lastBooking = JSON.parse(localStorage.getItem('lastBooking') || '{}');
     if (lastBooking.userLocation) setUserCoords(lastBooking.userLocation);
+    if (lastBooking.userAddress) setUserAddress(lastBooking.userAddress);
     if (lastBooking.bookingResponse) {
       setAmbulances(lastBooking.bookingResponse.assignedAmbulances || []);
       setPoliceMap(lastBooking.bookingResponse.assignedPoliceMap || {});
@@ -122,7 +136,10 @@ export default function Tracking() {
     <div className="min-h-screen bg-white font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl relative">
       {/* Map Section */}
       <div className={`relative transition-all duration-300 ${isMapCollapsed ? "h-16" : "h-96"}`}>
-        <LiveMap patientCoords={userCoords} hospitalCoords={hospitalCoords} />
+        <LiveMap
+          patientCoords={userCoords}
+          ambulanceCoords={ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude ? { latitude: ambulances[0].latitude, longitude: ambulances[0].longitude } : undefined}
+        />
         {/* TODO: Replace this image with Google Maps API integration. */}
         {/* Collapse button */}
         
@@ -191,30 +208,36 @@ export default function Tracking() {
                       Your location:
                     </div>
                     <div className="text-black text-xs font-normal mb-2">
-                      908, ABS Road, City
+                      {userAddress || "-"}
                     </div>
                     {/* Gray line below address */}
                     <div className="w-full h-px bg-gray-300 mb-2"></div>
                     <div className="text-black text-xs font-normal mb-1">
-                      Hospital details:
+                      Ambulance details:
                     </div>
                     <div className="text-black text-xs font-normal mb-2">
-                      Sunrise Hospital<br />Address details<br />Bed/OT/ICU assigned
+                      {ambulances.length > 0 ? (
+                        <>
+                          <b>Driver:</b> {ambulances[0].driverName || "-"}<br />
+                          <b>Reg:</b> {ambulances[0].regNumber || "-"}
+                        </>
+                      ) : "No ambulance assigned."}
                     </div>
-                    {/* Gray line below hospital address */}
+                    {/* Gray line below ambulance distance */}
                     <div className="w-full h-px bg-gray-300"></div>
                   </div>
-                  <button
-                    onClick={handleCallHospital}
-                    className="w-9 h-8 bg-emergency-green rounded-full flex items-center justify-center absolute right-0 top-0"
-                  >
-                    <PhoneIcon className="w-5 h-5 text-black" />
-                  </button>
                 </div>
                 {/* Distance and Time */}
                 <div className="bg-emergency-orange text-center py-2 rounded">
                   <span className="text-black text-xs font-normal">
-                    Total Distance: 2.3 kms | Est. Time: 14 mins
+                    Total Distance: {ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude
+                      ? `${getDistanceKm(
+                          ambulances[0].latitude,
+                          ambulances[0].longitude,
+                          userCoords.latitude,
+                          userCoords.longitude
+                        ).toFixed(2)} kms`
+                      : "-"} | Est. Time: 14 mins
                   </span>
                 </div>
               </div>

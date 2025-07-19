@@ -33,7 +33,8 @@ export default function BookingForm() {
     needFireBrigade: false,
     requestedFireTruckCount: 1,
     isForSelf: true,
-    victimPhoneNumber: ""
+    victimPhoneNumber: "",
+    address: ""
   });
 
   // Get user's current location on component mount
@@ -124,9 +125,18 @@ export default function BookingForm() {
           "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          ...form,
           latitude: latitudeNum,
-          longitude: longitudeNum
+          longitude: longitudeNum,
+          issueType: form.issueType,
+          notes: form.notes,
+          needAmbulance: form.needAmbulance,
+          requestedAmbulanceCount: form.requestedAmbulanceCount,
+          needPolice: form.needPolice,
+          requestedPoliceCount: form.requestedPoliceCount,
+          needFireBrigade: form.needFireBrigade,
+          requestedFireTruckCount: form.requestedFireTruckCount,
+          isForSelf: form.isForSelf,
+          victimPhoneNumber: form.victimPhoneNumber
         })
       });
 
@@ -140,6 +150,7 @@ export default function BookingForm() {
       // Success - navigate to tracking page
       localStorage.setItem('lastBooking', JSON.stringify({
         userLocation: { latitude: latitudeNum, longitude: longitudeNum },
+        userAddress: form.address,
         bookingResponse: data
       }));
       alert("Emergency request submitted successfully! Help is on the way.");
@@ -222,6 +233,18 @@ export default function BookingForm() {
                   inputMode="decimal"
                 />
               </div>
+            </div>
+            {/* Address Block */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="908, ABS Road, City"
+              />
             </div>
           </div>
 
@@ -341,7 +364,7 @@ export default function BookingForm() {
 
           {/* Victim Information */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold mb-3">👤 Victim Information</h2>
+            <h2 className="text-lg font-semibold mb-3">�� Victim Information</h2>
             <div className="space-y-3">
               <div className="flex items-center">
                 <input
