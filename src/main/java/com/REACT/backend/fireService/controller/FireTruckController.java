@@ -35,4 +35,6 @@ public class FireTruckController {
         return ResponseEntity.ok("Location updated and broadcasted");
     }
 
+
+
 }
