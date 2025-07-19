@@ -2,13 +2,11 @@ import { useState } from 'react';
 
 export default function PoliceDashboard() {
   const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    phoneNumber: '',
-    governmentId: '',
-    password: '',
-    role: 'POLICE_OFFICER',
-    policeStationId: '',
+    id: '',
+    stationName: '',
+    latitude: '',
+    longitude: '',
+    availableOfficers: ''
   });
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,22 +20,42 @@ export default function PoliceDashboard() {
     e.preventDefault();
     setMessage('');
     setLoading(true);
+    
+    // Get JWT token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('Authentication token not found. Please login again.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const body = { ...form, policeStationId: Number(form.policeStationId) };
-      const res = await fetch('http://localhost:8080/auth/register/police-officer', {
+      const requestBody = {
+        id: form.id ? parseInt(form.id) : undefined,
+        stationName: form.stationName,
+        latitude: parseFloat(form.latitude),
+        longitude: parseFloat(form.longitude),
+        availableOfficers: parseInt(form.availableOfficers)
+      };
+
+      const res = await fetch('http://localhost:8080/police/station/add', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(requestBody),
       });
+      
       if (res.ok) {
-        setMessage('Police officer registered successfully!');
-        setForm({ fullName: '', email: '', phoneNumber: '', governmentId: '', password: '', role: 'POLICE_OFFICER', policeStationId: '' });
+        setMessage('Police station created successfully!');
+        setForm({ id: '', stationName: '', latitude: '', longitude: '', availableOfficers: '' });
       } else {
         const data = await res.json();
-        setMessage(data.message || 'Registration failed.');
+        setMessage(data.message || 'Failed to create police station.');
       }
     } catch (err) {
-      setMessage('Network error.');
+      setMessage('Network error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -46,17 +64,58 @@ export default function PoliceDashboard() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-indigo-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg text-center">
-        <h2 className="text-3xl font-bold mb-4 text-indigo-800">Police Officer Dashboard</h2>
-        <p className="text-lg mb-2">Register a new police officer:</p>
+        <h2 className="text-3xl font-bold mb-4 text-indigo-800">Police Station Dashboard</h2>
+        <p className="text-lg mb-2">Create a new police station:</p>
         <form onSubmit={handleSubmit} className="space-y-3 text-left">
-          <input name="fullName" value={form.fullName} onChange={handleChange} placeholder="Full Name" required className="w-full px-3 py-2 border rounded" />
-          <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required className="w-full px-3 py-2 border rounded" />
-          <input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} placeholder="Phone Number" required className="w-full px-3 py-2 border rounded" />
-          <input name="governmentId" value={form.governmentId} onChange={handleChange} placeholder="Government ID" required className="w-full px-3 py-2 border rounded" />
-          <input name="password" value={form.password} onChange={handleChange} placeholder="Password" type="password" required className="w-full px-3 py-2 border rounded" />
-          <input name="role" value={form.role} readOnly className="w-full px-3 py-2 border rounded bg-gray-100" />
-          <input name="policeStationId" value={form.policeStationId} onChange={handleChange} placeholder="Police Station ID" type="number" required className="w-full px-3 py-2 border rounded" />
-          <button type="submit" disabled={loading} className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50">{loading ? 'Registering...' : 'Register'}</button>
+          <input 
+            name="id" 
+            value={form.id} 
+            onChange={handleChange} 
+            placeholder="Station ID (optional)" 
+            type="number"
+            className="w-full px-3 py-2 border rounded" 
+          />
+          <input 
+            name="stationName" 
+            value={form.stationName} 
+            onChange={handleChange} 
+            placeholder="Station Name" 
+            required 
+            className="w-full px-3 py-2 border rounded" 
+          />
+          <input 
+            name="latitude" 
+            value={form.latitude} 
+            onChange={handleChange} 
+            placeholder="Latitude (e.g., 10.5204)" 
+            type="number" 
+            step="any"
+            required 
+            className="w-full px-3 py-2 border rounded" 
+          />
+          <input 
+            name="longitude" 
+            value={form.longitude} 
+            onChange={handleChange} 
+            placeholder="Longitude (e.g., 73.8567)" 
+            type="number" 
+            step="any"
+            required 
+            className="w-full px-3 py-2 border rounded" 
+          />
+          <input 
+            name="availableOfficers" 
+            value={form.availableOfficers} 
+            onChange={handleChange} 
+            placeholder="Available Officers" 
+            type="number" 
+            min="0"
+            required 
+            className="w-full px-3 py-2 border rounded" 
+          />
+          <button type="submit" disabled={loading} className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50">
+            {loading ? 'Creating...' : 'Create Police Station'}
+          </button>
         </form>
         {message && <div className={`mt-4 ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</div>}
       </div>
