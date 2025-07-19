@@ -1,6 +1,7 @@
 package com.REACT.backend.ambulanceService.model;
 
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
+//import com.REACT.backend.hospitalService.model.Hospital;
 import com.REACT.backend.hospitalService.model.Hospital;
 import com.REACT.backend.users.AppUser;
 import jakarta.persistence.*;
@@ -39,7 +40,7 @@ public class AmbulanceEntity {
     private AppUser driver;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id", nullable = false)
+    @JoinColumn(name = "hospital_id", nullable = true)
     private Hospital hospital;
 
 
