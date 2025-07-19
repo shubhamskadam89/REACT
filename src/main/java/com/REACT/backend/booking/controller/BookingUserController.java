@@ -5,8 +5,12 @@ import com.REACT.backend.booking.dto.BookingSummeryDto;
 import com.REACT.backend.booking.service.BookingService;
 import com.REACT.backend.users.AppUser;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/user")
@@ -28,17 +33,20 @@ public class BookingUserController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/bookings/{userId}")
+
     public ResponseEntity<List<BookingSummeryDto>> getUserBookings(@PathVariable Long userId) {
-        logger.info("Fetching booking history for user {}", userId);
+
         List<BookingSummeryDto> bookings = bookingService.getBookingHistoryForUser(userId);
+        log.info("Bookings for userId {} requested",userId);
         return ResponseEntity.ok(bookings);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<BookingResponseDto> getBookingDetails(@PathVariable Long bookingId) {
-        logger.info("Fetching booking details for bookingId {}", bookingId);
+        log.info("Fetching booking details for bookingId {}", bookingId);
         BookingResponseDto bookingDetails = bookingService.getBookingDetailsByBookingId(bookingId);
+        log.info("Booking with {} requested ny the user",bookingId);
         return ResponseEntity.ok(bookingDetails);
     }
 
@@ -48,10 +56,12 @@ public class BookingUserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
 
-        logger.warn("User {} is attempting to delete booking {}", user.getUserId(), bookingId);
+        log.warn("User {} is attempting to delete booking {}", user.getUserId(), bookingId);
 
-        bookingService.deleteBookingById(bookingId, user.getUserId());
-        return ResponseEntity.ok("Booking deleted Successfully");
+
+        BookingResponseDto response = bookingService.deleteBookingById(bookingId, user.getUserId());
+        log.info("Booking delete request received for booking {}",bookingId);
+        return ResponseEntity.ok( "Booking deleted Successfully");
     }
 
 }

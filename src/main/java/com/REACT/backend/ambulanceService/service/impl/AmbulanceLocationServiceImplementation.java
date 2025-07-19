@@ -10,10 +10,11 @@ import com.REACT.backend.locationService.model.UnitType;
 import com.REACT.backend.locationService.service.LocationBroadcastService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AmbulanceLocationServiceImplementation implements AmbulanceLocationService {
@@ -26,12 +27,15 @@ public class AmbulanceLocationServiceImplementation implements AmbulanceLocation
     @Override
     @Transactional
     public void updateLocation(AmbulanceLocationUpdateDto dto){
+        log.info("Received location update for Ambulance ID: {}, lat: {}, long: {}",
+                dto.getAmbulanceId(), dto.getLatitude(), dto.getLongitude());
         AmbulanceEntity entity = ambulanceRepositoryRepo.findById(dto.getAmbulanceId())
                 .orElseThrow(()-> new RuntimeException("No such ambulance exist"+dto.getAmbulanceId()));
 
 
         entity.setLocation(locationUtils.createPoint( dto.getLongitude(), dto.getLatitude()));
         ambulanceRepositoryRepo.save(entity);
+        log.debug("Ambulance ID {} location updated in DB.", entity.getId());
 
         LocationBroadcastDto broadcastDto = new LocationBroadcastDto(
                 entity.getId(),
@@ -40,6 +44,7 @@ public class AmbulanceLocationServiceImplementation implements AmbulanceLocation
                 dto.getLatitude()
         );
         broadcastService.broadcastLocation(broadcastDto);
+        log.info("Location broadcasted for Ambulance ID: {}", entity.getId());
     }
 
 

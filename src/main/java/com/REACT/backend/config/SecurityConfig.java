@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-
+                        .requestMatchers("/63342/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/location/**").permitAll()
                         .requestMatchers("/ws-location/**").permitAll()
