@@ -1,5 +1,6 @@
 package com.REACT.backend.fireService.model;
 
+import com.REACT.backend.users.model.FireTruckDriver;
 import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
@@ -20,7 +21,14 @@ public class FireTruckEntity {
 
     private String driverName;
 
+    @OneToOne(mappedBy = "fireTruckEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private FireTruckDriver driver;
+
+
     private String vehicleRegNumber;
+
+    @Column(nullable = true)
+    private String driverPhoneNumber;
 
     @Enumerated(EnumType.STRING)
     private FireTruckStatus status;

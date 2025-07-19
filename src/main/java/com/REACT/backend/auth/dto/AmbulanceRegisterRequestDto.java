@@ -16,7 +16,7 @@ public class AmbulanceRegisterRequestDto {
     private String governmentId;
     private String password;
 
-    private Role role = Role.FIRE_DRIVER;
+    private Role role = Role.AMBULANCE_DRIVER;
     private String licenseNumber;
 
     private String vehicleRegNumber;

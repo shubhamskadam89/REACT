@@ -24,5 +24,7 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
             @Param("radius") double radiusInMeters
     );
 
+    List<FireTruckEntity> findByFireStationEntityId(Long stationId);
+
 
 }
