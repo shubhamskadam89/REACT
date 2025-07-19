@@ -1,0 +1,14 @@
+16:48:49.927 [http-nio-8080-exec-7] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: log@example.com
+16:48:49.928 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - 🚨 New booking request received from userId 31 for issue 'Loggers Added'
+16:48:49.928 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 2 ambulances near [18.5304, 73.8167]
+16:48:50.582 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+16:48:50.583 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+16:48:50.583 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 4 officers near [18.5304, 73.8167]
+16:48:50.818 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=4]
+16:48:50.818 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 2 units near [18.5304, 73.8167]
+16:48:51.513 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:13
+16:48:51.515 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+16:48:51.517 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status NONE || Fire brigade Assignment statusNONE
+16:48:51.579 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 13
+16:48:51.580 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+16:48:51.580 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user log@example.com. Returning response.
