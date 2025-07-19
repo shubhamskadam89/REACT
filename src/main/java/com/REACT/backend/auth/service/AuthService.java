@@ -46,19 +46,16 @@ public class AuthService {
     private final PoliceStationRepository policeStationRepo;
     private final PoliceOfficerRepository policeOfficerRepo;
 
-    /**
-     * Register normal user
-     * @param  request {RegisterRequestdto}
-     * @return AuthResponse
-     */
     public AuthResponse register(RegisterRequest request) {
+        log.info("Registering new user: {}", request.getEmail());
+
         if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("User with same government id exist {}",request.getGovernmentId());
+            log.error("Duplicate government ID: {}", request.getGovernmentId());
             throw new RuntimeException("User already exists with this Government ID");
         }
 
         if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("User with same phone number  exist {}",request.getPhoneNumber());
+            log.error("Duplicate phone number: {}", request.getPhoneNumber());
             throw new RuntimeException("Phone number already registered");
         }
 
@@ -70,38 +67,19 @@ public class AuthService {
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .userType(request.getUserType())
-                .verified(true)  // You can make this false if email verification is needed
+                .verified(true)
                 .build();
 
         AppUser savedUser = userRepo.save(newUser);
+        log.info("User registered successfully: {} (Role: {})", savedUser.getUserEmail(), savedUser.getRole());
 
-        String token = jwtUtils.generateTokenFromEmail(savedUser);
-
-        return AuthResponse.builder()
-                .token(token)
-                .email(savedUser.getUserEmail())
-                .userId(savedUser.getUserId())
-                .role(savedUser.getRole())
-                .userType(savedUser.getUserType())
-                .build();
+        return buildAuthResponse(savedUser);
     }
 
+    public AuthResponse registerFireDriver(FireDriverRegisterRequestDto request) {
+        log.info("Registering fire truck driver: {}", request.getEmail());
 
-    /**
-     *  Register Fire Driver
-     * @param request registerRequest
-     * @return authResponse
-     */
-    public AuthResponse registerFireDriver(FireDriverRegisterRequestDto request){
-        if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("User with same government id exist {}",request.getGovernmentId());
-            throw new RuntimeException("User already exists with this Government ID");
-        }
-
-        if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("User with same phone number  exist {}",request.getPhoneNumber());
-            throw new RuntimeException("Phone number already registered");
-        }
+        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
 
         AppUser newUser = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -113,15 +91,18 @@ public class AuthService {
                 .verified(true)
                 .build();
 
-
         FireStationEntity station = fireStationRepo.findById(request.getFireStationId())
-                .orElseThrow(() -> new RuntimeException("Station does not exist with id:"+request.getFireStationId()));
+                .orElseThrow(() -> {
+                    log.error("No fire station with ID: {}", request.getFireStationId());
+                    return new RuntimeException("Station does not exist with id:" + request.getFireStationId());
+                });
 
+        log.info("Assigning driver {} to fire station: {}", request.getFullName(), station.getStationName());
 
         FireTruckEntity fireTruckEntity = FireTruckEntity.builder()
                 .driverName(request.getFullName())
                 .status(FireTruckStatus.AVAILABLE)
-                .lastUpdated(Instant.now().plusSeconds(330*3600))
+                .lastUpdated(Instant.now().plusSeconds(330 * 3600))
                 .location(station.getLocation())
                 .fireStationEntity(station)
                 .vehicleRegNumber(request.getVehicleRegNumber())
@@ -135,35 +116,15 @@ public class AuthService {
 
         AppUser savedUser = userRepo.save(newUser);
         fireTruckDriverRepo.save(fireTruckDriver);
+        log.info("Fire truck driver registered: {}, assigned truck: {}", savedUser.getUserEmail(), request.getVehicleRegNumber());
 
-        String token = jwtUtils.generateTokenFromEmail(savedUser);
-
-        return AuthResponse.builder()
-                .token(token)
-                .email(savedUser.getUserEmail())
-                .userId(savedUser.getUserId())
-                .role(savedUser.getRole())
-                .build();
+        return buildAuthResponse(savedUser);
     }
 
-
-    /**
-     * Register Ambulance Driver
-     * @param request registerRequest
-     * @return authResponse
-     */
-
     public AuthResponse registerAmbulanceDriver(AmbulanceRegisterRequestDto request) {
+        log.info("Registering ambulance driver: {}", request.getEmail());
 
-        if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("User with same government id exist {}",request.getGovernmentId());
-            throw new RuntimeException("User already exists with this Government ID");
-        }
-
-        if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("User with same phone number  exist {}",request.getPhoneNumber());
-            throw new RuntimeException("Phone number already registered");
-        }
+        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
 
         AppUser user = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -175,11 +136,11 @@ public class AuthService {
                 .verified(true)
                 .build();
 
-
-        System.out.println("HospitalID:"+request.getHospitalID());
         Hospital hospital = hospitalRepo.findById(request.getHospitalID())
-                .orElseThrow(()-> new RuntimeException("No hospital with this id exist: "+request.getHospitalID()));
-
+                .orElseThrow(() -> {
+                    log.error("Invalid hospital ID: {}", request.getHospitalID());
+                    return new RuntimeException("No hospital with this id exist: " + request.getHospitalID());
+                });
 
         AmbulanceEntity ambulance = AmbulanceEntity.builder()
                 .ambulanceRegNumber(request.getVehicleRegNumber())
@@ -191,7 +152,6 @@ public class AuthService {
                 .hospital(hospital)
                 .build();
 
-
         AmbulanceDriver driver = AmbulanceDriver.builder()
                 .driver(user)
                 .ambulance(ambulance)
@@ -200,32 +160,15 @@ public class AuthService {
 
         AppUser savedUser = userRepo.save(user);
         ambulanceDriverRepo.save(driver);
+        log.info("Ambulance driver registered: {}, vehicle: {}", savedUser.getUserEmail(), request.getVehicleRegNumber());
 
-
-        return AuthResponse.builder()
-                .token(jwtUtils.generateTokenFromEmail(savedUser))
-                .email(savedUser.getUserEmail())
-                .userId(savedUser.getUserId())
-                .role(savedUser.getRole())
-                .build();
+        return buildAuthResponse(savedUser);
     }
 
+    public AuthResponse registerPoliceOfficer(PoliceOfficerRegisterRequestDto request) {
+        log.info("Registering police officer: {}", request.getEmail());
 
-    /**
-     * Register Police Officer
-     * @param request registerRequest
-     * @return authResponse
-     */
-    public AuthResponse registerPoliceOfficer(PoliceOfficerRegisterRequestDto request){
-        if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("User with same government id exist {}",request.getGovernmentId());
-            throw new RuntimeException("User already exists with this Government ID");
-        }
-
-        if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("User with same phone number  exist {}",request.getPhoneNumber());
-            throw new RuntimeException("Phone number already registered");
-        }
+        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
 
         AppUser user = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -238,7 +181,12 @@ public class AuthService {
                 .build();
 
         PoliceStationEntity station = policeStationRepo.findById(request.getPoliceStationId())
-                .orElseThrow(()-> new RuntimeException("No such Police Station exist"));
+                .orElseThrow(() -> {
+                    log.error("No police station found with ID: {}", request.getPoliceStationId());
+                    return new RuntimeException("No such Police Station exist");
+                });
+
+        log.info("Assigning officer {} to station {}", request.getFullName(), station.getStationName());
 
         PoliceOfficer officer = PoliceOfficer.builder()
                 .fullName(request.getFullName())
@@ -248,33 +196,46 @@ public class AuthService {
 
         AppUser savedUser = userRepo.save(user);
         policeOfficerRepo.save(officer);
+        log.info("Police officer registered: {}", savedUser.getUserEmail());
 
-        return AuthResponse.builder()
-                .token(jwtUtils.generateTokenFromEmail(savedUser))
-                .email(savedUser.getUserEmail())
-                .userId(savedUser.getUserId())
-                .role(savedUser.getRole())
-                .build();
+        return buildAuthResponse(savedUser);
     }
 
-
     public AuthResponse login(LoginRequest request) {
+        log.info("Login attempt for {}", request.getEmail());
 
         AppUser user = userRepo.findByUserEmail(request.getEmail());
-        log.debug("Login request from {}",request.getEmail());
 
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getUserPassword())) {
-            log.error("Invalid email or password");
+            log.warn("Invalid login attempt for {}", request.getEmail());
             throw new RuntimeException("Invalid email or password");
         }
 
-        String token = jwtUtils.generateTokenFromEmail(user);
+        log.info("Login successful for {}", request.getEmail());
+        return buildAuthResponse(user);
+    }
 
+    // ------------------ Helpers ------------------------
+
+    private void checkUserConflict(String govId, String phone) {
+        if (userRepo.existsByGovernmentId(govId)) {
+            log.error("Duplicate government ID: {}", govId);
+            throw new RuntimeException("User already exists with this Government ID");
+        }
+
+        if (userRepo.existsByPhoneNumber(phone)) {
+            log.error("Duplicate phone number: {}", phone);
+            throw new RuntimeException("Phone number already registered");
+        }
+    }
+
+    private AuthResponse buildAuthResponse(AppUser user) {
         return AuthResponse.builder()
-                .token(token)
+                .token(jwtUtils.generateTokenFromEmail(user))
                 .email(user.getUserEmail())
                 .userId(user.getUserId())
                 .role(user.getRole())
+                .userType(user.getUserType())
                 .build();
     }
 }

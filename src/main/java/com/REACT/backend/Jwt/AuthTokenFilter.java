@@ -61,10 +61,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.debug("Security context updated with user: {}", userDetails.getUserEmail());
-                } else {
+                }
+                else {
                     log.warn("User not found in DB for email: {}", userEmail);
                 }
-            } else {
+            }
+            else {
                 log.warn("Invalid or missing JWT token.");
             }
 

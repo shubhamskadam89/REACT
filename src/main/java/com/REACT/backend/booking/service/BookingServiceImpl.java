@@ -54,15 +54,21 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingResponseDto createBooking(BookingRequestDto requestDto, Long requestedById) {
 
+        log.info("🚨 New booking request received from userId {} for issue '{}'", requestedById, requestDto.getIssueType());
+
 
         // 🏥 1. Assign ambulances
         List<AmbulanceEntity> assignedAmbulances = new ArrayList<>();
         if (requestDto.isNeedAmbulance()) {
+            log.info("Ambulance required: Searching for {} ambulances near [{}, {}]",
+                    requestDto.getRequestedAmbulanceCount(), requestDto.getLatitude(), requestDto.getLongitude());
             assignedAmbulances = findNearestAmbulances(
                     requestDto.getLatitude(),
                     requestDto.getLongitude(),
                     requestDto.getRequestedAmbulanceCount()
+
             );
+            log.info("Ambulances assigned: {}", assignedAmbulances.stream().map(AmbulanceEntity::getId).toList());
 
         }
 
@@ -71,6 +77,8 @@ public class BookingServiceImpl implements BookingService {
         String policeStatus = "";
         Map<PoliceStationEntity,Integer> assignedPoliceMap = new HashMap<>();
         if (requestDto.isNeedPolice()) {
+            log.info("Police required: {} officers near [{}, {}]",
+                    requestDto.getRequestedPoliceCount(), requestDto.getLatitude(), requestDto.getLongitude());
             assignedPoliceMap = assignPoliceOfficers(
                     requestDto.getLatitude(),
                     requestDto.getLongitude(),
@@ -78,11 +86,14 @@ public class BookingServiceImpl implements BookingService {
             );
 
 
+
             if (!assignedPoliceMap.isEmpty()) {
                 policeStatus = (calculateTotalOfficers(assignedPoliceMap) == requestDto.getRequestedPoliceCount())
                         ? "FULLY_ASSIGNED"
                         : "PARTIALLY_ASSIGNED";
             }
+            log.info("Police assignment: {}", assignedPoliceMap.entrySet()
+                    .stream().map(e -> e.getKey().getStationName() + "=" + e.getValue()).toList());
         }
 
 
@@ -91,6 +102,8 @@ public class BookingServiceImpl implements BookingService {
         // 🔥 3. Assign fire trucks
         List<FireTruckEntity> assignedFireTruckEntities = new ArrayList<>();
         if (requestDto.isNeedFireBrigade()) {
+            log.info("Fire truck required: {} units near [{}, {}]",
+                    requestDto.getRequestedFireTruckCount(), requestDto.getLatitude(), requestDto.getLongitude());
             assignedFireTruckEntities = findAvailableFireTrucks(
                     requestDto.getLatitude(),
                     requestDto.getLongitude(),
@@ -98,6 +111,7 @@ public class BookingServiceImpl implements BookingService {
             );
 
         }
+
 
 
         // 👮‍♂️ 4. Resolve user
@@ -133,6 +147,7 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         requestRepo.save(requestEntity);
+        log.info("Emergency Request saved with id:"+requestEntity.getId());
 
         // 🧯 6. Update statuses
         assignedAmbulances.forEach(amb -> {
@@ -147,6 +162,8 @@ public class BookingServiceImpl implements BookingService {
             fireTruckRepository.save(truck);
         });
 
+        log.info("Status update for each service");
+
         // Update police station availability
 
 
@@ -159,6 +176,7 @@ public class BookingServiceImpl implements BookingService {
         String fireStatus = DispatchUtils.fireTruckStatus(
                 assignedFireTruckEntities.size(), requestDto.getRequestedFireTruckCount()
         );
+        log.info("Ambulance assignment status {} || Fire brigade Assignment status{}",ambStatus,fireStatus);
 
 
 
@@ -166,7 +184,7 @@ public class BookingServiceImpl implements BookingService {
 
 
         // 📖 8. Booking log
-        BookingLogEntity log = BookingLogEntity.builder()
+        BookingLogEntity logg = BookingLogEntity.builder()
                 .createdAt(Instant.now())
                 .statusMessage("Ambulance: " + ambStatus + ", Police: " + policeStatus+ ", Fire: " + fireStatus)
                 .emergencyRequest(requestEntity)
@@ -175,15 +193,22 @@ public class BookingServiceImpl implements BookingService {
                 .assignedPoliceMap(assignedPoliceMap)
                 .build();
 
-        BookingLogEntity savedLog = logRepo.save(log);
+        BookingLogEntity savedLog = logRepo.save(logg);
+        log.info("Booking log saved with id {}",logg.getId());
 
 
+
+
+        log.info("Started building booking Response dto");
 
         Map<String, Integer> policeDtoMap = assignedPoliceMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getKey().getStationName(),  // or getName()
                         Map.Entry::getValue
                 ));
+
+        log.info("Booking process completed successfully for user {}. Returning response.", requestedBy.getUserEmail());
+
 
         // 🧾 9. Build response
         return BookingResponseDto.builder()
@@ -209,6 +234,7 @@ public class BookingServiceImpl implements BookingService {
 
     public List<AmbulanceEntity> findNearestAmbulances(double lat, double lng, int requiredCount) {
         List<AmbulanceEntity> assigned = new ArrayList<>();
+
         for (int radius = 1000; radius <= MAX_RADIUS_KM * 1000; radius += 1000) {
             List<AmbulanceEntity> ambulances = ambulanceRepository.findAvailableWithinRadius(lat, lng, radius);
             System.out.println("🚑 Found " + ambulances.size() + " ambulances within radius " + radius);
@@ -222,6 +248,7 @@ public class BookingServiceImpl implements BookingService {
                 }
             }
         }
+        log.info("Ambulances assigned: {}", assigned.stream().map(AmbulanceEntity::getId).toList());
         return assigned;
     }
 
