@@ -71,6 +71,10 @@ function Login() {
             </div>
           )}
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-gray-600">Don't have an account? </span>
+          <a href="/register" className="text-blue-600 hover:underline">Register</a>
+        </div>
       </div>
     </div>
   )
