@@ -42,12 +42,12 @@ public class BookingLogEntity {
     /**
      * stationId → number of officers assigned from that station
      */
-
     @ElementCollection
-    @CollectionTable(name = "booking_log_police_map", joinColumns = @JoinColumn(name = "booking_log_id"))
+    @CollectionTable(name = "booking_log_police_allocations", joinColumns = @JoinColumn(name = "booking_log_id"))
     @MapKeyJoinColumn(name = "station_id")
     @Column(name = "officer_count")
     private Map<PoliceStationEntity, Integer> assignedPoliceMap;
+
 
 
 

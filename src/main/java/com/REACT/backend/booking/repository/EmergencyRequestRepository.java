@@ -24,5 +24,7 @@ public interface EmergencyRequestRepository extends JpaRepository<EmergencyReque
     List<EmergencyRequestEntity> findByRequestedBy_UserIdAndEmergencyRequestStatus(
             Long userId, EmergencyRequestStatus status);
 
+    List<EmergencyRequestEntity> findByEmergencyRequestStatus(EmergencyRequestStatus status);
+
 
 }
