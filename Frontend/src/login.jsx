@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -6,6 +7,7 @@ function Login() {
   const [error, setError] = useState('')
   const [token, setToken] = useState('')
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -24,6 +26,8 @@ function Login() {
 
       const data = await response.json()
       setToken(data.token || data.jwt || '')
+      localStorage.setItem('jwt', data.token || data.jwt || '')
+      navigate('/landing')
     } catch (err) {
       setError(err.message || 'Login failed')
       setToken('')
