@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Landing() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     latitude: '',
     longitude: '',
@@ -139,12 +141,45 @@ export default function Landing() {
             {message && <div className={`text-center mt-2 ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</div>}
           </form>
         </section>
+        
+        {/* Navigation Section */}
+        <section className="mt-8 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+          <h3 className="text-xl font-semibold mb-4 text-center">Track Emergency</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 font-medium text-gray-700">Emergency Request ID</label>
+              <input 
+                id="requestId" 
+                type="number" 
+                placeholder="Enter request ID (e.g., 1)" 
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <button 
+              onClick={() => {
+                const requestId = document.getElementById('requestId').value;
+                if (requestId) {
+                  navigate(`/navigation/${requestId}`);
+                } else {
+                  alert('Please enter a request ID');
+                }
+              }}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+            >
+              View Navigation Map
+            </button>
+            <p className="text-sm text-gray-600 text-center">
+              Track the route between ambulance and emergency location
+            </p>
+          </div>
+        </section>
+        
         <section className="mt-10 text-center max-w-2xl">
           <h3 className="text-xl font-semibold mb-2">Why Choose Us?</h3>
           <ul className="list-disc list-inside text-gray-700 space-y-1">
             <li>Instant emergency booking for ambulance, police, and fire brigade</li>
             <li>24/7 availability, rapid response</li>
-            <li>Track your emergency request in real-time (coming soon)</li>
+            <li>Track your emergency request in real-time</li>
             <li>Trusted by thousands of citizens</li>
             <li>Professional and trained responders</li>
             <li>Multi-service coordination for complex emergencies</li>
