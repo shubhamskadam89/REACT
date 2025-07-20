@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/63342/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/location-map/**").permitAll()
                         .requestMatchers("/location/**","/fire/**").permitAll()
                         .requestMatchers("/ws-location/**").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")

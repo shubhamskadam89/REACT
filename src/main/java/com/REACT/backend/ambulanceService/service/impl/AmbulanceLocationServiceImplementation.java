@@ -1,5 +1,6 @@
 package com.REACT.backend.ambulanceService.service.impl;
 
+import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
 import com.REACT.backend.ambulanceService.dto.AmbulanceLocationUpdateDto;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
@@ -48,4 +49,12 @@ public class AmbulanceLocationServiceImplementation implements AmbulanceLocation
     }
 
 
+    public AmbulanceDto getAmbulanceById(Long id) {
+        log.info("Fetching ambulance with ID: {}", id);
+
+        AmbulanceEntity entity = ambulanceRepositoryRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("No such ambulance exists: " + id));
+
+        return new AmbulanceDto(entity);
+    }
 }
