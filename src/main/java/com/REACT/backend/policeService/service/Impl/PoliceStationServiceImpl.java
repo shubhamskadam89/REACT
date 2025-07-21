@@ -5,11 +5,12 @@ import com.REACT.backend.policeService.model.PoliceStationEntity;
 import com.REACT.backend.policeService.repository.PoliceStationRepository;
 import com.REACT.backend.policeService.service.PoliceStationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PoliceStationServiceImpl implements PoliceStationService {

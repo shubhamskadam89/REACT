@@ -5,11 +5,13 @@ import com.REACT.backend.ambulanceService.dto.AmbulanceLocationUpdateDto;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
 import com.REACT.backend.ambulanceService.service.AmbulanceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import  java.util.*;
 import java.util.stream.Collectors;
+@Slf4j
 
 @Service
 public class AmbulanceServiceImpl implements AmbulanceService {

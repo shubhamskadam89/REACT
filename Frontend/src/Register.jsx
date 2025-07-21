@@ -15,6 +15,13 @@ export default function Register() {
     governmentId: '',
     password: '',
     role: 'USER',
+    licenseNumber: '',
+    vehicleRegNumber: '',
+    hospitalID: '',
+    fireStationId: '',
+    policeStationId: '',
+    securityQuestion: 'PET_NAME',
+    securityAnswer: '',
   });
   const [message, setMessage] = useState('');
 
@@ -25,15 +32,85 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    let endpoint = 'http://localhost:8080/auth/register';
+    let body = {};
+    if (form.role === 'AMBULANCE_DRIVER') {
+      endpoint = 'http://localhost:8080/auth/register/ambulance-driver';
+      body = {
+        fullName: form.fullName,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        governmentId: form.governmentId,
+        password: form.password,
+        licenseNumber: form.licenseNumber,
+        vehicleRegNumber: form.vehicleRegNumber,
+        hospitalID: form.hospitalID ? Number(form.hospitalID) : undefined,
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer,
+      };
+    } else if (form.role === 'FIRE_DRIVER') {
+      endpoint = 'http://localhost:8080/auth/register/fire-driver';
+      body = {
+        fullName: form.fullName,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        governmentId: form.governmentId,
+        password: form.password,
+        licenseNumber: form.licenseNumber,
+        vehicleRegNumber: form.vehicleRegNumber,
+        fireStationId: form.fireStationId ? Number(form.fireStationId) : undefined,
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer,
+      };
+    } else if (form.role === 'POLICE_OFFICER') {
+      endpoint = 'http://localhost:8080/auth/register/police-officer';
+      body = {
+        fullName: form.fullName,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        governmentId: form.governmentId,
+        password: form.password,
+        role: 'POLICE_OFFICER',
+        policeStationId: form.policeStationId ? Number(form.policeStationId) : undefined,
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer,
+      };
+    } else {
+      // USER
+      body = {
+        fullName: form.fullName,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        governmentId: form.governmentId,
+        password: form.password,
+        role: 'USER',
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer,
+      };
+    }
     try {
-      const res = await fetch('http://localhost:8080/auth/register', {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         setMessage('Registration successful!');
-        setForm({ fullName: '', email: '', phoneNumber: '', governmentId: '', password: '', role: 'USER' });
+        setForm({
+          fullName: '',
+          email: '',
+          phoneNumber: '',
+          governmentId: '',
+          password: '',
+          role: 'USER',
+          licenseNumber: '',
+          vehicleRegNumber: '',
+          hospitalID: '',
+          fireStationId: '',
+          policeStationId: '',
+          securityQuestion: 'PET_NAME',
+          securityAnswer: '',
+        });
       } else {
         const data = await res.json();
         setMessage(data.message || 'Registration failed.');
@@ -42,6 +119,13 @@ export default function Register() {
       setMessage('Network error.');
     }
   };
+
+  const securityQuestions = [
+    { value: 'PET_NAME', label: "What is your pet’s name?" },
+    { value: 'BIRTH_CITY', label: 'In which city were you born?' },
+    { value: 'FAVORITE_TEACHER', label: 'Who was your favorite teacher?' },
+    { value: 'MOTHER_MAIDEN_NAME', label: "What is your mother's maiden name?" },
+  ];
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -74,6 +158,20 @@ export default function Register() {
             </label>
           </div>
           <div>
+            <label className="block mb-1 font-medium">Security Question<br />
+              <select name="securityQuestion" value={form.securityQuestion} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {securityQuestions.map((q) => (
+                  <option key={q.value} value={q.value}>{q.label}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div>
+            <label className="block mb-1 font-medium">Security Answer<br />
+              <input name="securityAnswer" value={form.securityAnswer} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </label>
+          </div>
+          <div>
             <label className="block mb-1 font-medium">Role<br />
               <select name="role" value={form.role} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {roles.map((role) => (
@@ -82,6 +180,54 @@ export default function Register() {
               </select>
             </label>
           </div>
+          {/* Ambulance Driver fields */}
+          {form.role === 'AMBULANCE_DRIVER' && (
+            <>
+              <div>
+                <label className="block mb-1 font-medium">License Number<br />
+                  <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Vehicle Registration Number<br />
+                  <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Hospital ID<br />
+                  <input name="hospitalID" type="number" value={form.hospitalID} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+            </>
+          )}
+          {/* Fire Driver fields */}
+          {form.role === 'FIRE_DRIVER' && (
+            <>
+              <div>
+                <label className="block mb-1 font-medium">License Number<br />
+                  <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Vehicle Registration Number<br />
+                  <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Fire Station ID<br />
+                  <input name="fireStationId" type="number" value={form.fireStationId} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </label>
+              </div>
+            </>
+          )}
+          {/* Police Officer fields */}
+          {form.role === 'POLICE_OFFICER' && (
+            <div>
+              <label className="block mb-1 font-medium">Police Station ID<br />
+                <input name="policeStationId" type="number" value={form.policeStationId} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </label>
+            </div>
+          )}
           <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Register</button>
         </form>
         {message && <p className={`mt-4 text-center ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}

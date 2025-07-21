@@ -143,172 +143,173 @@ export default function NavigationMap() {
   };
 
   const initializeMap = (data) => {
-    // Load Mapbox GL JS
-    const script = document.createElement('script');
-    script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-    script.onload = () => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-      document.head.appendChild(link);
-      
-      // Initialize map after CSS is loaded
+    // Load Google Maps JS API
+    const scriptId = 'google-maps-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCnwJl8uyVjTS8ql060q5d0az43nvVsyUw&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        setTimeout(() => {
+          createMap(data);
+        }, 100);
+      };
+      document.head.appendChild(script);
+    } else {
       setTimeout(() => {
         createMap(data);
       }, 100);
-    };
-    document.head.appendChild(script);
+    }
   };
 
   const createMap = (data) => {
-    // Validate data structure
     if (!data || !data.emergencyRequest || !data.emergencyRequest.longitude || !data.emergencyRequest.latitude) {
       setError('Invalid emergency request data received.');
       return;
     }
-
     const vehicleData = data.ambulance || data.fireTruck;
     if (!vehicleData || !vehicleData.longitude || !vehicleData.latitude) {
       setError('Invalid vehicle data received.');
       return;
     }
-
-    // You'll need to replace 'YOUR_MAPBOX_ACCESS_TOKEN' with actual token
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
-    
-    const mapInstance = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [
-        (data.emergencyRequest.longitude + vehicleData.longitude) / 2,
-        (data.emergencyRequest.latitude + vehicleData.latitude) / 2
-      ],
-      zoom: 12
+    // Center between emergency and vehicle
+    const center = {
+      lat: (data.emergencyRequest.latitude + vehicleData.latitude) / 2,
+      lng: (data.emergencyRequest.longitude + vehicleData.longitude) / 2
+    };
+    const mapInstance = new window.google.maps.Map(document.getElementById('map'), {
+      center,
+      zoom: 12,
+      mapTypeId: 'roadmap',
     });
-
-    mapInstance.on('load', () => {
-      // Add emergency request marker
-      new mapboxgl.Marker({ color: '#FF4444' })
-        .setLngLat([data.emergencyRequest.longitude, data.emergencyRequest.latitude])
-        .setPopup(new mapboxgl.Popup().setHTML('<h3>Emergency Request</h3>'))
-        .addTo(mapInstance);
-
-      // Add ambulance marker if available
-      if (data.ambulance) {
-        new mapboxgl.Marker({ color: '#44FF44' })
-          .setLngLat([data.ambulance.longitude, data.ambulance.latitude])
-          .setPopup(new mapboxgl.Popup().setHTML('<h3>Ambulance</h3>'))
-          .addTo(mapInstance);
-      }
-
-      // Add fire truck marker if available
-      if (data.fireTruck) {
-        new mapboxgl.Marker({ color: '#FF8800' })
-          .setLngLat([data.fireTruck.longitude, data.fireTruck.latitude])
-          .setPopup(new mapboxgl.Popup().setHTML('<h3>Fire Truck</h3>'))
-          .addTo(mapInstance);
-      }
-
-      // Get directions for all available vehicles
-      getDirections(data, mapInstance);
+    // Emergency marker
+    new window.google.maps.Marker({
+      position: { lat: data.emergencyRequest.latitude, lng: data.emergencyRequest.longitude },
+      map: mapInstance,
+      title: 'Emergency Request',
+      icon: {
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        fillColor: '#FF4444',
+        fillOpacity: 1,
+        strokeWeight: 2,
+        strokeColor: '#fff',
+      },
     });
-
+    // Ambulance marker
+    if (data.ambulance) {
+      new window.google.maps.Marker({
+        position: { lat: data.ambulance.latitude, lng: data.ambulance.longitude },
+        map: mapInstance,
+        title: 'Ambulance',
+        icon: {
+          path: window.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+          scale: 5,
+          fillColor: '#44FF44',
+          fillOpacity: 1,
+          strokeWeight: 2,
+          strokeColor: '#fff',
+        },
+      });
+    }
+    // Fire Truck marker
+    if (data.fireTruck) {
+      new window.google.maps.Marker({
+        position: { lat: data.fireTruck.latitude, lng: data.fireTruck.longitude },
+        map: mapInstance,
+        title: 'Fire Truck',
+        icon: {
+          path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          scale: 5,
+          fillColor: '#FF8800',
+          fillOpacity: 1,
+          strokeWeight: 2,
+          strokeColor: '#fff',
+        },
+      });
+    }
+    // Draw routes
+    getDirections(data, mapInstance);
     setMap(mapInstance);
   };
 
   const getDirections = async (data, mapInstance) => {
     try {
       const routes = [];
-      const bounds = new mapboxgl.LngLatBounds();
-      
-      // Add emergency request to bounds
-      bounds.extend([data.emergencyRequest.longitude, data.emergencyRequest.latitude]);
-
-      // Get directions for ambulance if available
+      const bounds = new window.google.maps.LatLngBounds();
+      bounds.extend(new window.google.maps.LatLng(data.emergencyRequest.latitude, data.emergencyRequest.longitude));
+      // DirectionsService and DirectionsRenderer
+      const directionsService = new window.google.maps.DirectionsService();
+      // Ambulance route
       if (data.ambulance) {
-        bounds.extend([data.ambulance.longitude, data.ambulance.latitude]);
-        const ambulanceRoute = await getRouteDirections(data.ambulance, data.emergencyRequest, 'ambulance');
-        if (ambulanceRoute) {
-          routes.push(ambulanceRoute);
-          addRouteToMap(mapInstance, ambulanceRoute, 'ambulance-route', '#44FF44');
-        }
+        bounds.extend(new window.google.maps.LatLng(data.ambulance.latitude, data.ambulance.longitude));
+        await getRouteDirections(
+          data.ambulance,
+          data.emergencyRequest,
+          'ambulance',
+          mapInstance,
+          directionsService,
+          routes
+        );
       }
-
-      // Get directions for fire truck if available
+      // Fire Truck route
       if (data.fireTruck) {
-        bounds.extend([data.fireTruck.longitude, data.fireTruck.latitude]);
-        const fireTruckRoute = await getRouteDirections(data.fireTruck, data.emergencyRequest, 'fire-truck');
-        if (fireTruckRoute) {
-          routes.push(fireTruckRoute);
-          addRouteToMap(mapInstance, fireTruckRoute, 'fire-truck-route', '#FF8800');
-        }
+        bounds.extend(new window.google.maps.LatLng(data.fireTruck.latitude, data.fireTruck.longitude));
+        await getRouteDirections(
+          data.fireTruck,
+          data.emergencyRequest,
+          'fire-truck',
+          mapInstance,
+          directionsService,
+          routes
+        );
       }
-
       // Calculate combined route info
       if (routes.length > 0) {
         const totalDistance = routes.reduce((sum, route) => sum + route.distance, 0);
         const avgTime = routes.reduce((sum, route) => sum + route.duration, 0) / routes.length;
-        
         setRouteInfo({
           distance: (totalDistance / 1000).toFixed(1),
           duration: Math.round(avgTime / 60),
           vehicleCount: routes.length
         });
       }
-
-      // Fit map to show all markers and routes
-      mapInstance.fitBounds(bounds, { padding: 50 });
+      mapInstance.fitBounds(bounds);
     } catch (err) {
       console.error('Error getting directions:', err);
     }
   };
 
-  const getRouteDirections = async (vehicle, emergency, vehicleType) => {
-    try {
-      const start = `${vehicle.longitude},${vehicle.latitude}`;
-      const end = `${emergency.longitude},${emergency.latitude}`;
-      
-      const response = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${mapboxgl.accessToken}`
-      );
-      
-      const route = await response.json();
-      
-      if (route.routes && route.routes.length > 0) {
-        return {
-          ...route.routes[0],
-          vehicleType
-        };
-      }
-    } catch (err) {
-      console.error(`Error getting ${vehicleType} directions:`, err);
-    }
-    return null;
-  };
-
-  const addRouteToMap = (mapInstance, routeData, sourceId, color) => {
-    mapInstance.addSource(sourceId, {
-      type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: routeData.geometry
-      }
-    });
-
-    mapInstance.addLayer({
-      id: sourceId,
-      type: 'line',
-      source: sourceId,
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': color,
-        'line-width': 3,
-        'line-opacity': 0.8
-      }
+  const getRouteDirections = (vehicle, emergency, vehicleType, mapInstance, directionsService, routesArr) => {
+    return new Promise((resolve) => {
+      const request = {
+        origin: { lat: vehicle.latitude, lng: vehicle.longitude },
+        destination: { lat: emergency.latitude, lng: emergency.longitude },
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      };
+      const directionsRenderer = new window.google.maps.DirectionsRenderer({
+        map: mapInstance,
+        suppressMarkers: true,
+        polylineOptions: {
+          strokeColor: vehicleType === 'ambulance' ? '#44FF44' : '#FF8800',
+          strokeWeight: 4,
+          strokeOpacity: 0.8,
+        },
+      });
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK' && result.routes && result.routes[0]) {
+          directionsRenderer.setDirections(result);
+          const leg = result.routes[0].legs[0];
+          routesArr.push({
+            distance: leg.distance.value,
+            duration: leg.duration.value,
+            vehicleType,
+          });
+        }
+        resolve();
+      });
     });
   };
 

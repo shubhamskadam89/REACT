@@ -3,8 +3,9 @@ package com.REACT.backend.LocationMaping.services;
 import com.REACT.backend.LocationMaping.dto.LocationMapDto;
 import com.REACT.backend.LocationMaping.repository.LocationMapRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LocationMapServiceImpl implements LocationMapService {

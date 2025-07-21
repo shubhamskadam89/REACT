@@ -36,17 +36,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/ws-location/**",
-                                "/location-map/**",       // 👈 both ambulance + fire_truck here
-                                "/fire/**",
-                                "/location/**",
-                                "/driver/**"
-                        ).permitAll()
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/auth/**").permitAll()  // only auth endpoints open
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)

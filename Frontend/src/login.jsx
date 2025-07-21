@@ -144,6 +144,10 @@ function Login() {
               </div>
             )}
           </form>
+          {error && <div className="text-red-500 text-center mt-2">{error}</div>}
+          <div className="mt-4 text-center">
+            <a href="/forgot-password" className="text-blue-600 hover:underline">Forgot Password?</a>
+          </div>
 
           <div className="mt-6">
             <div className="relative">

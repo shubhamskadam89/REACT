@@ -5,6 +5,16 @@ export default function Landing() {
   const navigate = useNavigate();
   const [requestId, setRequestId] = useState('');
   const [vehicleType, setVehicleType] = useState('ambulance');
+  const [showUserTypeModal, setShowUserTypeModal] = useState(false);
+
+  const handleUserTypeSelection = (userType) => {
+    if (userType === 'admin') {
+      navigate('/login');
+    } else if (userType === 'user') {
+      window.open('http://localhost:8081/', '_blank');
+    }
+    setShowUserTypeModal(false);
+  };
 
   const handleNavigation = () => {
     if (requestId.trim()) {
@@ -117,7 +127,7 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={() => navigate('/login')}
+                onClick={() => setShowUserTypeModal(true)}
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-300 shadow-lg"
               >
                 Get Started Now
@@ -336,7 +346,7 @@ export default function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
-              onClick={() => navigate('/login')}
+              onClick={() => setShowUserTypeModal(true)}
               className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-300 shadow-lg"
             >
               Access Emergency Services
@@ -381,7 +391,7 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><button onClick={() => navigate('/login')} className="hover:text-white">Login</button></li>
+                <li><button onClick={() => setShowUserTypeModal(true)} className="hover:text-white">Login</button></li>
                 <li><button onClick={() => navigate('/register')} className="hover:text-white">Register</button></li>
                 <li><button onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })} className="hover:text-white">Services</button></li>
               </ul>
@@ -392,6 +402,47 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* User Type Selection Modal */}
+      {showUserTypeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Select Your Role
+              </h3>
+              <p className="text-gray-600 mb-8">
+                Choose how you would like to access the emergency services system.
+              </p>
+              
+              <div className="space-y-4">
+                <button
+                  onClick={() => handleUserTypeSelection('user')}
+                  className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 shadow-lg flex items-center justify-center gap-3"
+                >
+                  <span className="text-2xl">👤</span>
+                  <span>User</span>
+                </button>
+                
+                <button
+                  onClick={() => handleUserTypeSelection('admin')}
+                  className="w-full bg-red-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-red-700 transition duration-300 shadow-lg flex items-center justify-center gap-3"
+                >
+                  <span className="text-2xl">🔧</span>
+                  <span>Admin</span>
+                </button>
+              </div>
+              
+              <button
+                onClick={() => setShowUserTypeModal(false)}
+                className="mt-6 text-gray-500 hover:text-gray-700 font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
