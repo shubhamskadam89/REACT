@@ -6,6 +6,7 @@ import com.REACT.backend.booking.dto.BookingResponseDto;
 import com.REACT.backend.booking.dto.BookingSummeryDto;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
 import com.REACT.backend.booking.model.EmergencyRequestStatus;
+import com.REACT.backend.fireService.model.FireTruckEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -47,5 +48,8 @@ public interface EmergencyRequestRepository extends JpaRepository<EmergencyReque
                                                                   @Param("status") EmergencyRequestStatus status);
 
 
+
+    @Query("SELECT er FROM EmergencyRequestEntity er JOIN er.assignedFireTruckEntities t where t=:truck")
+    List<EmergencyRequestEntity> findByAssignedFireTruckEntities(@Param("truck") FireTruckEntity truck);
 
 }

@@ -14,9 +14,9 @@
 
     <!-- Centralized all-service rolling file -->
     <appender name="AllLogsFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/central.log</file>
+        <file>${LOG_PATH}/central/central.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/central.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/central/central.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
@@ -29,9 +29,9 @@
 
     <!-- Template for service-specific appenders -->
     <appender name="AmbulanceServiceFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/ambulance-service.log</file>
+        <file>${LOG_PATH}/ambulance/ambulance-service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/ambulance-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/ambulance/ambulance-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
@@ -43,9 +43,9 @@
     </appender>
 
     <appender name="BookingServiceFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/booking-service.log</file>
+        <file>${LOG_PATH}/booking/booking-service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/booking-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/booking/booking-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
@@ -57,9 +57,9 @@
     </appender>
 
     <appender name="AuthServiceLoggers" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/auth-service.log</file>
+        <file>${LOG_PATH}/auth/auth-service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/auth-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/auth/auth-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
@@ -100,9 +100,9 @@
 
     <!-- JWT Auth File Appender -->
     <appender name="JwtAuthFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/jwt-auth.log</file>
+        <file>${LOG_PATH}/JWT/jwt-auth.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/jwt-auth.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/JWT/jwt-auth.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>

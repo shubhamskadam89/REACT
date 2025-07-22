@@ -5,6 +5,7 @@ import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.fireService.model.FireTruckEntity;
+import com.REACT.backend.fireService.model.FireTruckStatus;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
 
 
@@ -79,6 +80,7 @@ public class EmergencyRequestEntity {
     private Map<PoliceStationEntity, Integer> assignedPoliceMap;
 
 
+
     @ManyToMany
     @JoinTable(
             name = "emergency_request_assigned_ambulances",
@@ -90,6 +92,7 @@ public class EmergencyRequestEntity {
     @ElementCollection
     @MapKeyJoinColumn(name = "ambulance_id")
     @Column(name = "ambulance_status")
+    @Enumerated(EnumType.STRING)
     @CollectionTable(name = "emergency_request_ambulance_status", joinColumns = @JoinColumn(name = "emergency_request_id"))
     private Map<AmbulanceEntity, AmbulanceStatus> ambulanceStatusMap = new HashMap<>();
 
@@ -101,6 +104,14 @@ public class EmergencyRequestEntity {
             inverseJoinColumns = @JoinColumn(name = "fire_truck_id")
     )
     private List<FireTruckEntity> assignedFireTruckEntities;
+
+    @ElementCollection
+    @CollectionTable(name = "emergency_request_firetruck_status", joinColumns = @JoinColumn(name = "request_id"))
+    @MapKeyJoinColumn(name = "fire_truck_id")
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Map<FireTruckEntity, FireTruckStatus> fireTruckStatusMap;
+
 
 
 

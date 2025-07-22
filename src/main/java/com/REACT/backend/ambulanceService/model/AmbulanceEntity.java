@@ -26,6 +26,8 @@ public class AmbulanceEntity {
 
     private String ambulanceRegNumber;
 
+    private String phoneNumber;
+
     private String ambulanceDriverName;
 
     @Enumerated(EnumType.STRING)

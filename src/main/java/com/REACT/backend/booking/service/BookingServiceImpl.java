@@ -97,9 +97,13 @@ public class BookingServiceImpl implements BookingService {
                         ? "FULLY_ASSIGNED"
                         : "PARTIALLY_ASSIGNED";
             }
+            else{
+                policeStatus = "NOT_REQUESTED";
+            }
             log.info("Police assignment: {}", assignedPoliceMap.entrySet()
                     .stream().map(e -> e.getKey().getStationName() + "=" + e.getValue()).toList());
         }
+
 
 
 
@@ -115,6 +119,10 @@ public class BookingServiceImpl implements BookingService {
                     requestDto.getRequestedFireTruckCount()
             );
 
+        }
+        Map<FireTruckEntity, FireTruckStatus> fireTruckStatusMap = new HashMap<>();
+        for (FireTruckEntity truck : assignedFireTruckEntities) {
+            fireTruckStatusMap.put(truck, FireTruckStatus.EN_ROUTE);
         }
 
 
@@ -150,6 +158,7 @@ public class BookingServiceImpl implements BookingService {
                 .assignedFireTruckEntities(assignedFireTruckEntities)
                 .assignedPoliceMap(assignedPoliceMap)
                 .ambulanceStatusMap(ambulanceStatusMap)
+                .fireTruckStatusMap(fireTruckStatusMap)
                 .build();
 
         requestRepo.save(requestEntity);
@@ -183,10 +192,6 @@ public class BookingServiceImpl implements BookingService {
                 assignedFireTruckEntities.size(), requestDto.getRequestedFireTruckCount()
         );
         log.info("Ambulance assignment status {} || Fire brigade Assignment status{}",ambStatus,fireStatus);
-
-
-
-
 
 
         // 📖 8. Booking log

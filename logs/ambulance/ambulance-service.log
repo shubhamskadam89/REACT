@@ -1,0 +1,100 @@
+
+11:09:15.153 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+11:09:15.475 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
+11:09:15.475 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
+11:09:15.521 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
+11:09:15.651 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
+11:23:49.275 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+11:23:49.389 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
+11:23:49.389 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
+11:23:49.428 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
+11:23:49.560 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 1 requests where ambulance where involved.
+11:24:23.134 [http-nio-8080-exec-6] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+11:24:23.250 [http-nio-8080-exec-6] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+11:24:23.250 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+11:24:23.361 [http-nio-8080-exec-6] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+11:24:23.362 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+11:24:23.363 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+11:24:23.363 [http-nio-8080-exec-6] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+11:24:33.457 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+11:24:33.574 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
+11:24:33.575 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
+11:24:33.632 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
+11:24:33.741 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
+11:35:26.515 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+11:35:26.780 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
+11:35:26.781 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
+11:35:26.885 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
+11:35:26.998 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
+18:01:59.956 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:02:00.248 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:02:00.248 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+18:02:00.346 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+18:02:00.346 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+18:02:00.393 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+18:02:00.436 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:05:53.770 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:05:54.021 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:05:54.021 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+18:05:54.178 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+18:05:54.178 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+18:05:54.228 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+18:05:54.277 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:15:36.202 [http-nio-8080-exec-3] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:15:36.301 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:15:36.302 [http-nio-8080-exec-3] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+18:15:36.425 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+18:15:36.426 [http-nio-8080-exec-3] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+18:15:36.475 [http-nio-8080-exec-3] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+18:15:36.516 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:17:21.481 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:17:21.735 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:17:21.735 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+18:17:22.007 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+18:17:22.007 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+18:17:22.070 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+18:17:22.125 [http-nio-8080-exec-2] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:17:40.003 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:17:40.104 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:17:40.104 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 2
+18:17:40.216 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 2
+18:17:40.216 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 2 to response DTO
+18:17:40.259 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 3 to response DTO
+18:17:40.309 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:18:19.186 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:18:19.298 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:18:19.298 [http-nio-8080-exec-7] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 5
+18:18:19.396 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 5
+18:18:19.397 [http-nio-8080-exec-7] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 10 to response DTO
+18:18:19.448 [http-nio-8080-exec-7] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 11 to response DTO
+18:18:19.495 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:18:41.566 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:18:41.656 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:18:41.656 [http-nio-8080-exec-8] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 5
+18:18:41.756 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 5
+18:18:41.756 [http-nio-8080-exec-8] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 10 to response DTO
+18:18:41.810 [http-nio-8080-exec-8] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 11 to response DTO
+18:18:41.854 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
+18:22:25.541 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:22:25.657 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:22:25.657 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 5
+18:22:25.768 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 4 bookings for ambulance ID: 5
+18:22:25.769 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 10 to response DTO
+18:22:25.829 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 11 to response DTO
+18:22:25.880 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 14 to response DTO
+18:22:25.939 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 15 to response DTO
+18:22:26.007 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 4 booking DTOs for response
+18:22:35.672 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
+18:22:35.776 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
+18:22:35.776 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 5
+18:22:35.876 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 4 bookings for ambulance ID: 5
+18:22:35.876 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 10 to response DTO
+18:22:35.925 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 11 to response DTO
+18:22:35.991 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 14 to response DTO
+18:22:36.036 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 15 to response DTO
+18:22:36.074 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 4 booking DTOs for response
+18:53:21.643 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceDriverController - Status update to COMPLETE request fetched:
+18:53:21.900 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Started with COMPLETE status update process
+18:53:22.028 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found ambulance 5
+18:53:22.369 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found that entity 15
+18:53:22.463 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - done updating status

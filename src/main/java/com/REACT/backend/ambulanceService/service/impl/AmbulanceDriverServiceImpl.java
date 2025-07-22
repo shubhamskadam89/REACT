@@ -1,22 +1,22 @@
 package com.REACT.backend.ambulanceService.service.impl;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceBookingHistoryResponseDto;
+import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
-import com.REACT.backend.booking.model.EmergencyRequestStatus;
 import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
-import com.REACT.backend.users.repository.AmbulanceDriverRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -55,6 +55,7 @@ public class AmbulanceDriverServiceImpl {
                             .emailOfRequester(req.getRequestedBy().getUserEmail())
                             .requestedAt(req.getCreatedAt())
                             .latitude(req.getLatitude())
+                            .status(req.getAmbulanceStatusMap().get(ambulance))
                             .longitude(req.getLongitude())
                             .build();
                 })
@@ -82,6 +83,37 @@ public class AmbulanceDriverServiceImpl {
              .map(req -> new LocationDto(req.getLatitude(), req.getLongitude()))
              .orElseThrow(()-> new RuntimeException("No active EN_ROUTE request for this ambulance"));
 
+    }
+
+
+    public CompleteAssignmentResponseDto completeBooking(Object obj){
+        log.info("Started with COMPLETE status update process");
+        AmbulanceDriver driver = (AmbulanceDriver) obj;
+        AppUser appUser = driver.getDriver();
+        AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
+        log.info("found ambulance {}",ambulance.getId());
+        ambulance.setStatus(AmbulanceStatus.AVAILABLE);
+        ambulanceRepository.save(ambulance);
+        List<EmergencyRequestEntity> entity = emergencyRequestRepo.findByAssignedAmbulance(ambulance);
+        EmergencyRequestEntity thisEntity= null;
+        for(EmergencyRequestEntity e: entity){
+            AmbulanceStatus status = e.getAmbulanceStatusMap().get(ambulance);
+            if(status==AmbulanceStatus.EN_ROUTE){
+                thisEntity=e;
+                break;
+            }
+        }
+        thisEntity.getAmbulanceStatusMap().put(ambulance,AmbulanceStatus.COMPLETED);
+        log.info("Completed the assignment {}",thisEntity.getId());
+        emergencyRequestRepo.save(thisEntity);
+        log.info("done updating status");
+
+        Duration duration = Duration.between(thisEntity.getCreatedAt(), Instant.now());
+        long time = duration.toMinutes();
+        return CompleteAssignmentResponseDto.builder()
+                .completedAt(Instant.now())
+                .duration(time)
+                .build();
     }
 
 

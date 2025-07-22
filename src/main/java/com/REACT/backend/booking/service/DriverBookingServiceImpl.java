@@ -39,9 +39,6 @@ public class DriverBookingServiceImpl {
             throw new RuntimeException("This booking is not assigned to this driver.");
         }
 
-        if (!ambulance.getStatus().equals(AmbulanceStatus.PENDING_ACCEPTANCE)) {
-            throw new RuntimeException("Booking is not in PENDING_ACCEPTANCE state.");
-        }
 
         // update ambulance & request
         ambulance.setStatus(AmbulanceStatus.EN_ROUTE);

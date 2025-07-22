@@ -26,6 +26,7 @@
             this.regNumber = entity.getAmbulanceRegNumber();
             this.status = entity.getStatus();
             this.lastUpdated = entity.getLastUpdated();
+            this.status = entity.getStatus();
             if (entity.getDriver() != null) {
                 this.driverName = entity.getDriver().getUserFullName();
                 this.driverPhone = entity.getDriver().getPhoneNumber();

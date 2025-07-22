@@ -12,13 +12,13 @@ import java.util.Optional;
 public interface PoliceStationRepository extends JpaRepository<PoliceStationEntity, Long> {
 
     @Query(value = """
-        SELECT * 
-        FROM police_station_entity p
-        ORDER BY ST_Distance(p.location, ST_MakePoint(:lng, :lat)::geography)
-        """, nativeQuery = true)
+    SELECT * 
+    FROM police_station_entity p
+    ORDER BY ST_Distance(p.location, CAST(ST_MakePoint(:lng, :lat) AS geography))
+    """, nativeQuery = true)
     List<PoliceStationEntity> findAllByProximity(
-            @Param("lat") double latitude,
-            @Param("lng") double longitude
+            @Param("lat") double lat,
+            @Param("lng") double lng
     );
 
     Optional<PoliceStationEntity> findByStationName(String stationName);

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
 @Repository
 public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long> {
 
@@ -17,8 +16,8 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
         SELECT * 
         FROM ambulance_entity a 
         WHERE a.status = 'AVAILABLE'
-          AND ST_DWithin(a.location, ST_MakePoint(:lng, :lat)::geography, :radius) 
-        ORDER BY ST_Distance(a.location, ST_MakePoint(:lng, :lat)::geography)
+          AND ST_DWithin(a.location, CAST(ST_MakePoint(:lng, :lat) AS geography), :radius) 
+        ORDER BY ST_Distance(a.location, CAST(ST_MakePoint(:lng, :lat) AS geography))
         LIMIT 1
         """, nativeQuery = true)
     Optional<AmbulanceEntity> findNearestAvailable(
@@ -30,8 +29,8 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
     @Query(value = """
         SELECT * FROM ambulance_entity a
         WHERE a.status = 'AVAILABLE'
-          AND ST_DWithin(a.location, ST_MakePoint(:lng, :lat)::geography, :radius)
-        ORDER BY ST_Distance(a.location, ST_MakePoint(:lng, :lat)::geography)
+          AND ST_DWithin(a.location, CAST(ST_MakePoint(:lng, :lat) AS geography), :radius)
+        ORDER BY ST_Distance(a.location, CAST(ST_MakePoint(:lng, :lat) AS geography))
         """, nativeQuery = true)
     List<AmbulanceEntity> findAvailableWithinRadius(
             @Param("lat") double lat,
@@ -42,8 +41,4 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
     List<AmbulanceEntity> findByHospitalId(Long hospitalId);
 
     AmbulanceEntity findByDriver(AppUser driver);
-
-
-
-
 }

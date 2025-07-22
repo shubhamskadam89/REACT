@@ -116,7 +116,7 @@ public class AuthService{
                 .lastUpdated(Instant.now().plusSeconds(330 * 3600))
                 .location(station.getLocation())
                 .fireStationEntity(station)
-
+                .driverPhoneNumber(request.getPhoneNumber())
                 .vehicleRegNumber(request.getVehicleRegNumber())
                 .build();
 
@@ -161,6 +161,7 @@ public class AuthService{
                 .ambulanceRegNumber(request.getVehicleRegNumber())
                 .ambulanceDriverName(request.getFullName())
                 .status(AmbulanceStatus.AVAILABLE)
+                .phoneNumber(request.getPhoneNumber())
                 .location(hospital.getLocation())
                 .lastUpdated(Instant.now())
                 .driver(user)

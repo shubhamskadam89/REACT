@@ -31,4 +31,5 @@ public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Lo
         List<BookingLogEntity> findAllByStationId(@Param("stationId") Long stationId);
 
 
+
 }

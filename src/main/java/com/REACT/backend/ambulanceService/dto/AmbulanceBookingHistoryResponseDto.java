@@ -1,5 +1,6 @@
 package com.REACT.backend.ambulanceService.dto;
 
+import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,5 +14,6 @@ public class AmbulanceBookingHistoryResponseDto {
     private String emailOfRequester;
     private Instant requestedAt;
     private double latitude;
+    private AmbulanceStatus status;
     private double longitude;
 }

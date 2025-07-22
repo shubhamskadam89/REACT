@@ -9,5 +9,5 @@ public enum AmbulanceStatus {
     AVAILABLE,
     EN_ROUTE,
     BUSY,
-    PENDING_ACCEPTANCE
+    COMPLETED
 }

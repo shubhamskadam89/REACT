@@ -17,6 +17,7 @@ public class FireTruckEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long fireTruckId;
 
     private String driverName;

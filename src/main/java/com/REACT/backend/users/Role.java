@@ -6,7 +6,8 @@ public enum Role {
     FIRE_DRIVER,           // Handles fire truck
     POLICE_OFFICER,
     ROLE_FIRE_STATION_ADMIN,
-    ADMIN
+    ADMIN,
+    HOSPITAL_ADMIN
 
 
 }

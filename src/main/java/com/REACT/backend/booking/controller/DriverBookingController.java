@@ -17,21 +17,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DriverBookingController {
 
-    private final DriverBookingServiceImpl driverBookingService;
-
-    @PostMapping("/booking/accept")
-    public ResponseEntity<String> acceptBooking(@RequestParam Long bookingId,
-                                                @RequestParam Long driverId) {
-
-        driverBookingService.acceptBooking(bookingId, driverId);
-        return ResponseEntity.ok("Booking accepted successfully!");
-    }
-
-    @GetMapping("/{driverId}/pending-requests")
-    public ResponseEntity<List<BookingDto>> getPendingRequests(@PathVariable Long driverId) {
-        List<EmergencyRequestEntity> pending = driverBookingService.getPendingRequestsForDriver(driverId);
-        List<BookingDto> response = pending.stream().map(BookingDto::new).toList();
-        return ResponseEntity.ok(response);
-    }
+//    private final DriverBookingServiceImpl driverBookingService;
+//
+//    @PostMapping("/booking/accept")
+//    public ResponseEntity<String> acceptBooking(@RequestParam Long bookingId,
+//                                                @RequestParam Long driverId) {
+//
+//        driverBookingService.acceptBooking(bookingId, driverId);
+//        return ResponseEntity.ok("Booking accepted successfully!");
+//    }
+//
+//    @GetMapping("/{driverId}/pending-requests")
+//    public ResponseEntity<List<BookingDto>> getPendingRequests(@PathVariable Long driverId) {
+//        List<EmergencyRequestEntity> pending = driverBookingService.getPendingRequestsForDriver(driverId);
+//        List<BookingDto> response = pending.stream().map(BookingDto::new).toList();
+//        return ResponseEntity.ok(response);
+//    }
 }
 
