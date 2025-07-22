@@ -1,5 +1,8 @@
 package com.REACT.backend.booking.repository;
 
+import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
+import com.REACT.backend.booking.dto.BookingResponseDto;
 import com.REACT.backend.booking.dto.BookingSummeryDto;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
 import com.REACT.backend.booking.model.EmergencyRequestStatus;
@@ -23,6 +26,26 @@ public interface EmergencyRequestRepository extends JpaRepository<EmergencyReque
 
     List<EmergencyRequestEntity> findByRequestedBy_UserIdAndEmergencyRequestStatus(
             Long userId, EmergencyRequestStatus status);
+
+    @Query("SELECT er FROM EmergencyRequestEntity er JOIN er.assignedAmbulances a WHERE a = :ambulance")
+    List<EmergencyRequestEntity> findByAssignedAmbulance(@Param("ambulance") AmbulanceEntity ambulance);
+
+//    @Query("SELECT er FROM EmergencyRequestEntity er JOIN er.assignedAmbulances a " +
+//            "WHERE a = :ambulance AND er.emergencyRequestStatus = :status")
+//    List<EmergencyRequestEntity> findByAssignedAmbulanceAndStatus(@Param("ambulance") AmbulanceEntity ambulance,
+//                                                                  @Param("status") EmergencyRequestStatus status);
+//
+//
+//
+//
+//    @Query("SELECT e FROM EmergencyRequestEntity e JOIN e.assignedAmbulances a WHERE a = :ambulance AND e.status != 'COMPLETED'")
+//    List<EmergencyRequestEntity> findActiveByAmbulance(@Param("ambulance") AmbulanceEntity ambulance);
+
+    @Query("SELECT er FROM EmergencyRequestEntity er JOIN er.assignedAmbulances a " +
+            "WHERE a = :ambulance AND er.emergencyRequestStatus = :status")
+    List<EmergencyRequestEntity> findByAssignedAmbulanceAndStatus(@Param("ambulance") AmbulanceEntity ambulance,
+                                                                  @Param("status") EmergencyRequestStatus status);
+
 
 
 }

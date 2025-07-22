@@ -19,24 +19,25 @@ import java.util.Map;
 @Slf4j
 @Component
 public class AuthEntryPointJWT implements AuthenticationEntryPoint {
-
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
-        log.error("Unauthorized error: {}", authException.getMessage());
-        System.out.println(authException);
+        if (authException.getMessage().contains("Full authentication is required")) {
+            log.warn("Missing or invalid JWT: {}", authException.getMessage());
+        } else {
+            log.error("Unauthorized error: {}", authException.getMessage(), authException);
+        }
+
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         final Map<String, Object> body = new HashMap<>();
-        body.put("status",HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error","Unauthorized");
-        body.put("message",authException.getMessage());
-        body.put("path",request.getServletPath());
+        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("error", "Unauthorized");
+        body.put("message", authException.getMessage());
+        body.put("path", request.getServletPath());
 
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(),body);
-
+        new ObjectMapper().writeValue(response.getOutputStream(), body);
     }
 }
 

@@ -3,6 +3,7 @@ package com.REACT.backend.booking.model;
 
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 
+import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +86,13 @@ public class EmergencyRequestEntity {
             inverseJoinColumns = @JoinColumn(name = "ambulance_id")
     )
     private List<AmbulanceEntity> assignedAmbulances;
+
+    @ElementCollection
+    @MapKeyJoinColumn(name = "ambulance_id")
+    @Column(name = "ambulance_status")
+    @CollectionTable(name = "emergency_request_ambulance_status", joinColumns = @JoinColumn(name = "emergency_request_id"))
+    private Map<AmbulanceEntity, AmbulanceStatus> ambulanceStatusMap = new HashMap<>();
+
 
     @ManyToMany
     @JoinTable(

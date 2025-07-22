@@ -2,16 +2,26 @@ package com.REACT.backend.auth.Controller;
 
 import com.REACT.backend.auth.dto.*;
 import com.REACT.backend.auth.service.AuthService;
+import com.REACT.backend.users.AppUser;
+import com.REACT.backend.users.repository.AppUserRepository;
+import com.REACT.backend.users.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final UserRepository repo ;
+
 
     private final AuthService authService;
     @GetMapping("/home")
@@ -54,5 +64,28 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/forgot-password/request")
+    public ResponseEntity<?> getSecurityQuestion(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        return ResponseEntity.ok(authService.getSecurityQuestion(email));
+    }
+    @PostMapping("/forgot-password/verify")
+    public ResponseEntity<?> resetPassword(@RequestBody ForgotPasswordDto dto) {
+        authService.resetPassword(dto);
+        return ResponseEntity.ok(Map.of("message", "Password updated successfully."));
+    }
+
+
+    @PostMapping("/reset-password")
+    public String changePassword(@RequestBody ResetPasswordDto request){
+        log.info("Reset password request fetched");
+        authService.changePassword(request);
+        return "Password Changes Successfully";
+    }
+
+
+
 
 }

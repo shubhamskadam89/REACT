@@ -2,8 +2,8 @@
 <configuration scan="true" scanPeriod="30 seconds">
 
     <property name="LOG_PATH" value="logs"/>
-    <property name="MAX_HISTORY" value="15"/>
-    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="MAX_HISTORY" value="7"/>
+    <property name="MAX_FILE_SIZE" value="2MB"/>
 
     <!-- Console Appender -->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
@@ -56,6 +56,22 @@
         </encoder>
     </appender>
 
+    <appender name="AuthServiceLoggers" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/auth-service.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/auth-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
     <!-- You can duplicate this for other services like policeService, fireService, etc. -->
 
     <!-- Root Logger -->
@@ -63,6 +79,10 @@
         <appender-ref ref="Console"/>
         <appender-ref ref="AllLogsFile"/>
     </root>
+
+    <logger name="com.REACT.backend.auth">
+        <appender-ref ref="AuthServiceLoggers"/>
+    </logger>
 
     <!-- Service-Specific Loggers -->
     <logger name="com.REACT.backend.ambulanceService" level="DEBUG" additivity="false">
@@ -77,5 +97,26 @@
     <logger name="com.REACT.backend.fireService" level="DEBUG" additivity="false">
         <appender-ref ref="FireServiceFile"/>
     </logger>
+
+    <!-- JWT Auth File Appender -->
+    <appender name="JwtAuthFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/jwt-auth.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/jwt-auth.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger for JWT classes -->
+    <logger name="com.REACT.backend.Jwt" level="DEBUG" additivity="false">
+        <appender-ref ref="JwtAuthFile"/>
+    </logger>
+
 
 </configuration>

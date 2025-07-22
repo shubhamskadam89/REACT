@@ -1,6 +1,7 @@
 package com.REACT.backend.users;
 
 
+import com.REACT.backend.users.model.SecurityQuestion;
 import jakarta.persistence.*;
 import lombok.*;
 @Entity
@@ -19,8 +20,7 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @Enumerated(EnumType.STRING)
-    private UserType userType = UserType.CITIZEN;
+
 
     @Column(nullable = false)
     private String userFullName;
@@ -38,6 +38,13 @@ public class AppUser {
     private String userPassword;
 
     private boolean verified = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "security_question", nullable = false)
+    private SecurityQuestion securityQuestion;
+
+    @Column(name = "security_answer", nullable = false)
+    private String securityAnswer; // hashed
 
 
 }

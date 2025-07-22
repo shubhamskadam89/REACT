@@ -30,6 +30,7 @@ import com.REACT.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +71,10 @@ public class BookingServiceImpl implements BookingService {
             );
             log.info("Ambulances assigned: {}", assignedAmbulances.stream().map(AmbulanceEntity::getId).toList());
 
+        }
+        Map<AmbulanceEntity, AmbulanceStatus> ambulanceStatusMap = new HashMap<>();
+        for (AmbulanceEntity amb : assignedAmbulances) {
+            ambulanceStatusMap.put(amb, AmbulanceStatus.EN_ROUTE);
         }
 
 
@@ -144,6 +149,7 @@ public class BookingServiceImpl implements BookingService {
                 .assignedAmbulances(assignedAmbulances)
                 .assignedFireTruckEntities(assignedFireTruckEntities)
                 .assignedPoliceMap(assignedPoliceMap)
+                .ambulanceStatusMap(ambulanceStatusMap)
                 .build();
 
         requestRepo.save(requestEntity);
@@ -372,6 +378,20 @@ public class BookingServiceImpl implements BookingService {
                 .notes(entity.getNotes())
                 .build();
     }
+
+    @Autowired
+    EmergencyRequestRepository emergencyRequestRepository;
+
+    public List<EmergencyRequestEntity> getActiveRequestsForAmbulance(AmbulanceEntity ambulance) {
+        EmergencyRequestStatus targetStatus = EmergencyRequestStatus.PENDING;
+
+        log.info("🔍 Fetching requests for ambulance {} with status {}", ambulance.getId(), targetStatus);
+        List<EmergencyRequestEntity> result = emergencyRequestRepository.findByAssignedAmbulanceAndStatus(ambulance, targetStatus);
+
+        log.info("✅ Found {} requests for ambulance {}", result.size(), ambulance.getId());
+        return result;
+    }
+
 
 
 

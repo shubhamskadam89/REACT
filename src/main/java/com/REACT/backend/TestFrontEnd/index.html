@@ -2,16 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Live Emergency Unit Tracking</title>
+    <title>Role-Based Registration</title>
     <style>
         body {
           margin: 0;
           font-family: Arial, sans-serif;
-        }
-
-        #map {
-          height: 90vh;
-          width: 100%;
+          background-color: #f4f4f4;
         }
 
         #header {
@@ -22,100 +18,194 @@
           font-weight: bold;
           text-align: center;
         }
+
+        .form-container {
+          max-width: 500px;
+          margin: 30px auto;
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-container h2 {
+          margin-bottom: 15px;
+          color: #2c3e50;
+        }
+
+        .form-container select,
+        .form-container input[type="text"],
+        .form-container input[type="password"],
+        .form-container input[type="email"],
+        .form-container input[type="number"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+
+        .form-container button {
+          width: 100%;
+          padding: 10px;
+          background-color: #2c3e50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+
+        .form-container button:hover {
+          background-color: #1a252f;
+        }
+
+        .hidden {
+          display: none;
+        }
     </style>
 </head>
 <body>
-<div id="header">🚨 Live Tracking of Ambulance & Fire Truck</div>
-<div id="map"></div>
 
-<!-- Dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+<div id="header">🚨 Role-Based Registration Form</div>
 
-<!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnwJl8uyVjTS8ql060q5d0az43nvVsyUw&callback=initMap" async defer></script>
+<div class="form-container">
+    <h2>Register</h2>
+    <form id="registrationForm">
+        <!-- Common Fields -->
+        <input type="text" name="fullName" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="text" name="phoneNumber" placeholder="Phone Number" required />
+        <input type="text" name="governmentId" placeholder="Government ID" required />
+        <input type="password" name="password" placeholder="Password" required />
+
+        <!-- Role Dropdown -->
+        <select name="role" id="roleSelect" required>
+            <option value="">Select Role</option>
+            <option value="USER">User</option>
+            <option value="AMBULANCE_DRIVER">Ambulance Driver</option>
+            <option value="FIRE_DRIVER">Fire Truck Driver</option>
+            <option value="POLICE_OFFICER">Police Officer</option>
+            <option value="ROLE_FIRE_STATION_ADMIN">Fire Station Admin</option>
+            <option value="ADMIN">Admin</option>
+        </select>
+
+        <!-- Conditional Fields -->
+        <div id="licenseFields" class="hidden">
+            <input type="text" name="licenseNumber" placeholder="License Number" />
+            <input type="text" name="vehicleRegNumber" placeholder="Vehicle Registration Number" />
+        </div>
+
+        <div id="hospitalField" class="hidden">
+            <input type="number" name="hospitalID" placeholder="Hospital ID" />
+        </div>
+
+        <div id="fireStationField" class="hidden">
+            <input type="number" name="fireStationId" placeholder="Fire Station ID" />
+        </div>
+
+        <div id="policeStationField" class="hidden">
+            <input type="number" name="policeStationId" placeholder="Police Station ID" />
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
 
 <script>
-    // 🔧 Config: Set your booking ID, backend URL, and JWT token
-    const bookingId = 4;
-    const backendUrl = "http://localhost:8080";
-    const jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXZpLmt1bGthcm5pQGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjkwMzYyOSwiZXhwIjoxNzUzMjAzNjI5fQ.iPJdE0D-XcMEJpLPkWsZvHROvuwDiov1Hcxvv_nrc_E";
+    const roleSelect = document.getElementById("roleSelect");
+    const licenseFields = document.getElementById("licenseFields");
+    const hospitalField = document.getElementById("hospitalField");
+    const fireStationField = document.getElementById("fireStationField");
+    const policeStationField = document.getElementById("policeStationField");
 
-    const ambulanceIcon = "https://img.icons8.com/color/48/ambulance.png";
-    const fireTruckIcon = "https://img.icons8.com/color/48/fire-truck.png";
+    roleSelect.addEventListener("change", function () {
+        const role = this.value;
 
-    let map;
-    const markers = {};
+        // Hide all dynamic sections
+        licenseFields.classList.add("hidden");
+        hospitalField.classList.add("hidden");
+        fireStationField.classList.add("hidden");
+        policeStationField.classList.add("hidden");
 
-    function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 13,
-        center: { lat: 18.5204, lng: 73.8567 },
-      });
-
-      loadAssignedUnits();
-      connectWebSocket();
-    }
-
-    function loadAssignedUnits() {
-      fetch(`${backendUrl}/booking/${bookingId}`, {
-        headers: {
-          "Authorization": `Bearer ${jwtToken}`
+        // Show relevant fields
+        if (role === "AMBULANCE_DRIVER") {
+            licenseFields.classList.remove("hidden");
+            hospitalField.classList.remove("hidden");
+        } else if (role === "FIRE_DRIVER") {
+            licenseFields.classList.remove("hidden");
+            fireStationField.classList.remove("hidden");
+        } else if (role === "POLICE_OFFICER") {
+            policeStationField.classList.remove("hidden");
         }
-      })
-        .then(res => {
-          if (!res.ok) throw new Error("Failed to fetch booking data");
-          return res.json();
-        })
-        .then(data => {
-          console.log("Booking data loaded:", data);
-          const bounds = new google.maps.LatLngBounds();
+    });
 
-          data.assignedAmbulances.forEach(unit => {
-            addOrUpdateMarker(`ambulance_${unit.id}`, unit.latitude, unit.longitude, "Ambulance", ambulanceIcon);
-            bounds.extend(new google.maps.LatLng(unit.latitude, unit.longitude));
-          });
+    const registrationForm = document.getElementById("registrationForm");
 
-          data.assignedFireTrucks.forEach(unit => {
-            addOrUpdateMarker(`fire_${unit.id}`, unit.latitude, unit.longitude, "Fire Truck", fireTruckIcon);
-            bounds.extend(new google.maps.LatLng(unit.latitude, unit.longitude));
-          });
+    registrationForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-          map.fitBounds(bounds);
-        })
-        .catch(err => console.error("Error loading assigned units:", err));
-    }
+        const formData = new FormData(registrationForm);
+        const role = formData.get("role");
 
-    function addOrUpdateMarker(id, lat, lng, label, iconUrl) {
-      const pos = { lat, lng };
-      if (markers[id]) {
-        markers[id].setPosition(pos);
-      } else {
-        markers[id] = new google.maps.Marker({
-          position: pos,
-          map: map,
-          icon: {
-            url: iconUrl,
-            scaledSize: new google.maps.Size(40, 40)
-          },
-          title: `${label} (${id})`
-        });
-      }
-    }
+        let endpoint = "/auth/register";
+        let body = {
+            fullName: formData.get("fullName"),
+            email: formData.get("email"),
+            phoneNumber: formData.get("phoneNumber"),
+            governmentId: formData.get("governmentId"),
+            password: formData.get("password"),
+            role: role
+        };
 
-    function connectWebSocket() {
-      const socket = new SockJS(`${backendUrl}/ws-location`);
-      const stompClient = Stomp.over(socket);
-      stompClient.connect({}, () => {
-        stompClient.subscribe('/topic/location', (message) => {
-          const data = JSON.parse(message.body);
-          const type = data.unitType.toLowerCase(); // "ambulance" or "fire_truck"
-          const markerId = `${type}_${data.userId}`;
-          const icon = type.includes("ambulance") ? ambulanceIcon : fireTruckIcon;
-          addOrUpdateMarker(markerId, data.latitude, data.longitude, type, icon);
-        });
-      });
-    }
+        if (role === "AMBULANCE_DRIVER") {
+            endpoint = "/auth/register/ambulance-driver";
+            body = {
+                ...body,
+                licenseNumber: formData.get("licenseNumber"),
+                vehicleRegNumber: formData.get("vehicleRegNumber"),
+                hospitalID: parseInt(formData.get("hospitalID"))
+            };
+        } else if (role === "FIRE_DRIVER") {
+            endpoint = "/auth/register/fire-driver";
+            body = {
+                ...body,
+                licenseNumber: formData.get("licenseNumber"),
+                vehicleRegNumber: formData.get("vehicleRegNumber"),
+                fireStationId: parseInt(formData.get("fireStationId"))
+            };
+        } else if (role === "POLICE_OFFICER") {
+            endpoint = "/auth/register/police-officer";
+            body = {
+                ...body,
+                policeStationId: parseInt(formData.get("policeStationId"))
+            };
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080" + endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.token) {
+                localStorage.setItem("jwtToken", data.token); // 🔒 Save token
+                alert("Registered successfully. JWT saved.");
+                window.location.href = "/dashboard.html"; // or redirect to login
+            } else {
+                alert("Registration failed. " + (data.message || "Check backend logs."));
+            }
+        } catch (err) {
+            console.error("Registration error:", err);
+            alert("Something went wrong.");
+        }
+    });
 </script>
+
 </body>
 </html>

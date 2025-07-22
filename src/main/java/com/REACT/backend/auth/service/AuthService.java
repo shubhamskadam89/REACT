@@ -3,6 +3,8 @@ package com.REACT.backend.auth.service;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.auth.dto.*;
+import com.REACT.backend.common.exception.ResourceNotFoundException;
+import com.REACT.backend.common.util.LoggedUserUtil;
 import com.REACT.backend.fireService.model.FireStationEntity;
 import com.REACT.backend.fireService.model.FireTruckStatus;
 import com.REACT.backend.fireService.repository.FireStationRepository;
@@ -17,10 +19,7 @@ import com.REACT.backend.users.UserType;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import com.REACT.backend.users.model.FireTruckDriver;
 import com.REACT.backend.users.model.PoliceOfficer;
-import com.REACT.backend.users.repository.AmbulanceDriverRepository;
-import com.REACT.backend.users.repository.FireTruckDriverRepository;
-import com.REACT.backend.users.repository.PoliceOfficerRepository;
-import com.REACT.backend.users.repository.UserRepository;
+import com.REACT.backend.users.repository.*;
 import com.REACT.backend.Jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +27,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService{
 
     private final UserRepository userRepo;
+    private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
@@ -46,10 +48,14 @@ public class AuthService {
 
     private final PoliceStationRepository policeStationRepo;
     private final PoliceOfficerRepository policeOfficerRepo;
+    private final LoggedUserUtil loggedUserUtil;
 
     public AuthResponse register(RegisterRequest request) {
         log.info("Registering new user: {}", request.getEmail());
 
+        if (request.getSecurityQuestion() == null || request.getSecurityAnswer() == null || request.getSecurityAnswer().isBlank()) {
+            throw new IllegalArgumentException("Security question and answer are required");
+        }
         if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
             log.error("Duplicate government ID: {}", request.getGovernmentId());
             throw new RuntimeException("User already exists with this Government ID");
@@ -60,6 +66,7 @@ public class AuthService {
             throw new RuntimeException("Phone number already registered");
         }
 
+
         AppUser newUser = AppUser.builder()
                 .userFullName(request.getFullName())
                 .userEmail(request.getEmail())
@@ -67,7 +74,8 @@ public class AuthService {
                 .governmentId(request.getGovernmentId())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
-                .userType(UserType.CITIZEN)
+                .securityQuestion(request.getSecurityQuestion())
+                .securityAnswer(passwordEncoder.encode(request.getSecurityAnswer()))
                 .verified(true)
                 .build();
 
@@ -89,6 +97,8 @@ public class AuthService {
                 .governmentId(request.getGovernmentId())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .securityQuestion(request.getSecurityQuestion())
+                .securityAnswer(passwordEncoder.encode(request.getSecurityAnswer()))
                 .verified(true)
                 .build();
 
@@ -136,6 +146,8 @@ public class AuthService {
                 .governmentId(request.getGovernmentId())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(Role.AMBULANCE_DRIVER)
+                .securityQuestion(request.getSecurityQuestion())
+                .securityAnswer(passwordEncoder.encode(request.getSecurityAnswer()))
                 .verified(true)
                 .build();
 
@@ -180,6 +192,8 @@ public class AuthService {
                 .governmentId(request.getGovernmentId())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
                 .role(Role.POLICE_OFFICER)
+                .securityQuestion(request.getSecurityQuestion())
+                .securityAnswer(passwordEncoder.encode(request.getSecurityAnswer()))
                 .verified(true)
                 .build();
 
@@ -238,7 +252,50 @@ public class AuthService {
                 .email(user.getUserEmail())
                 .userId(user.getUserId())
                 .role(user.getRole())
-                .userType(user.getUserType())
                 .build();
     }
+    public Map<String, String> getSecurityQuestion(String email) {
+       AppUser user = userRepo.findByUserEmail(email);
+        return Map.of("securityQuestion", user.getSecurityQuestion().toString());
+    }
+
+    public void resetPassword(ForgotPasswordDto dto) {
+        AppUser user = userRepo.findByUserEmail(dto.getEmail());
+        if(user==null){
+            throw new ResourceNotFoundException("User with email " + dto.getEmail() + " not found.");
+        }
+
+        if (!passwordEncoder.matches(dto.getSecurityAnswer(), user.getSecurityAnswer())) {
+            throw new IllegalArgumentException("Incorrect security answer");
+        }
+
+        user.setUserPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepo.save(user);
+    }
+
+
+    public void changePassword( ResetPasswordDto dto) {
+        AppUser user = loggedUserUtil.getCurrentUser();
+        log.info("Fetched user {}",user.getUserEmail());
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getUserPassword())) {
+            log.error("Incorrect current Password");
+            throw new IllegalArgumentException("Incorrect current password.");
+        }
+
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            log.error("New password and confirm password do not match.");
+            throw new IllegalArgumentException("New password and confirm password do not match.");
+        }
+
+        if (dto.getNewPassword().equals(dto.getCurrentPassword())) {
+            log.error("New password cannot be same as current password.");
+            throw new IllegalArgumentException("New password cannot be same as current password.");
+        }
+        log.warn("User password changed for email {}",user.getUserEmail());
+        user.setUserPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepo.save(user);
+
+    }
+
+
 }

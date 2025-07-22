@@ -24,4 +24,5 @@ public class BookingResponseDto {
     private String notes;
     private String victimPhoneNumber;
     private String issueType;
+
 }

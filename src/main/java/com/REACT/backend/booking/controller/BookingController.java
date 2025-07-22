@@ -20,7 +20,6 @@ public class BookingController {
 
     private final BookingServiceImpl bookingService;
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/request")
     public ResponseEntity<BookingResponseDto> handleBooking(@RequestBody BookingRequestDto requestDto) {
         // 🔒 Get currently authenticated user

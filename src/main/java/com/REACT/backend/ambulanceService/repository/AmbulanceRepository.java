@@ -1,6 +1,8 @@
 package com.REACT.backend.ambulanceService.repository;
 
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+import com.REACT.backend.users.AppUser;
+import com.REACT.backend.users.model.AmbulanceDriver;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -38,6 +40,8 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
     );
 
     List<AmbulanceEntity> findByHospitalId(Long hospitalId);
+
+    AmbulanceEntity findByDriver(AppUser driver);
 
 
 

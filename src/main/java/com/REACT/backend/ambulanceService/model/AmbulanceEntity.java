@@ -16,10 +16,12 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @Table(name = "ambulance_entity")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AmbulanceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String ambulanceRegNumber;

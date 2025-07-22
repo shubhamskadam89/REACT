@@ -30,28 +30,37 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("🔐 Configuring Security Filter Chain...");
+
         return http
                 .cors(withDefaults())
-                .csrf(csrf -> csrf.disable())
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/ws-location/**",
-                                "/location-map/**",       // 👈 both ambulance + fire_truck here
-                                "/fire/**",
-                                "/location/**",
-                                "/driver/**"
-                        ).permitAll()
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .anyRequest().authenticated()
-                )
+                .csrf(csrf -> {
+                    System.out.println("🔐 CSRF Disabled");
+                    csrf.disable();
+                })
+                .exceptionHandling(ex -> {
+                    System.out.println("🔐 Setting up Authentication Entry Point");
+                    ex.authenticationEntryPoint(unauthorizedHandler);
+                })
+                .sessionManagement(sess -> {
+                    System.out.println("🔐 Stateless Session Policy");
+                    sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .authorizeHttpRequests(auth -> {
+                    System.out.println("🔐 Configuring Public Endpoints and Role-based Access");
+                    auth
+                            .requestMatchers(
+                                    "/auth/**",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+                            ).permitAll()
+                            .requestMatchers("/api/user/**").hasAuthority("USER")
+                            .anyRequest().authenticated();
+                })
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -71,3 +80,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+//     "/ws-location/**",
+//                                "/location-map/**",
+//                                "/fire/**",
+//                                "/location/**",
+//                                "/driver/**"

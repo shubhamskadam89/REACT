@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,7 +54,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
-                                    List.of(new SimpleGrantedAuthority("ROLE_" + userDetails.getRole()))
+                                    // After (preferred based on your current structure)
+                                    List.of(new SimpleGrantedAuthority(userDetails.getRole().name()))
+
                             );
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -27,7 +27,6 @@ public class BookingUserController {
 
     private final BookingService bookingService;
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/bookings/{userId}")
     public ResponseEntity<List<BookingSummeryDto>> getUserBookings(@PathVariable Long userId){
 
@@ -36,7 +35,7 @@ public class BookingUserController {
         return ResponseEntity.ok(bookings);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<BookingResponseDto> getBookingDetails(@PathVariable Long bookingId){
         BookingResponseDto bookingDetails = bookingService.getBookingDetailsByBookingId(bookingId);
