@@ -4,5 +4,4 @@ public enum PoliceStatus {
     FULLY_ASSIGNED,
     PARTIALLY_ASSIGNED,
     NOT_REQUESTED,
-    INFORMED
 }
