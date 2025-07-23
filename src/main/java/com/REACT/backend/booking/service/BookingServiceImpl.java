@@ -8,6 +8,7 @@ import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
 import com.REACT.backend.booking.dto.BookingRequestDto;
 import com.REACT.backend.booking.dto.BookingResponseDto;
 import com.REACT.backend.booking.dto.BookingSummeryDto;
+import com.REACT.backend.booking.dto.BookingDto;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
 import com.REACT.backend.booking.model.BookingLogEntity;
 import com.REACT.backend.booking.model.EmergencyRequestStatus;
@@ -103,10 +104,6 @@ public class BookingServiceImpl implements BookingService {
             log.info("Police assignment: {}", assignedPoliceMap.entrySet()
                     .stream().map(e -> e.getKey().getStationName() + "=" + e.getValue()).toList());
         }
-
-
-
-
 
         // 🔥 3. Assign fire trucks
         List<FireTruckEntity> assignedFireTruckEntities = new ArrayList<>();
@@ -397,8 +394,98 @@ public class BookingServiceImpl implements BookingService {
         return result;
     }
 
+    private void ensureBookingCompletion(EmergencyRequestEntity requestEntity) {
+        log.info("Checking if all services for request {} have completed", requestEntity.getId());
 
+        // Check if all ambulance statuses are completed
+        boolean ambulancesCompleted = requestEntity.getAmbulanceStatusMap().values().stream()
+                .allMatch(status -> status == AmbulanceStatus.COMPLETED);
 
+        // Check if all fire truck statuses are completed
+        boolean fireTrucksCompleted = requestEntity.getFireTruckStatusMap().values().stream()
+                .allMatch(status -> status == FireTruckStatus.COMPLETED);
 
+        // Check if police assignments are fulfilled
+        boolean policeCompleted = requestEntity.getAssignedPoliceMap().entrySet().stream()
+                .allMatch(e -> e.getValue() >= 0);
+
+        if (ambulancesCompleted && fireTrucksCompleted && policeCompleted) {
+            requestEntity.setEmergencyRequestStatus(EmergencyRequestStatus.COMPLETED);
+            log.info("Request {} is now marked as completed.", requestEntity.getId());
+            requestRepo.save(requestEntity);
+        }
+    }
+
+    // Dashboard API implementations
+    @Override
+    public List<BookingDto> getAllBookings() {
+        log.info("Fetching all bookings from database");
+        
+        try {
+            List<BookingDto> bookings = requestRepo.findAll().stream()
+                    .map(BookingDto::new)
+                    .collect(Collectors.toList());
+            
+            log.info("Successfully retrieved {} total bookings", bookings.size());
+            return bookings;
+        } catch (Exception e) {
+            log.error("Error retrieving all bookings", e);
+            throw new RuntimeException("Failed to retrieve all bookings", e);
+        }
+    }
+
+    @Override
+    public List<BookingDto> getAmbulanceBookings() {
+        log.info("Fetching ambulance service bookings from database");
+        
+        try {
+            List<BookingDto> ambulanceBookings = requestRepo.findAll().stream()
+                    .filter(request -> request.isNeedAmbulance())
+                    .map(BookingDto::new)
+                    .collect(Collectors.toList());
+                    
+            log.info("Successfully retrieved {} ambulance bookings", ambulanceBookings.size());
+            return ambulanceBookings;
+        } catch (Exception e) {
+            log.error("Error retrieving ambulance bookings", e);
+            throw new RuntimeException("Failed to retrieve ambulance bookings", e);
+        }
+    }
+
+    @Override
+    public List<BookingDto> getFireServiceBookings() {
+        log.info("Fetching fire service bookings from database");
+        
+        try {
+            List<BookingDto> fireBookings = requestRepo.findAll().stream()
+                    .filter(request -> request.isNeedFireBrigade())
+                    .map(BookingDto::new)
+                    .collect(Collectors.toList());
+                    
+            log.info("Successfully retrieved {} fire service bookings", fireBookings.size());
+            return fireBookings;
+        } catch (Exception e) {
+            log.error("Error retrieving fire service bookings", e);
+            throw new RuntimeException("Failed to retrieve fire service bookings", e);
+        }
+    }
+
+    @Override
+    public List<BookingDto> getPoliceServiceBookings() {
+        log.info("Fetching police service bookings from database");
+        
+        try {
+            List<BookingDto> policeBookings = requestRepo.findAll().stream()
+                    .filter(request -> request.isNeedPolice())
+                    .map(BookingDto::new)
+                    .collect(Collectors.toList());
+                    
+            log.info("Successfully retrieved {} police service bookings", policeBookings.size());
+            return policeBookings;
+        } catch (Exception e) {
+            log.error("Error retrieving police service bookings", e);
+            throw new RuntimeException("Failed to retrieve police service bookings", e);
+        }
+    }
 
 }

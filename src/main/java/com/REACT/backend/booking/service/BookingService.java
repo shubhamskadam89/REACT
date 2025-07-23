@@ -3,6 +3,7 @@ package com.REACT.backend.booking.service;
 import com.REACT.backend.booking.dto.BookingRequestDto;
 import com.REACT.backend.booking.dto.BookingResponseDto;
 import com.REACT.backend.booking.dto.BookingSummeryDto;
+import com.REACT.backend.booking.dto.BookingDto;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -22,5 +23,11 @@ public interface BookingService {
     BookingResponseDto getBookingDetailsByBookingId(Long bookingId);
 
     BookingResponseDto deleteBookingById(Long bookingId, Long userId) throws AccessDeniedException;
+
+    // Dashboard APIs
+    List<BookingDto> getAllBookings();
+    List<BookingDto> getAmbulanceBookings();
+    List<BookingDto> getFireServiceBookings();
+    List<BookingDto> getPoliceServiceBookings();
 
 }

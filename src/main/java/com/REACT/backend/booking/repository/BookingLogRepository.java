@@ -30,6 +30,11 @@ public interface BookingLogRepository extends JpaRepository<BookingLogEntity, Lo
         @Query("SELECT DISTINCT b FROM BookingLogEntity b JOIN b.assignedFireTruckEntities t WHERE t.fireStationEntity.id = :stationId")
         List<BookingLogEntity> findAllByStationId(@Param("stationId") Long stationId);
 
+        @Query("SELECT DISTINCT b FROM BookingLogEntity b WHERE b.emergencyRequest.id IN " +
+                "(SELECT er.id FROM EmergencyRequestEntity er WHERE er.assignedPoliceMap IS NOT EMPTY " +
+                "AND KEY(er.assignedPoliceMap).id = :policeStationId)")
+        List<BookingLogEntity> findAllByPoliceStationId(@Param("policeStationId") Long policeStationId);
+
 
 
 }

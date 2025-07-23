@@ -15,34 +15,28 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LoggedUserUtil {
-
-    private final AppUserRepository appUserRepository;
     @Autowired
-    private final AmbulanceDriverRepository ambulanceDriverRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
-    private final PoliceOfficerRepository policeOfficerRepository;
+    private AmbulanceDriverRepository ambulanceDriverRepository;
 
     @Autowired
-    private final FireTruckDriverRepository fireTruckDriverRepository;
+    private PoliceOfficerRepository policeOfficerRepository;
 
+    @Autowired
+    private FireTruckDriverRepository fireTruckDriverRepository;
 
-    public  AppUser getCurrentUser() {
+    public AppUser getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof AppUser) {
-            return (AppUser) principal;
-        } else if (principal instanceof UserDetails) {
-            String email = ((UserDetails) principal).getUsername(); // Should be email
-            return appUserRepository.findByUserEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
-        } else if (principal instanceof String) {
-            // In case principal is just a username string
-            return appUserRepository.findByUserEmail((String) principal)
-                    .orElseThrow(() -> new RuntimeException("User not found for email: " + principal));
-        }
-        throw new RuntimeException("Unsupported principal type: " + principal.getClass());
-    }
 
+        if (!(principal instanceof AppUser appUser)) {
+            throw new RuntimeException("Invalid principal type: " + principal.getClass());
+        }
+
+        return appUser;
+    }
 
     public Object getCurrentLoggedUserDetails() {
         AppUser appUser = getCurrentUser();
@@ -54,8 +48,15 @@ public class LoggedUserUtil {
                     .orElseThrow(() -> new RuntimeException("Police officer details not found"));
             case FIRE_DRIVER -> fireTruckDriverRepository.findByDriver(appUser)
                     .orElseThrow(() -> new RuntimeException("Fire truck driver details not found"));
-            default -> appUser;
+            default -> throw new RuntimeException("Unsupported role: " + appUser.getRole());
         };
+    }
+    public <T> T getUserAs(Class<T> type) {
+        Object user = getCurrentLoggedUserDetails();
+        if (!type.isInstance(user)) {
+            throw new RuntimeException("Current user is not of type: " + type.getSimpleName());
+        }
+        return type.cast(user);
     }
 
 }

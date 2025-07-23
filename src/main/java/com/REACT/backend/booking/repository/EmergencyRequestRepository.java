@@ -17,6 +17,11 @@ import java.util.List;
 @Repository
 public interface EmergencyRequestRepository extends JpaRepository<EmergencyRequestEntity, Long> {
 
+    // Dashboard statistics methods
+    long countByNeedAmbulance(boolean needAmbulance);
+    long countByNeedFireBrigade(boolean needFireBrigade);
+    long countByNeedPolice(boolean needPolice);
+    long countByEmergencyRequestStatus(EmergencyRequestStatus status);
 
     @Query("SELECT e FROM EmergencyRequestEntity e WHERE e.requestedBy.id = :userId ORDER BY e.createdAt DESC")
     List<EmergencyRequestEntity> findAllByRequestedById(@Param("userId") Long userId);

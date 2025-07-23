@@ -44,7 +44,7 @@ public class AmbulanceDriverController {
     }
 
     @PatchMapping("/complete-booking")
-    @PreAuthorize(("hasAuthority('FIRE_DRIVER') or hasAuthority('HOSPITAL_ADMIN')"))
+    @PreAuthorize(("hasAuthority('AMBULANCE_DRIVER') or hasAuthority('HOSPITAL_ADMIN')"))
     public ResponseEntity<CompleteAssignmentResponseDto> completeBooking(){
         log.info("Status update to COMPLETE request fetched:");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();

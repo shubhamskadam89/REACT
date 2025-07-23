@@ -10,6 +10,7 @@ import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
+import com.REACT.backend.fireService.model.FireTruckStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -72,16 +73,16 @@ public class AmbulanceDriverServiceImpl {
         AmbulanceDriver driver = (AmbulanceDriver) driverObject;
         AppUser appUser = driver.getDriver();
         log.info("found user who is requesting {}",appUser.getUserEmail());
-      AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
-      log.info("Found associated ambulance {} of {} ",ambulance.getAmbulanceRegNumber(),ambulance.getAmbulanceDriverName());
+        AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
+        log.info("Found associated ambulance {} of {} ",ambulance.getAmbulanceRegNumber(),ambulance.getAmbulanceDriverName());
 
-     List< EmergencyRequestEntity> activeEntity= emergencyRequestRepo.findByAssignedAmbulance(ambulance);
-     log.info("Fetched {} requests where ambulance where involved.",activeEntity.size());
+        List< EmergencyRequestEntity> activeEntity= emergencyRequestRepo.findByAssignedAmbulance(ambulance);
+        log.info("Fetched {} requests where ambulance where involved.",activeEntity.size());
 
-     return activeEntity.stream().filter( req -> AmbulanceStatus.EN_ROUTE.equals(req.getAmbulanceStatusMap().get(ambulance)))
-             .findFirst()
-             .map(req -> new LocationDto(req.getLatitude(), req.getLongitude()))
-             .orElseThrow(()-> new RuntimeException("No active EN_ROUTE request for this ambulance"));
+        return activeEntity.stream().filter( req -> AmbulanceStatus.EN_ROUTE.equals(req.getAmbulanceStatusMap().get(ambulance)))
+                .findFirst()
+                .map(req -> new LocationDto(req.getLatitude(), req.getLongitude()))
+                .orElseThrow(()-> new RuntimeException("No active EN_ROUTE request for this ambulance"));
 
     }
 
@@ -108,6 +109,9 @@ public class AmbulanceDriverServiceImpl {
         emergencyRequestRepo.save(thisEntity);
         log.info("done updating status");
 
+        // Check if all services are completed
+        checkAndCompleteBooking(thisEntity);
+
         Duration duration = Duration.between(thisEntity.getCreatedAt(), Instant.now());
         long time = duration.toMinutes();
         return CompleteAssignmentResponseDto.builder()
@@ -116,8 +120,32 @@ public class AmbulanceDriverServiceImpl {
                 .build();
     }
 
+    private void checkAndCompleteBooking(EmergencyRequestEntity requestEntity) {
+        log.info("Checking if all services for request {} have completed", requestEntity.getId());
 
+        // Check if all ambulance statuses are completed
+        boolean ambulancesCompleted = requestEntity.getAmbulanceStatusMap().values().stream()
+                .allMatch(status -> status == AmbulanceStatus.COMPLETED);
 
+        // Check if all fire truck statuses are completed
+        boolean fireTrucksCompleted = requestEntity.getFireTruckStatusMap() == null ||
+                requestEntity.getFireTruckStatusMap().values().stream()
+                        .allMatch(status -> status == FireTruckStatus.COMPLETED);
 
+        // Check if police assignments are completed (all stations have 0 assigned officers)
+        boolean policeCompleted = requestEntity.getAssignedPoliceMap() == null ||
+                requestEntity.getAssignedPoliceMap().values().stream()
+                        .allMatch(count -> count == 0);
+
+        log.info("Service completion status - Ambulances: {}, Fire: {}, Police: {}",
+                ambulancesCompleted, fireTrucksCompleted, policeCompleted);
+
+        if (ambulancesCompleted && fireTrucksCompleted && policeCompleted) {
+            requestEntity.setEmergencyRequestStatus(
+                    com.REACT.backend.booking.model.EmergencyRequestStatus.COMPLETED);
+            emergencyRequestRepo.save(requestEntity);
+            log.info("Emergency request {} marked as COMPLETED", requestEntity.getId());
+        }
+    }
 
 }

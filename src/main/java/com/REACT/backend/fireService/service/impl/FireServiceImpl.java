@@ -3,6 +3,7 @@ package com.REACT.backend.fireService.service.impl;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
+import com.REACT.backend.booking.model.EmergencyRequestStatus;
 import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
@@ -25,13 +26,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FireServiceImpl  implements FireService {
-      private final FireTruckRepository fireTruckRepository;
-      private final EmergencyRequestRepository emergencyRequestRepo;
+    private final FireTruckRepository fireTruckRepository;
+    private final EmergencyRequestRepository emergencyRequestRepo;
 
 
     public LocationDto getLocationOfCurrentBooking(Object driverObject) {
         log.info("Location fetch request init");
-         FireTruckDriver driver = (FireTruckDriver) driverObject;
+        FireTruckDriver driver = (FireTruckDriver) driverObject;
         AppUser appUser = driver.getDriver();
         log.info("found user who is requesting {}",appUser.getUserEmail());
         FireTruckEntity truck = fireTruckRepository.findByDriver(driver);
@@ -74,6 +75,9 @@ public class FireServiceImpl  implements FireService {
         log.info("Completed the assignment {}",thisEntity.getId());
         emergencyRequestRepo.save(thisEntity);
 
+        // Check if all services are completed
+        checkAndCompleteBooking(thisEntity);
+
         Duration duration = Duration.between(thisEntity.getCreatedAt(), Instant.now());
         long time = duration.toMinutes();
 
@@ -83,6 +87,31 @@ public class FireServiceImpl  implements FireService {
                 .build();
     }
 
+    private void checkAndCompleteBooking(EmergencyRequestEntity requestEntity) {
+        log.info("Checking if all services for request {} have completed", requestEntity.getId());
 
+        // Check if all ambulance statuses are completed
+        boolean ambulancesCompleted = requestEntity.getAmbulanceStatusMap() == null ||
+                requestEntity.getAmbulanceStatusMap().values().stream()
+                        .allMatch(status -> status == AmbulanceStatus.COMPLETED);
+
+        // Check if all fire truck statuses are completed
+        boolean fireTrucksCompleted = requestEntity.getFireTruckStatusMap().values().stream()
+                .allMatch(status -> status == FireTruckStatus.COMPLETED);
+
+        // Check if police assignments are completed (all stations have 0 assigned officers)
+        boolean policeCompleted = requestEntity.getAssignedPoliceMap() == null ||
+                requestEntity.getAssignedPoliceMap().values().stream()
+                        .allMatch(count -> count == 0);
+
+        log.info("Service completion status - Ambulances: {}, Fire: {}, Police: {}",
+                ambulancesCompleted, fireTrucksCompleted, policeCompleted);
+
+        if (ambulancesCompleted && fireTrucksCompleted && policeCompleted) {
+            requestEntity.setEmergencyRequestStatus(EmergencyRequestStatus.COMPLETED);
+            emergencyRequestRepo.save(requestEntity);
+            log.info("Emergency request {} marked as COMPLETED", requestEntity.getId());
+        }
+    }
 
 }

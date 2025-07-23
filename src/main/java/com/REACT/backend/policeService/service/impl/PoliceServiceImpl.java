@@ -1,4 +1,4 @@
-package com.REACT.backend.policeService.service.Impl;
+package com.REACT.backend.policeService.service.impl;
 
 import com.REACT.backend.policeService.service.PoliceService;
 import org.springframework.stereotype.Service;

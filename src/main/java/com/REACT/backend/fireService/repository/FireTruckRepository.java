@@ -2,6 +2,7 @@ package com.REACT.backend.fireService.repository;
 
 import com.REACT.backend.fireService.model.FireTruckEntity;
 
+import com.REACT.backend.fireService.model.FireTruckStatus;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.FireTruckDriver;
 import org.springframework.data.jpa.repository.*;
@@ -27,4 +28,10 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
     List<FireTruckEntity> findByFireStationEntityId(Long stationId);
 
     FireTruckEntity findByDriver(FireTruckDriver driver);
+    
+    @Query("SELECT COUNT(f) FROM FireTruckEntity f WHERE f.status = :status")
+    long countByStatus(@Param("status") FireTruckStatus status);
+    
+    @Query("SELECT COUNT(DISTINCT f.fireStationEntity.id) FROM FireTruckEntity f")
+    long countDistinctByFireStationId();
 }

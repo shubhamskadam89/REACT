@@ -1,6 +1,7 @@
 package com.REACT.backend.ambulanceService.repository;
 
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
+import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import org.springframework.data.jpa.repository.*;
@@ -41,4 +42,7 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
     List<AmbulanceEntity> findByHospitalId(Long hospitalId);
 
     AmbulanceEntity findByDriver(AppUser driver);
+    
+    @Query("SELECT COUNT(a) FROM AmbulanceEntity a WHERE a.status = :status")
+    long countByStatus(@Param("status") AmbulanceStatus status);
 }

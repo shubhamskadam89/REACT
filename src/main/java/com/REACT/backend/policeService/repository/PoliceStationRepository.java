@@ -22,5 +22,8 @@ public interface PoliceStationRepository extends JpaRepository<PoliceStationEnti
     );
 
     Optional<PoliceStationEntity> findByStationName(String stationName);
+    
+    @Query("SELECT SUM(p.availableOfficers) FROM PoliceStationEntity p")
+    long countTotalPoliceOfficers();
 
 }
