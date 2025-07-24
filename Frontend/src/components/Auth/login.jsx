@@ -47,6 +47,9 @@ function Login() {
         case 'POLICE_OFFICER':
           navigate('/police-dashboard');
           break;
+        case 'ADMIN':
+          navigate('/admin-dashboard');
+          break;
         default:
           navigate('/user-dashboard');
       }

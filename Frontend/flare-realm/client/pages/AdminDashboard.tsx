@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useEffect, useState } from "react";
 
 const UserIcon = ({ className = "w-8 h-8" }: { className?: string }) => (
   <svg
@@ -30,6 +31,27 @@ const UserIcon = ({ className = "w-8 h-8" }: { className?: string }) => (
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("http://localhost:8080/api/dashboard/stats");
+        if (!res.ok) throw new Error("Failed to fetch stats");
+        const data = await res.json();
+        setStats(data);
+      } catch (err: any) {
+        setError(err.message || "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -62,20 +84,86 @@ export default function AdminDashboard() {
             <h2 className="text-lg font-semibold text-blue-800 mb-2">
               System Overview
             </h2>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium">Active Users:</span> 156
+            {loading ? (
+              <div className="text-blue-600">Loading stats...</div>
+            ) : error ? (
+              <div className="text-red-600">{error}</div>
+            ) : stats ? (
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium">Timestamp:</span> {stats.timestamp ? new Date(stats.timestamp).toLocaleString() : '-'}
+                </div>
+                <div>
+                  <span className="font-medium">Total Bookings:</span> {stats.total_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Total Users:</span> {stats.total_users}
+                </div>
+                <div>
+                  <span className="font-medium">Total Ambulances:</span> {stats.total_ambulances}
+                </div>
+                <div>
+                  <span className="font-medium">Total Fire Trucks:</span> {stats.total_fire_trucks}
+                </div>
+                <div>
+                  <span className="font-medium">Total Fire Stations:</span> {stats.total_fire_stations}
+                </div>
+                <div>
+                  <span className="font-medium">Total Hospitals:</span> {stats.total_hospitals}
+                </div>
+                <div>
+                  <span className="font-medium">Total Police Officers:</span> {stats.total_police_officers}
+                </div>
+                <div>
+                  <span className="font-medium">Total Police Stations:</span> {stats.total_police_stations}
+                </div>
+                <div>
+                  <span className="font-medium">Ambulance Bookings:</span> {stats.ambulance_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Fire Service Bookings:</span> {stats.fire_service_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Police Service Bookings:</span> {stats.police_service_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Pending Bookings:</span> {stats.pending_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">In Progress Bookings:</span> {stats.in_progress_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Completed Bookings:</span> {stats.completed_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Partially Assigned Bookings:</span> {stats.partially_assigned_bookings}
+                </div>
+                <div>
+                  <span className="font-medium">Available Ambulances:</span> {stats.available_ambulances}
+                </div>
+                <div>
+                  <span className="font-medium">Busy Ambulances:</span> {stats.busy_ambulances}
+                </div>
+                <div>
+                  <span className="font-medium">Available Fire Trucks:</span> {stats.available_fire_trucks}
+                </div>
+                <div>
+                  <span className="font-medium">Busy Fire Trucks:</span> {stats.busy_fire_trucks}
+                </div>
+                <div>
+                  <span className="font-medium">Fire Truck Utilization Rate:</span> {stats.fire_truck_utilization_rate?.toFixed(2)}%
+                </div>
+                <div>
+                  <span className="font-medium">Ambulance Utilization Rate:</span> {stats.ambulance_utilization_rate?.toFixed(2)}%
+                </div>
+                <div>
+                  <span className="font-medium">Booking Completion Rate:</span> {stats.booking_completion_rate?.toFixed(2)}%
+                </div>
+                <div>
+                  <span className="font-medium">Avg Completion Time (min):</span> {stats.average_completion_time_minutes}
+                </div>
               </div>
-              <div>
-                <span className="font-medium">Active Drivers:</span> 23
-              </div>
-              <div>
-                <span className="font-medium">Pending Requests:</span> 8
-              </div>
-              <div>
-                <span className="font-medium">Completed Today:</span> 45
-              </div>
-            </div>
+            ) : null}
           </div>
 
           <div className="bg-green-50 p-4 rounded-lg">

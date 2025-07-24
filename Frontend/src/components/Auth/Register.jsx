@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const roles = [
   { value: 'USER', label: 'User (Requester)' },
   { value: 'AMBULANCE_DRIVER', label: 'Ambulance Driver' },
   { value: 'FIRE_DRIVER', label: 'Fire Truck Driver' },
   { value: 'POLICE_OFFICER', label: 'Police Officer' },
+  { value: 'ADMIN', label: 'Admin' }, // Added Admin role
 ];
 
 export default function Register() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -75,6 +78,18 @@ export default function Register() {
         securityQuestion: form.securityQuestion,
         securityAnswer: form.securityAnswer,
       };
+    } else if (form.role === 'ADMIN') {
+      endpoint = 'http://localhost:8080/auth/register/admin';
+      body = {
+        fullName: form.fullName,
+        email: form.email,
+        phoneNumber: form.phoneNumber,
+        governmentId: form.governmentId,
+        password: form.password,
+        role: 'ADMIN',
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer,
+      };
     } else {
       // USER
       body = {
@@ -111,6 +126,9 @@ export default function Register() {
           securityQuestion: 'PET_NAME',
           securityAnswer: '',
         });
+        if (form.role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        }
       } else {
         const data = await res.json();
         setMessage(data.message || 'Registration failed.');

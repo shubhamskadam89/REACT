@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
+
+const mockProfile = {
+  name: 'John Doe',
+  phone: '+91 9876543210',
+  avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&size=128',
+};
+const mockHistory = [
+  { id: 1, date: '2025-07-23', status: 'Completed', from: '18.53, 73.81', to: '18.54, 73.82' },
+  { id: 2, date: '2025-07-22', status: 'Completed', from: '18.51, 73.80', to: '18.52, 73.83' },
+  { id: 3, date: '2025-07-21', status: 'Cancelled', from: '18.50, 73.79', to: '18.53, 73.84' },
+];
 
 export default function AmbulanceDriverPage() {
   const [appointment, setAppointment] = useState(null);
@@ -7,7 +18,11 @@ export default function AmbulanceDriverPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [completed, setCompleted] = useState(false);
-  const [slideChecked, setSlideChecked] = useState(false);
+  const [slideValue, setSlideValue] = useState(0);
+  const [sliderAnimating, setSliderAnimating] = useState(false);
+  const sliderRef = useRef();
+  const [routeInfo, setRouteInfo] = useState(null);
+  const [activePage, setActivePage] = useState('dashboard');
 
   // Fetch assigned appointment location
   useEffect(() => {
@@ -58,6 +73,7 @@ export default function AmbulanceDriverPage() {
 
   // Handle completion PATCH request
   const handleComplete = async () => {
+    setSliderAnimating(false);
     setLoading(true);
     setError('');
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
@@ -84,6 +100,36 @@ export default function AmbulanceDriverPage() {
     }
   };
 
+  // Watch slider value for auto-complete
+  useEffect(() => {
+    if (slideValue === 100 && !completed && !loading) {
+      setSliderAnimating(true);
+      setTimeout(() => {
+        handleComplete();
+      }, 800); // Animation duration
+    }
+  }, [slideValue, completed, loading]);
+
+  // Fetch route info when both locations are available
+  useEffect(() => {
+    if (!userLocation || !appointment) return;
+    const getRoute = async () => {
+      try {
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${userLocation.longitude},${userLocation.latitude};${appointment.longitude},${appointment.latitude}?geometries=geojson&access_token=${MAPBOX_TOKEN}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.routes && data.routes[0]) {
+          setRouteInfo({
+            distance: data.routes[0].distance / 1000, // km
+            duration: data.routes[0].duration / 60, // min
+            geometry: data.routes[0].geometry
+          });
+        }
+      } catch {}
+    };
+    getRoute();
+  }, [userLocation, appointment]);
+
   // Mapbox map rendering
   useEffect(() => {
     if (!window.mapboxgl || !appointment || !userLocation) return;
@@ -103,8 +149,28 @@ export default function AmbulanceDriverPage() {
       .setLngLat([userLocation.longitude, userLocation.latitude])
       .setPopup(new window.mapboxgl.Popup().setText('Your Location'))
       .addTo(map);
+    // Draw route polyline
+    if (routeInfo && routeInfo.geometry) {
+      map.on('load', () => {
+        map.addSource('route', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: routeInfo.geometry
+          }
+        });
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: 'route',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: { 'line-color': '#2563eb', 'line-width': 5 }
+        });
+      });
+    }
     return () => map.remove();
-  }, [appointment, userLocation]);
+  }, [appointment, userLocation, routeInfo]);
 
   // Load Mapbox GL JS script if not present
   useEffect(() => {
@@ -124,60 +190,213 @@ export default function AmbulanceDriverPage() {
     };
   }, []);
 
+  // Add logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-gray-50 p-4">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg border p-6 mb-8 flex flex-col items-center animate-fade-in">
-        <div className="flex items-center justify-between w-full mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">🚑</span>
-            <h1 className="text-2xl font-bold text-blue-700">Ambulance Driver Dashboard</h1>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-gray-50">
+      {/* Top Bar */}
+      <header className="flex items-center justify-between bg-blue-700 text-white px-6 py-3 shadow-md">
+        <div className="flex items-center gap-3">
+          <img src={mockProfile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white" />
+          <div>
+            <div className="font-bold text-lg">{mockProfile.name}</div>
+            <div className="text-sm opacity-80">{mockProfile.phone}</div>
           </div>
-          {/* Removed admin button for driver-only page */}
         </div>
-        {error && <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 w-full text-center">{error}</div>}
-        {loading && <div className="mb-4 text-blue-600">Loading...</div>}
-        {appointment && userLocation && (
-          <div className="w-full mb-6">
-            <div id="ambulance-map" className="w-full h-80 rounded-lg shadow border mb-4" />
-          </div>
-        )}
-        {appointment && (
-          <div className="mb-6 w-full">
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg mb-2">
-              <div className="font-semibold text-gray-800 mb-1">Appointment Location:</div>
-              <div className="font-mono text-lg text-blue-700">{appointment.latitude}, {appointment.longitude}</div>
-            </div>
-            {userLocation && (
-              <div className="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-lg">
-                <div className="font-semibold text-gray-800 mb-1">Your Location:</div>
-                <div className="font-mono text-lg text-gray-700">{userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}</div>
+        <button onClick={handleLogout} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded text-white font-semibold transition">Logout</button>
+      </header>
+      <div className="flex flex-1 w-full max-w-5xl mx-auto">
+        {/* Sidebar/Menu */}
+        <nav className="w-48 min-w-[140px] bg-blue-50 border-r border-blue-100 flex flex-col py-6 gap-2">
+          <button onClick={() => setActivePage('dashboard')} className={`text-left px-4 py-2 rounded font-semibold transition ${activePage === 'dashboard' ? 'bg-blue-600 text-white' : 'hover:bg-blue-100 text-blue-700'}`}>Dashboard</button>
+          <button onClick={() => setActivePage('history')} className={`text-left px-4 py-2 rounded font-semibold transition ${activePage === 'history' ? 'bg-blue-600 text-white' : 'hover:bg-blue-100 text-blue-700'}`}>Booking History</button>
+          <button onClick={() => setActivePage('profile')} className={`text-left px-4 py-2 rounded font-semibold transition ${activePage === 'profile' ? 'bg-blue-600 text-white' : 'hover:bg-blue-100 text-blue-700'}`}>Profile</button>
+        </nav>
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          {activePage === 'dashboard' && (
+            <>
+              <div className="flex items-center justify-between w-full mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl">🚑</span>
+                  <h1 className="text-2xl font-bold text-blue-700">Ambulance Driver Dashboard</h1>
+                </div>
+                {/* Removed admin button for driver-only page */}
               </div>
-            )}
-          </div>
-        )}
-        {!completed ? (
-          <div className="flex flex-col items-center w-full">
-            <label className="flex items-center cursor-pointer mb-4 w-full justify-center">
-              <span className="mr-4 text-gray-700 font-medium">Slide to Complete</span>
-              <input
-                type="checkbox"
-                checked={slideChecked}
-                onChange={e => setSlideChecked(e.target.checked)}
-                className="w-14 h-7 rounded-full bg-gray-300 focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-                style={{ accentColor: '#3b82f6' }}
-              />
-            </label>
-            <button
-              onClick={handleComplete}
-              disabled={!slideChecked || loading}
-              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 transition-all duration-200 shadow-lg"
-            >
-              Mark as Completed
-            </button>
-          </div>
-        ) : (
-          <div className="p-4 bg-green-100 text-green-700 rounded border border-green-200 font-semibold w-full text-center">Booking marked as completed!</div>
-        )}
+              {error && <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 w-full text-center">{error}</div>}
+              {loading && <div className="mb-4 text-blue-600">Loading...</div>}
+              {appointment && userLocation && (
+                <div className="w-full mb-6">
+                  <div id="ambulance-map" className="w-full h-80 rounded-lg shadow border mb-4" />
+                </div>
+              )}
+              {appointment && (
+                <div className="mb-6 w-full">
+                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg mb-2">
+                    <div className="font-semibold text-gray-800 mb-1">Appointment Location:</div>
+                    <div className="font-mono text-lg text-blue-700">{appointment.latitude}, {appointment.longitude}</div>
+                  </div>
+                  {userLocation && (
+                    <div className="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-1">Your Location:</div>
+                      <div className="font-mono text-lg text-gray-700">{userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {routeInfo && (
+                <div className="mb-4 w-full flex flex-col items-center">
+                  <div className="flex gap-4 items-center mb-2">
+                    <span className="text-blue-700 font-semibold">Distance: {routeInfo.distance.toFixed(2)} km</span>
+                    <span className="text-blue-700 font-semibold">Time: {Math.round(routeInfo.duration)} min</span>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${appointment.latitude},${appointment.longitude}&travelmode=driving`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition mb-2"
+                  >
+                    Open in Google Maps
+                  </a>
+                </div>
+              )}
+              {!completed ? (
+                <div className="flex flex-col items-center w-full">
+                  <div className="mb-4 w-full flex flex-col items-center">
+                    <label className="block text-gray-700 font-medium mb-2">Slide to Complete</label>
+                    <div className="w-72 p-4 bg-blue-50 rounded-2xl shadow flex flex-col items-center relative transition-all duration-300">
+                      <input
+                        ref={sliderRef}
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={slideValue}
+                        onChange={e => setSlideValue(Number(e.target.value))}
+                        disabled={loading || completed}
+                        className={`w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 transition-all duration-300 ${sliderAnimating ? 'bg-green-300' : ''}`}
+                        style={{ accentColor: '#3b82f6' }}
+                      />
+                      {/* Custom thumb with arrow */}
+                      <style>{`
+                        input[type='range']::-webkit-slider-thumb {
+                          -webkit-appearance: none;
+                          appearance: none;
+                          width: 40px;
+                          height: 40px;
+                          border-radius: 8px;
+                          background: #2563eb;
+                          box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          transition: background 0.2s;
+                          position: relative;
+                        }
+                        input[type='range']:focus::-webkit-slider-thumb {
+                          outline: 2px solid #2563eb;
+                        }
+                        input[type='range']::-webkit-slider-thumb::before {
+                          content: '';
+                          display: block;
+                          position: absolute;
+                          left: 12px;
+                          top: 10px;
+                          width: 0;
+                          height: 0;
+                          border-top: 10px solid transparent;
+                          border-bottom: 10px solid transparent;
+                          border-left: 18px solid #fff;
+                        }
+                        input[type='range']::-webkit-slider-thumb::after {
+                          display: none;
+                        }
+                        input[type='range']::-moz-range-thumb {
+                          width: 40px;
+                          height: 40px;
+                          border-radius: 8px;
+                          background: #2563eb;
+                          box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+                          border: none;
+                          position: relative;
+                        }
+                        input[type='range']:focus::-moz-range-thumb {
+                          outline: 2px solid #2563eb;
+                        }
+                        input[type='range']::-moz-range-thumb {
+                          background: #2563eb url('data:image/svg+xml;utf8,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><polygon points="6,4 20,12 6,20" fill="white"/></svg>') no-repeat center center;
+                          background-size: 24px 24px;
+                        }
+                        /* Hide the default arrow for Firefox */
+                        input[type='range']::-moz-focus-outer { border: 0; }
+                      `}</style>
+                      <div className="flex justify-between w-full text-xs mt-2">
+                        <span>Start</span>
+                        <span>End</span>
+                      </div>
+                      {sliderAnimating && (
+                        <div className="flex items-center mt-2 text-green-600 animate-bounce">
+                          <svg className="w-6 h-6 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                          Completed!
+                        </div>
+                      )}
+                      {loading && (
+                        <div className="flex items-center mt-2 text-blue-600">
+                          <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" /></svg>
+                          Processing...
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 bg-green-100 text-green-700 rounded border border-green-200 font-semibold w-full text-center">Booking marked as completed!</div>
+              )}
+            </>
+          )}
+          {activePage === 'history' && (
+            <div className="bg-white rounded-xl shadow p-6">
+              <h2 className="text-xl font-bold mb-4 text-blue-700">Booking History</h2>
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="bg-blue-50">
+                    <th className="px-4 py-2">ID</th>
+                    <th className="px-4 py-2">Date</th>
+                    <th className="px-4 py-2">Status</th>
+                    <th className="px-4 py-2">From</th>
+                    <th className="px-4 py-2">To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockHistory.map(h => (
+                    <tr key={h.id} className="border-b last:border-b-0">
+                      <td className="px-4 py-2 text-center">{h.id}</td>
+                      <td className="px-4 py-2 text-center">{h.date}</td>
+                      <td className={`px-4 py-2 text-center font-semibold ${h.status === 'Completed' ? 'text-green-600' : 'text-red-500'}`}>{h.status}</td>
+                      <td className="px-4 py-2 text-center">{h.from}</td>
+                      <td className="px-4 py-2 text-center">{h.to}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {activePage === 'profile' && (
+            <div className="bg-white rounded-xl shadow p-6 max-w-md mx-auto">
+              <h2 className="text-xl font-bold mb-4 text-blue-700">Profile</h2>
+              <div className="flex flex-col items-center gap-4">
+                <img src={mockProfile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-600" />
+                <div className="font-bold text-lg">{mockProfile.name}</div>
+                <div className="text-gray-600">{mockProfile.phone}</div>
+                <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition">Edit Profile</button>
+              </div>
+            </div>
+          )}
+        </main>
       </div>
       <style>{`
         @keyframes fadeIn {
