@@ -3,6 +3,8 @@ export { default as AmbulanceDashboard } from './Dashboard/AmbulanceDashboard';
 export { default as FireDashboard } from './Dashboard/FireDashboard';
 export { default as PoliceDashboard } from './Dashboard/PoliceDashboard';
 export { default as UserDashboard } from './Dashboard/UserDashboard';
+export { default as AmbulanceDriverPage } from './Driver/AmbulanceDriverPage';
+export { default as FireTruckDriverPage } from './Driver/FireTruckDriverPage';
 
 // Auth Components
 export { default as Login } from './Auth/login';

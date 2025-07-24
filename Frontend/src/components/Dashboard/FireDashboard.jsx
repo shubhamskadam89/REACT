@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function FireDashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [stationForm, setStationForm] = useState({
     name: '',
@@ -29,6 +31,10 @@ export default function FireDashboard() {
     email: 'sarah.johnson@fire.gov',
     phone: '+1 (555) 987-6543'
   });
+  const [reportTruckHistory, setReportTruckHistory] = useState([]);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportError, setReportError] = useState('');
+  const [reportTruckId, setReportTruckId] = useState('');
 
   const handleStationChange = (e) => {
     const { name, value } = e.target;
@@ -135,7 +141,7 @@ export default function FireDashboard() {
         longitude: parseFloat(locationForm.longitude)
       };
 
-      const res = await fetch('http://localhost:8080/fire/location/update', {
+      const res = await fetch('http://localhost:8080/fire/truck-driver/v1/update-location', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -278,6 +284,41 @@ export default function FireDashboard() {
     }
   };
 
+  const fetchReportTruckHistory = async () => {
+    if (!reportTruckId) {
+      setReportError('Please enter a truck ID.');
+      return;
+    }
+    setReportLoading(true);
+    setReportError('');
+    // Get JWT token
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setReportError('Authentication token not found. Please login again.');
+      setReportLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:8080/fire/admin/truck/${reportTruckId}/history`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setReportTruckHistory(result);
+      } else {
+        const data = await res.json();
+        setReportError(data.message || 'Failed to fetch truck history.');
+      }
+    } catch (err) {
+      setReportError('Network error. Please try again.');
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
   const QuickActionCard = ({ title, description, icon, onClick, color }) => (
     <div 
       onClick={onClick}
@@ -318,6 +359,16 @@ export default function FireDashboard() {
                 <p className="text-sm text-gray-600">Welcome, {profileData.name.split(' ')[1]}</p>
                 <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('jwt');
+                  localStorage.removeItem('token');
+                  navigate('/login');
+                }}
+                className="text-red-600 hover:text-red-700 text-sm font-medium"
+              >
+                Logout
+              </button>
               <button 
                 onClick={() => setShowProfile(!showProfile)}
                 className="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-semibold hover:bg-orange-700 transition"
@@ -866,7 +917,81 @@ export default function FireDashboard() {
         {activeTab === 'reports' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Reports</h2>
-            <p className="text-gray-600">Report generation features coming soon...</p>
+            <div className="flex items-center mb-4 gap-2">
+              <input
+                type="number"
+                min="1"
+                placeholder="Enter Truck ID"
+                value={reportTruckId}
+                onChange={e => setReportTruckId(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500 w-48"
+              />
+              <button
+                onClick={fetchReportTruckHistory}
+                disabled={reportLoading}
+                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+              >
+                {reportLoading ? 'Loading...' : 'Get Truck History by ID'}
+              </button>
+            </div>
+            {reportError && (
+              <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200">{reportError}</div>
+            )}
+            {reportTruckHistory && Array.isArray(reportTruckHistory) && reportTruckHistory.length > 0 && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm bg-white border border-gray-300">
+                  <thead className="bg-orange-100">
+                    <tr>
+                      <th className="px-3 py-2 border-b text-left">Booking ID</th>
+                      <th className="px-3 py-2 border-b text-left">Pickup Location</th>
+                      <th className="px-3 py-2 border-b text-left">Issue Type</th>
+                      <th className="px-3 py-2 border-b text-left">Status</th>
+                      <th className="px-3 py-2 border-b text-left">Created At</th>
+                      <th className="px-3 py-2 border-b text-left">Victim Phone</th>
+                      <th className="px-3 py-2 border-b text-left">Requested By</th>
+                      <th className="px-3 py-2 border-b text-left">For Self</th>
+                      <th className="px-3 py-2 border-b text-left">Ambulance</th>
+                      <th className="px-3 py-2 border-b text-left">Police</th>
+                      <th className="px-3 py-2 border-b text-left">Fire Brigade</th>
+                      <th className="px-3 py-2 border-b text-left">Ambulance Count</th>
+                      <th className="px-3 py-2 border-b text-left">Police Count</th>
+                      <th className="px-3 py-2 border-b text-left">Fire Truck Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reportTruckHistory.map((item, idx) => (
+                      <tr key={idx} className="hover:bg-gray-50">
+                        <td className="px-3 py-2 border-b">{item.booking_id}</td>
+                        <td className="px-3 py-2 border-b text-xs">{item.pickup_latitude?.toFixed(4)}, {item.pickup_longitude?.toFixed(4)}</td>
+                        <td className="px-3 py-2 border-b">{item.issue_type}</td>
+                        <td className="px-3 py-2 border-b">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            item.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                            item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 border-b text-xs">{new Date(item.created_at).toLocaleString()}</td>
+                        <td className="px-3 py-2 border-b">{item.victim_phone_number}</td>
+                        <td className="px-3 py-2 border-b">{item.requested_by_user_id}</td>
+                        <td className="px-3 py-2 border-b">{item.is_for_self ? 'Yes' : 'No'}</td>
+                        <td className="px-3 py-2 border-b">{item.needs_ambulance ? 'Yes' : 'No'}</td>
+                        <td className="px-3 py-2 border-b">{item.needs_police ? 'Yes' : 'No'}</td>
+                        <td className="px-3 py-2 border-b">{item.needs_fire_brigade ? 'Yes' : 'No'}</td>
+                        <td className="px-3 py-2 border-b">{item.requested_ambulance_count}</td>
+                        <td className="px-3 py-2 border-b">{item.requested_police_count}</td>
+                        <td className="px-3 py-2 border-b">{item.requested_fire_truck_count}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {(!reportLoading && (!reportTruckHistory || reportTruckHistory.length === 0)) && (
+              <p className="text-gray-600">No truck history data available. Enter a truck ID and click the button above to fetch.</p>
+            )}
           </div>
         )}
 

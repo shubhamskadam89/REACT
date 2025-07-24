@@ -8,56 +8,62 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fireDriverChoice, setFireDriverChoice] = useState(null);
+  const [pendingFireDriverUser, setPendingFireDriverUser] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
+    setFireDriverChoice(null);
+    setPendingFireDriverUser(null);
     try {
       const credentials = { email, password };
       const data = await authAPI.login(credentials);
-      
-      // Extract token from response
       const token = data.token || data.jwt || data.accessToken;
       if (!token) {
         throw new Error('No authentication token received from server');
       }
-
-      // Store token using utility function
       tokenUtils.setToken(token);
-      
-      // Get user info from token
       const userInfo = tokenUtils.getUserFromToken();
       if (!userInfo) {
         throw new Error('Invalid token format');
       }
-
+      if (userInfo.role === 'FIRE_DRIVER') {
+        setPendingFireDriverUser(userInfo);
+        setFireDriverChoice('pending');
+        setLoading(false);
+        return;
+      }
       // Navigate based on user role
       switch (userInfo.role) {
         case 'USER':
           navigate('/user-dashboard');
           break;
         case 'AMBULANCE_DRIVER':
-          navigate('/ambulance-dashboard');
-          break;
-        case 'FIRE_DRIVER':
-          navigate('/fire-dashboard');
+          navigate('/ambulance-role-select');
           break;
         case 'POLICE_OFFICER':
           navigate('/police-dashboard');
           break;
         default:
-          navigate('/user-dashboard'); // fallback
+          navigate('/user-dashboard');
       }
-      
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
-      // Clear any invalid tokens
       tokenUtils.removeToken();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFireDriverChoice = (choice) => {
+    if (!pendingFireDriverUser) return;
+    if (choice === 'admin') {
+      navigate('/fire-dashboard');
+    } else if (choice === 'driver') {
+      navigate('/fire-truck-driver');
     }
   };
 
@@ -76,8 +82,29 @@ function Login() {
             Access your emergency services dashboard
           </p>
         </div>
-
+        {/* Fire Driver Choice UI */}
+        {fireDriverChoice === 'pending' && (
+          <div className="bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100 flex flex-col items-center">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Choose Your Fire Role</h3>
+            <div className="flex gap-4 mb-4">
+              <button
+                onClick={() => handleFireDriverChoice('admin')}
+                className="bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition"
+              >
+                Fire Admin
+              </button>
+              <button
+                onClick={() => handleFireDriverChoice('driver')}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Fire Truck Driver
+              </button>
+            </div>
+            <p className="text-gray-500 text-sm">Select your role to continue.</p>
+          </div>
+        )}
         {/* Login Form */}
+        {fireDriverChoice !== 'pending' && (
         <div className="bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -186,6 +213,7 @@ function Login() {
             </a>
           </div>
         </div>
+        )}
 
         {/* Emergency Contact Info */}
         <div className="text-center">

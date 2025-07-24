@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function PoliceDashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [form, setForm] = useState({
     id: '',
@@ -21,6 +23,13 @@ export default function PoliceDashboard() {
     email: 'john.smith@police.gov',
     phone: '+1 (555) 123-4567'
   });
+  const [reportStationId, setReportStationId] = useState('');
+  const [reportStationHistory, setReportStationHistory] = useState([]);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportError, setReportError] = useState('');
+  const [emergencyHistory, setEmergencyHistory] = useState([]);
+  const [emergencyLoading, setEmergencyLoading] = useState(false);
+  const [emergencyError, setEmergencyError] = useState('');
 
   // Mock statistics data
   const stats = {
@@ -99,6 +108,72 @@ export default function PoliceDashboard() {
     }
   };
 
+  const fetchReportStationHistory = async () => {
+    if (!reportStationId) {
+      setReportError('Please enter a station ID.');
+      return;
+    }
+    setReportLoading(true);
+    setReportError('');
+    // Get JWT token
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setReportError('Authentication token not found. Please login again.');
+      setReportLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:8080/police/admin/station/${reportStationId}/history`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setReportStationHistory(result);
+      } else {
+        const data = await res.json();
+        setReportError(data.message || 'Failed to fetch station history.');
+      }
+    } catch (err) {
+      setReportError('Network error. Please try again.');
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
+  const fetchEmergencyHistory = async () => {
+    setEmergencyLoading(true);
+    setEmergencyError('');
+    // Get JWT token
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setEmergencyError('Authentication token not found. Please login again.');
+      setEmergencyLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:8080/police-officer/v1/assignment-history', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setEmergencyHistory(result);
+      } else {
+        const data = await res.json();
+        setEmergencyError(data.message || 'Failed to fetch assignment history.');
+      }
+    } catch (err) {
+      setEmergencyError('Network error. Please try again.');
+    } finally {
+      setEmergencyLoading(false);
+    }
+  };
+
   const QuickActionCard = ({ title, description, icon, onClick, color }) => (
     <div 
       onClick={onClick}
@@ -139,6 +214,16 @@ export default function PoliceDashboard() {
                 <p className="text-sm text-gray-600">Welcome, {profileData.name.split(' ')[1]}</p>
                 <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('jwt');
+                  localStorage.removeItem('token');
+                  navigate('/login');
+                }}
+                className="text-red-600 hover:text-red-700 text-sm font-medium"
+              >
+                Logout
+              </button>
               <button 
                 onClick={() => setShowProfile(!showProfile)}
                 className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold hover:bg-blue-700 transition"
@@ -480,14 +565,134 @@ export default function PoliceDashboard() {
         {activeTab === 'emergencies' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Emergency Monitoring</h2>
-            <p className="text-gray-600">Emergency monitoring features coming soon...</p>
+            <button
+              onClick={fetchEmergencyHistory}
+              disabled={emergencyLoading}
+              className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            >
+              {emergencyLoading ? 'Loading...' : 'Get Assignment History'}
+            </button>
+            {emergencyError && (
+              <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200">{emergencyError}</div>
+            )}
+            {emergencyHistory && Array.isArray(emergencyHistory) && emergencyHistory.length > 0 && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm bg-white border border-gray-300">
+                  <thead className="bg-blue-100">
+                    <tr>
+                      <th className="px-3 py-2 border-b text-left">Assignment ID</th>
+                      <th className="px-3 py-2 border-b text-left">Case Type</th>
+                      <th className="px-3 py-2 border-b text-left">Status</th>
+                      <th className="px-3 py-2 border-b text-left">Assigned At</th>
+                      <th className="px-3 py-2 border-b text-left">Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {emergencyHistory.map((item, idx) => (
+                      <tr key={idx} className="hover:bg-gray-50">
+                        <td className="px-3 py-2 border-b">{item.assignment_id || item.id}</td>
+                        <td className="px-3 py-2 border-b">{item.case_type || item.issue_type}</td>
+                        <td className="px-3 py-2 border-b">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            item.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                            item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 border-b text-xs">{item.assigned_at ? new Date(item.assigned_at).toLocaleString() : ''}</td>
+                        <td className="px-3 py-2 border-b">{item.location || `${item.latitude?.toFixed(4)}, ${item.longitude?.toFixed(4)}`}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {(!emergencyLoading && (!emergencyHistory || emergencyHistory.length === 0)) && (
+              <p className="text-gray-600">No assignment history data available. Click the button above to fetch.</p>
+            )}
           </div>
         )}
 
                  {activeTab === 'reports' && (
            <div className="bg-white rounded-lg shadow-md p-6">
              <h2 className="text-2xl font-bold text-gray-900 mb-6">Reports</h2>
-             <p className="text-gray-600">Report generation features coming soon...</p>
+             <div className="flex items-center mb-4 gap-2">
+               <input
+                 type="number"
+                 min="1"
+                 placeholder="Enter Station ID"
+                 value={reportStationId}
+                 onChange={e => setReportStationId(e.target.value)}
+                 className="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 w-48"
+               />
+               <button
+                 onClick={fetchReportStationHistory}
+                 disabled={reportLoading}
+                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+               >
+                 {reportLoading ? 'Loading...' : 'Get Station History by ID'}
+               </button>
+             </div>
+             {reportError && (
+               <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200">{reportError}</div>
+             )}
+             {reportStationHistory && Array.isArray(reportStationHistory) && reportStationHistory.length > 0 && (
+               <div className="overflow-x-auto">
+                 <table className="w-full text-sm bg-white border border-gray-300">
+                   <thead className="bg-blue-100">
+                     <tr>
+                       <th className="px-3 py-2 border-b text-left">Booking ID</th>
+                       <th className="px-3 py-2 border-b text-left">Pickup Location</th>
+                       <th className="px-3 py-2 border-b text-left">Issue Type</th>
+                       <th className="px-3 py-2 border-b text-left">Status</th>
+                       <th className="px-3 py-2 border-b text-left">Created At</th>
+                       <th className="px-3 py-2 border-b text-left">Victim Phone</th>
+                       <th className="px-3 py-2 border-b text-left">Requested By</th>
+                       <th className="px-3 py-2 border-b text-left">For Self</th>
+                       <th className="px-3 py-2 border-b text-left">Ambulance</th>
+                       <th className="px-3 py-2 border-b text-left">Police</th>
+                       <th className="px-3 py-2 border-b text-left">Fire Brigade</th>
+                       <th className="px-3 py-2 border-b text-left">Ambulance Count</th>
+                       <th className="px-3 py-2 border-b text-left">Police Count</th>
+                       <th className="px-3 py-2 border-b text-left">Fire Truck Count</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {reportStationHistory.map((item, idx) => (
+                       <tr key={idx} className="hover:bg-gray-50">
+                         <td className="px-3 py-2 border-b">{item.booking_id}</td>
+                         <td className="px-3 py-2 border-b text-xs">{item.pickup_latitude?.toFixed(4)}, {item.pickup_longitude?.toFixed(4)}</td>
+                         <td className="px-3 py-2 border-b">{item.issue_type}</td>
+                         <td className="px-3 py-2 border-b">
+                           <span className={`px-2 py-1 rounded text-xs ${
+                             item.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                             item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                             'bg-gray-100 text-gray-800'
+                           }`}>
+                             {item.status}
+                           </span>
+                         </td>
+                         <td className="px-3 py-2 border-b text-xs">{new Date(item.created_at).toLocaleString()}</td>
+                         <td className="px-3 py-2 border-b">{item.victim_phone_number}</td>
+                         <td className="px-3 py-2 border-b">{item.requested_by_user_id}</td>
+                         <td className="px-3 py-2 border-b">{item.is_for_self ? 'Yes' : 'No'}</td>
+                         <td className="px-3 py-2 border-b">{item.needs_ambulance ? 'Yes' : 'No'}</td>
+                         <td className="px-3 py-2 border-b">{item.needs_police ? 'Yes' : 'No'}</td>
+                         <td className="px-3 py-2 border-b">{item.needs_fire_brigade ? 'Yes' : 'No'}</td>
+                         <td className="px-3 py-2 border-b">{item.requested_ambulance_count}</td>
+                         <td className="px-3 py-2 border-b">{item.requested_police_count}</td>
+                         <td className="px-3 py-2 border-b">{item.requested_fire_truck_count}</td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </div>
+             )}
+             {(!reportLoading && (!reportStationHistory || reportStationHistory.length === 0)) && (
+               <p className="text-gray-600">No station history data available. Enter a station ID and click the button above to fetch.</p>
+             )}
            </div>
          )}
 
@@ -504,20 +709,14 @@ export default function PoliceDashboard() {
                <div className="space-y-4">
                  {stationRankings.slice(0, 3).map((station, index) => (
                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                     <div className="flex items-center space-x-4">
-                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                         index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-500'
-                       }`}>
-                         {index + 1}
-                       </div>
-                       <div>
-                         <h4 className="font-semibold text-gray-900">{station.name}</h4>
-                         <p className="text-sm text-gray-600">Score: {station.score}/100</p>
-                       </div>
+                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                       index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-500'
+                     }`}>
+                       {index + 1}
                      </div>
-                     <div className="text-right">
-                       <div className="text-lg font-bold text-green-600">{station.responseTime}</div>
-                       <div className="text-xs text-gray-500">Response Time</div>
+                     <div>
+                       <h4 className="font-semibold text-gray-900">{station.name}</h4>
+                       <p className="text-sm text-gray-600">Score: {station.score}/100</p>
                      </div>
                    </div>
                  ))}

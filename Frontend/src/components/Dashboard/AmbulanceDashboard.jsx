@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AmbulanceDashboard() {
@@ -43,6 +43,8 @@ export default function AmbulanceDashboard() {
   const [allDrivers, setAllDrivers] = useState([]);
   const [allDriversLoading, setAllDriversLoading] = useState(false);
   const [allDriversError, setAllDriversError] = useState('');
+  // Add role selection state
+  // const [role, setRole] = useState('DRIVER'); // DRIVER or ADMIN
 
   // Mock ambulance data
   const ambulanceData = {
@@ -389,7 +391,7 @@ export default function AmbulanceDashboard() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ambulance Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Ambulance Admin Dashboard</h1>
               <p className="text-gray-600">Emergency Medical Services Management</p>
             </div>
             <div className="flex items-center space-x-4">
@@ -399,7 +401,7 @@ export default function AmbulanceDashboard() {
               </div>
               <div className="flex items-center space-x-3">
                 <button 
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/')} 
                   className="text-gray-600 hover:text-gray-800 text-sm font-medium"
                 >
                   Home
@@ -421,7 +423,6 @@ export default function AmbulanceDashboard() {
           </div>
         </div>
       </div>
-
       {/* Navigation Tabs */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4">
@@ -452,7 +453,6 @@ export default function AmbulanceDashboard() {
           </nav>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {activeTab === 'overview' && (
