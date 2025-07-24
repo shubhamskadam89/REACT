@@ -319,40 +319,40 @@ export default function FireDashboard() {
     }
   };
 
-  const QuickActionCard = ({ title, description, icon, onClick, color }) => (
+  const QuickActionCard = ({ title, description, icon, onClick, gradient }) => (
     <div 
       onClick={onClick}
-      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:scale-105 ${color}`}
+      className={`${gradient} p-6 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:rotate-1 border border-white/20 backdrop-blur-sm animate-fadeInUp`}
     >
       <div className="flex items-center space-x-4">
-        <div className="text-3xl">{icon}</div>
+        <div className="text-3xl drop-shadow-sm">{icon}</div>
         <div>
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="font-semibold text-white drop-shadow-sm">{title}</h3>
+          <p className="text-sm text-white/80">{description}</p>
         </div>
       </div>
     </div>
   );
 
-  const StatCard = ({ title, value, subtitle, color }) => (
-    <div className={`bg-white p-6 rounded-lg shadow-md ${color}`}>
+  const StatCard = ({ title, value, subtitle, gradient }) => (
+    <div className={`${gradient} p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border border-white/20 backdrop-blur-sm animate-fadeInUp`}>
       <div className="text-right">
-        <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
-        <p className="text-sm text-gray-600">{title}</p>
-        {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+        <h3 className="text-2xl font-bold text-white drop-shadow-sm">{value}</h3>
+        <p className="text-sm text-white/80">{title}</p>
+        {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-gradient-to-r from-orange-600 via-red-600 to-yellow-600 shadow-lg backdrop-blur-sm border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Fire Dashboard</h1>
-              <p className="text-gray-600">Emergency Response Management System</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent drop-shadow-sm">Fire Dashboard</h1>
+              <p className="text-orange-100">Emergency Response Management System</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
@@ -420,25 +420,25 @@ export default function FireDashboard() {
                 title="Total Stations" 
                 value={stats.totalStations} 
                 subtitle="Active fire stations"
-                color="border-l-4 border-l-orange-500"
+                gradient="bg-gradient-to-br from-orange-500 to-orange-600"
               />
               <StatCard 
                 title="Active Trucks" 
                 value={stats.activeTrucks} 
                 subtitle="Available fire trucks"
-                color="border-l-4 border-l-red-500"
+                gradient="bg-gradient-to-br from-red-500 to-red-600"
               />
               <StatCard 
                 title="Emergency Calls" 
                 value={stats.emergencyCalls} 
                 subtitle="Today's calls"
-                color="border-l-4 border-l-yellow-500"
+                gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
               />
               <StatCard 
                 title="Avg Response Time" 
                 value={stats.responseTime} 
                 subtitle="Emergency response"
-                color="border-l-4 border-l-green-500"
+                gradient="bg-gradient-to-br from-green-500 to-green-600"
               />
             </div>
 
@@ -451,56 +451,56 @@ export default function FireDashboard() {
                   description="Create a new fire station"
                   icon="🏢"
                   onClick={() => setActiveTab('stations')}
-                  color="hover:border-orange-500"
+                  gradient="bg-gradient-to-br from-orange-500 to-orange-600"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Update truck locations"
                   icon="📍"
                   onClick={() => setActiveTab('trucks')}
-                  color="hover:border-red-500"
+                  gradient="bg-gradient-to-br from-green-500 to-green-600"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor active emergencies"
                   icon="🚨"
                   onClick={() => setActiveTab('emergencies')}
-                  color="hover:border-yellow-500"
+                  gradient="bg-gradient-to-br from-red-500 to-red-600"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
                   icon="📋"
                   onClick={() => setActiveTab('reports')}
-                  color="hover:border-purple-500"
+                  gradient="bg-gradient-to-br from-purple-500 to-purple-600"
                 />
                 <QuickActionCard
                   title="Live Map"
                   description="View real-time locations"
                   icon="🗺️"
                   onClick={() => window.open('/navigation/fire_truck/1', '_blank')}
-                  color="hover:border-indigo-500"
+                  gradient="bg-gradient-to-br from-indigo-500 to-indigo-600"
                 />
                 <QuickActionCard
                   title="Station Rankings"
                   description="View performance metrics"
                   icon="🏆"
                   onClick={() => setActiveTab('ranking')}
-                  color="hover:border-green-500"
+                  gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
                 />
                 <QuickActionCard
                   title="My Profile"
                   description="Update personal information"
                   icon="👤"
                   onClick={() => setActiveTab('profile')}
-                  color="hover:border-blue-500"
+                  gradient="bg-gradient-to-br from-blue-500 to-blue-600"
                 />
                 <QuickActionCard
                   title="Emergency Contacts"
                   description="Quick contact list"
                   icon="📞"
                   onClick={() => alert('Emergency contacts feature coming soon!')}
-                  color="hover:border-pink-500"
+                  gradient="bg-gradient-to-br from-pink-500 to-pink-600"
                 />
               </div>
             </div>

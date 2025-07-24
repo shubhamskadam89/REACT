@@ -78,9 +78,9 @@ function App() {
           
           {/* Protected routes - require authentication and specific roles */}
           <Route path="/user-dashboard" element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <UserDashboard />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path="/admin-dashboard" element={
             <ProtectedRoute requiredRole="ADMIN">

@@ -21,9 +21,40 @@ export default function FireTruckDriverPage() {
   const [completed, setCompleted] = useState(false);
   const [slideValue, setSlideValue] = useState(0);
   const [sliderAnimating, setSliderAnimating] = useState(false);
+  const [completionSlideIn, setCompletionSlideIn] = useState(false);
   const sliderRef = useRef();
   const [routeInfo, setRouteInfo] = useState(null);
   const [activePage, setActivePage] = useState('dashboard');
+  
+  // Additional feature states
+  const [shiftStartTime] = useState(new Date('2025-01-07T08:00:00'));
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [vehicleStatus] = useState({
+    fuelLevel: 85,
+    waterLevel: 92,
+    equipmentStatus: 'Ready',
+    lastMaintenance: '2025-01-05'
+  });
+  const [weatherInfo] = useState({
+    temperature: 24,
+    condition: 'Clear',
+    humidity: 65,
+    windSpeed: 12
+  });
+  const [performanceMetrics] = useState({
+    totalCalls: 47,
+    completedToday: 3,
+    averageResponseTime: '4.2 min',
+    rating: 4.8
+  });
+
+  // Update current time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Fetch assigned appointment location
   useEffect(() => {
@@ -72,7 +103,7 @@ export default function FireTruckDriverPage() {
     );
   }, []);
 
-  // Handle completion PATCH request
+  // Handle completion PATCH request with sliding animation
   const handleComplete = async () => {
     setSliderAnimating(false);
     setLoading(true);
@@ -89,7 +120,11 @@ export default function FireTruckDriverPage() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
-        setCompleted(true);
+        // Trigger sliding animation on success
+        setCompletionSlideIn(true);
+        setTimeout(() => {
+          setCompleted(true);
+        }, 500); // Delay to show the slide-in effect
       } else {
         const data = await res.json();
         setError(data.message || 'Failed to complete booking.');
@@ -222,7 +257,7 @@ export default function FireTruckDriverPage() {
         <main className="flex-1 p-6">
           {activePage === 'dashboard' && (
             <>
-              <div className="flex items-center justify-between w-full mb-4">
+              <div className="flex items-center justify-between w-full mb-6">
                 <div className="flex items-center gap-2">
                   <span className="text-3xl">🚒</span>
                   <h1 className="text-2xl font-bold text-orange-700">Fire Truck Driver Dashboard</h1>
@@ -233,6 +268,98 @@ export default function FireTruckDriverPage() {
                 >
                   Go to Fire Admin
                 </button>
+              </div>
+              
+              {/* Status Cards with sliding completion animation */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className={`bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border shadow-sm transform transition-all duration-500 ${completionSlideIn ? 'animate-fade-in' : ''}`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-blue-600 font-medium">Current Status</p>
+                      <p className="text-lg font-bold text-blue-800">{completed ? 'Completed' : 'Active'}</p>
+                    </div>
+                    <div className="text-2xl">{completed ? '✅' : '🔥'}</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-green-600 font-medium">Response Time</p>
+                      <p className="text-lg font-bold text-green-800">{performanceMetrics.averageResponseTime}</p>
+                    </div>
+                    <div className="text-2xl">⏱️</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-purple-600 font-medium">Rating</p>
+                      <p className="text-lg font-bold text-purple-800">{performanceMetrics.rating}/5.0 ⭐</p>
+                    </div>
+                    <div className="text-2xl">🏆</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Vehicle Status */}
+              <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <span className="text-xl">🚛</span>
+                  Vehicle Status
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">⛽</div>
+                    <p className="text-sm text-gray-600">Fuel Level</p>
+                    <p className="font-bold text-green-600">{vehicleStatus.fuelLevel}%</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">💧</div>
+                    <p className="text-sm text-gray-600">Water Level</p>
+                    <p className="font-bold text-blue-600">{vehicleStatus.waterLevel}%</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">🔧</div>
+                    <p className="text-sm text-gray-600">Equipment</p>
+                    <p className="font-bold text-green-600">{vehicleStatus.equipmentStatus}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">🔧</div>
+                    <p className="text-sm text-gray-600">Last Service</p>
+                    <p className="font-bold text-gray-700">{vehicleStatus.lastMaintenance}</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Weather & Performance */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-lg p-4 border shadow-sm">
+                  <h4 className="font-semibold text-sky-800 mb-2 flex items-center gap-2">
+                    <span className="text-lg">🌤️</span>
+                    Weather Conditions
+                  </h4>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-medium">Temperature:</span> {weatherInfo.temperature}°C</p>
+                    <p><span className="font-medium">Condition:</span> {weatherInfo.condition}</p>
+                    <p><span className="font-medium">Humidity:</span> {weatherInfo.humidity}%</p>
+                    <p><span className="font-medium">Wind:</span> {weatherInfo.windSpeed} km/h</p>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border shadow-sm">
+                  <h4 className="font-semibold text-orange-800 mb-2 flex items-center gap-2">
+                    <span className="text-lg">📊</span>
+                    Today's Performance
+                  </h4>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-medium">Total Calls:</span> {performanceMetrics.totalCalls}</p>
+                    <p><span className="font-medium">Completed Today:</span> {performanceMetrics.completedToday}</p>
+                    <p><span className="font-medium">Shift Started:</span> {shiftStartTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
+                    <p><span className="font-medium">Current Time:</span> {currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
+                </div>
               </div>
               {error && <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 w-full text-center">{error}</div>}
               {loading && <div className="mb-4 text-blue-600">Loading...</div>}

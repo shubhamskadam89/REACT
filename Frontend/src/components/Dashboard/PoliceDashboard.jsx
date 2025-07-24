@@ -174,45 +174,50 @@ export default function PoliceDashboard() {
     }
   };
 
-  const QuickActionCard = ({ title, description, icon, onClick, color }) => (
+  const QuickActionCard = ({ title, description, icon, onClick, gradient }) => (
     <div 
       onClick={onClick}
-      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:scale-105 ${color}`}
+      className={`${gradient} p-6 rounded-lg shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-fade-in-up relative overflow-hidden group`}
     >
-      <div className="flex items-center space-x-4">
-        <div className="text-3xl">{icon}</div>
+      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+      <div className="flex items-center space-x-4 relative z-10">
+        <div className="text-4xl transform group-hover:scale-110 transition-transform duration-300">{icon}</div>
         <div>
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="font-semibold text-white">{title}</h3>
+          <p className="text-sm text-white/90">{description}</p>
         </div>
       </div>
     </div>
   );
 
-  const StatCard = ({ title, value, subtitle, color }) => (
-    <div className={`bg-white p-6 rounded-lg shadow-md ${color}`}>
-      <div className="text-right">
-        <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
-        <p className="text-sm text-gray-600">{title}</p>
-        {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+  const StatCard = ({ title, value, subtitle, gradient, icon }) => (
+    <div className={`${gradient} p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-fade-in-up relative overflow-hidden group`}>
+      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+      <div className="flex items-center justify-between relative z-10">
+        <div className="text-4xl text-white/90 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">{icon}</div>
+        <div className="text-right">
+          <h3 className="text-2xl font-bold text-white">{value}</h3>
+          <p className="text-sm text-white/90">{title}</p>
+          {subtitle && <p className="text-xs text-white/80">{subtitle}</p>}
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Police Dashboard</h1>
-              <p className="text-gray-600">Emergency Response Management System</p>
+            <div className="animate-fade-in-up">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent animate-pulse">Police Dashboard</h1>
+              <p className="text-blue-100">Emergency Response Management System</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600">Welcome, {profileData.name.split(' ')[1]}</p>
-                <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
+                <p className="text-sm text-blue-100">Welcome, {profileData.name.split(' ')[1]}</p>
+                <p className="text-xs text-blue-200">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
               <button
                 onClick={() => {
@@ -220,13 +225,13 @@ export default function PoliceDashboard() {
                   localStorage.removeItem('token');
                   navigate('/login');
                 }}
-                className="text-red-600 hover:text-red-700 text-sm font-medium"
+                className="text-red-200 hover:text-red-100 text-sm font-medium transition-colors duration-200"
               >
                 Logout
               </button>
               <button 
                 onClick={() => setShowProfile(!showProfile)}
-                className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold hover:bg-blue-700 transition"
+                className="w-10 h-10 bg-gradient-to-r from-white/20 to-white/30 rounded-full flex items-center justify-center text-white font-semibold hover:from-white/30 hover:to-white/40 transition-all duration-200 backdrop-blur-sm"
               >
                 P
               </button>
@@ -275,87 +280,91 @@ export default function PoliceDashboard() {
                 title="Total Stations" 
                 value={stats.totalStations} 
                 subtitle="Active police stations"
-                color="border-l-4 border-l-blue-500"
+                gradient="bg-gradient-to-br from-blue-500 to-blue-600"
+                icon="🏢"
               />
               <StatCard 
                 title="Active Officers" 
                 value={stats.activeOfficers} 
                 subtitle="On duty officers"
-                color="border-l-4 border-l-green-500"
+                gradient="bg-gradient-to-br from-green-500 to-green-600"
+                icon="👮"
               />
               <StatCard 
                 title="Emergency Calls" 
                 value={stats.emergencyCalls} 
                 subtitle="Today's calls"
-                color="border-l-4 border-l-red-500"
+                gradient="bg-gradient-to-br from-red-500 to-red-600"
+                icon="🚨"
               />
               <StatCard 
                 title="Avg Response Time" 
                 value={stats.responseTime} 
                 subtitle="Emergency response"
-                color="border-l-4 border-l-yellow-500"
+                gradient="bg-gradient-to-br from-yellow-500 to-orange-500"
+                icon="⏱️"
               />
             </div>
 
             {/* Quick Actions */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 animate-fade-in-up">Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <QuickActionCard
                   title="Create Station"
                   description="Add a new police station"
                   icon="🏢"
                   onClick={() => setActiveTab('stations')}
-                  color="hover:border-blue-500"
+                  gradient="bg-gradient-to-br from-blue-500 to-blue-600"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor active emergencies"
                   icon="🚨"
                   onClick={() => setActiveTab('emergencies')}
-                  color="hover:border-red-500"
+                  gradient="bg-gradient-to-br from-red-500 to-red-600"
                 />
                 <QuickActionCard
                   title="Officer Management"
                   description="Manage police officers"
                   icon="👮"
                   onClick={() => setActiveTab('officers')}
-                  color="hover:border-green-500"
+                  gradient="bg-gradient-to-br from-green-500 to-green-600"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
                   icon="📋"
                   onClick={() => setActiveTab('reports')}
-                  color="hover:border-purple-500"
+                  gradient="bg-gradient-to-br from-purple-500 to-purple-600"
                 />
                 <QuickActionCard
                   title="Live Map"
                   description="View real-time locations"
                   icon="🗺️"
                   onClick={() => window.open('/navigation/ambulance/1', '_blank')}
-                  color="hover:border-indigo-500"
+                  gradient="bg-gradient-to-br from-indigo-500 to-indigo-600"
                 />
                                  <QuickActionCard
                    title="Emergency Contacts"
                    description="Quick contact list"
                    icon="📞"
                    onClick={() => alert('Emergency contacts feature coming soon!')}
-                   color="hover:border-orange-500"
+                   gradient="bg-gradient-to-br from-orange-500 to-orange-600"
                  />
                  <QuickActionCard
                    title="Station Rankings"
                    description="View performance metrics"
                    icon="🏆"
                    onClick={() => setActiveTab('ranking')}
-                   color="hover:border-yellow-500"
+                   gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
                  />
                  <QuickActionCard
                    title="My Profile"
                    description="Update personal information"
                    icon="👤"
                    onClick={() => setActiveTab('profile')}
-                   color="hover:border-purple-500"
+                   gradient="bg-gradient-to-br from-pink-500 to-pink-600"
                  />
               </div>
             </div>

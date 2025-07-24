@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Animated Section Header
+function SectionHeader({ icon, title }) {
+  return (
+    <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-fade-in">
+      <span className="text-3xl">{icon}</span>
+      {title}
+    </h2>
+  );
+}
+
 export default function AmbulanceDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
@@ -203,7 +213,7 @@ export default function AmbulanceDashboard() {
   const QuickActionCard = ({ title, description, icon, onClick, color }) => (
     <div 
       onClick={onClick}
-      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:scale-105 ${color}`}
+      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:scale-105 ${color} hover:shadow-emergency`}
     >
       <div className="flex items-center space-x-4">
         <div className="text-3xl">{icon}</div>
@@ -216,13 +226,13 @@ export default function AmbulanceDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-accent to-secondary/80">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white/80 shadow-sm border-b backdrop-blur-md animate-fade-in">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ambulance Dashboard</h1>
+              <h1 className="text-3xl font-extrabold text-gray-900 drop-shadow">Ambulance Dashboard</h1>
               <p className="text-gray-600">Emergency Medical Services Management</p>
             </div>
             <div className="flex items-center space-x-4">
@@ -232,21 +242,14 @@ export default function AmbulanceDashboard() {
               </div>
               <div className="flex items-center space-x-3">
                 <button 
-                  onClick={() => navigate('/')}
-                  className="text-gray-600 hover:text-gray-800 text-sm font-medium"
-                >
-                  Home
-                </button>
+                  onClick={() => navigate('/')} 
+                  className="text-gray-600 hover:text-primary text-sm font-medium transition-colors"
+                >Home</button>
                 <button 
-                  onClick={() => {
-                    localStorage.removeItem('jwt');
-                    navigate('/login');
-                  }}
-                  className="text-red-600 hover:text-red-700 text-sm font-medium"
-                >
-                  Logout
-                </button>
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  onClick={() => { localStorage.removeItem('jwt'); navigate('/login'); }}
+                  className="text-primary hover:text-red-700 text-sm font-medium transition-colors"
+                >Logout</button>
+                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold shadow-emergency animate-bounce">
                   🚑
                 </div>
               </div>
@@ -256,27 +259,14 @@ export default function AmbulanceDashboard() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white border-b">
+      <div className="bg-white/80 border-b backdrop-blur-md animate-fade-in">
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
-            {[
-              { id: 'overview', name: 'Overview', icon: '📊' },
-              { id: 'drivers', name: 'Drivers', icon: '👨‍⚕️' },
-              { id: 'vehicles', name: 'Vehicles', icon: '🚑' },
-              { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
-              { id: 'reports', name: 'Reports', icon: '📋' },
-              { id: 'rankings', name: 'Rankings', icon: '🏆' },
-              { id: 'profile', name: 'Profile', icon: '👤' },
-              { id: 'register', name: 'Register', icon: '➕' }
-            ].map((tab) => (
+            {[{ id: 'overview', name: 'Overview', icon: '📊' }, { id: 'drivers', name: 'Drivers', icon: '👨‍⚕️' }, { id: 'vehicles', name: 'Vehicles', icon: '🚑' }, { id: 'emergencies', name: 'Emergencies', icon: '🚨' }, { id: 'reports', name: 'Reports', icon: '📋' }, { id: 'rankings', name: 'Rankings', icon: '🏆' }, { id: 'profile', name: 'Profile', icon: '👤' }, { id: 'register', name: 'Register', icon: '➕' }].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200 ${activeTab === tab.id ? 'border-primary text-primary scale-110' : 'border-transparent text-gray-500 hover:text-secondary hover:border-accent'}`}
               >
                 <span className="mr-2">{tab.icon}</span>
                 {tab.name}
@@ -287,12 +277,12 @@ export default function AmbulanceDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
         {activeTab === 'overview' && (
           <div className="space-y-8">
             {/* Quick Actions */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+              <SectionHeader icon="🚑" title="Quick Actions" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <QuickActionCard
                   title="Register Driver"
@@ -341,36 +331,36 @@ export default function AmbulanceDashboard() {
 
             {/* Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md bg-gradient-to-br from-primary/10 to-accent/10">
                 <div className="flex items-center">
-                  <div className="text-3xl mr-4">🚑</div>
+                  <div className="text-3xl mr-4 text-primary">🚑</div>
                   <div>
                     <p className="text-sm text-gray-600">Total Ambulances</p>
                     <p className="text-2xl font-bold text-gray-900">{ambulanceData.totalAmbulances}</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md bg-gradient-to-br from-secondary/10 to-primary/10">
                 <div className="flex items-center">
-                  <div className="text-3xl mr-4">👨‍⚕️</div>
+                  <div className="text-3xl mr-4 text-secondary">👨‍⚕️</div>
                   <div>
                     <p className="text-sm text-gray-600">Active Drivers</p>
                     <p className="text-2xl font-bold text-green-600">{ambulanceData.activeDrivers}</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md bg-gradient-to-br from-accent/10 to-secondary/10">
                 <div className="flex items-center">
-                  <div className="text-3xl mr-4">🚨</div>
+                  <div className="text-3xl mr-4 text-accent">🚨</div>
                   <div>
                     <p className="text-sm text-gray-600">Emergencies</p>
                     <p className="text-2xl font-bold text-blue-600">{ambulanceData.totalEmergencies}</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md bg-gradient-to-br from-primary/10 to-accent/10">
                 <div className="flex items-center">
-                  <div className="text-3xl mr-4">⏱️</div>
+                  <div className="text-3xl mr-4 text-primary">⏱️</div>
                   <div>
                     <p className="text-sm text-gray-600">Avg Response</p>
                     <p className="text-2xl font-bold text-purple-600">{ambulanceData.averageResponseTime}</p>
@@ -380,8 +370,8 @@ export default function AmbulanceDashboard() {
             </div>
 
             {/* Recent Emergencies */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Emergencies</h3>
+            <div className="bg-white/90 rounded-lg shadow-emergency p-6 animate-fade-in">
+              <SectionHeader icon="🚨" title="Recent Emergencies" />
               <div className="space-y-4">
                 {recentEmergencies.map((emergency, index) => (
                   <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
@@ -840,6 +830,15 @@ export default function AmbulanceDashboard() {
           </div>
         )}
       </div>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: none; }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+      `}</style>
     </div>
   );
 } 

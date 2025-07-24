@@ -369,30 +369,31 @@ export default function AmbulanceDashboard() {
     }
   };
 
-  const QuickActionCard = ({ title, description, icon, onClick, color }) => (
+  const QuickActionCard = ({ title, description, icon, onClick, color, gradient }) => (
     <div 
       onClick={onClick}
-      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer transition-all hover:shadow-lg hover:scale-105 ${color}`}
+      className={`bg-gradient-to-br ${gradient} p-6 rounded-xl shadow-lg cursor-pointer transition-all duration-200 hover:shadow-xl backdrop-blur-sm border border-white/20 group relative`}
+      style={{ pointerEvents: 'auto' }}
     >
-      <div className="flex items-center space-x-4">
-        <div className="text-3xl">{icon}</div>
+      <div className="flex items-center space-x-4 relative z-10">
+        <div className="text-4xl transition-transform duration-200 group-hover:scale-110">{icon}</div>
         <div>
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="font-bold text-white text-lg">{title}</h3>
+          <p className="text-sm text-white/80">{description}</p>
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 shadow-lg border-b border-blue-100/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ambulance Admin Dashboard</h1>
-              <p className="text-gray-600">Emergency Medical Services Management</p>
+            <div className="opacity-100 translate-x-0">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Ambulance Admin Dashboard</h1>
+              <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
@@ -436,20 +437,30 @@ export default function AmbulanceDashboard() {
               { id: 'rankings', name: 'Rankings', icon: '🏆' },
               { id: 'profile', name: 'Profile', icon: '👤' },
               { id: 'register', name: 'Register', icon: '➕' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.name}
-              </button>
-            ))}
+            ].map((tab) => {
+              const handleTabClick = () => {
+                console.log('Tab clicked:', tab.id);
+                console.log('Current activeTab:', activeTab);
+                setActiveTab(tab.id);
+                console.log('Tab should be set to:', tab.id);
+              };
+              
+              return (
+                <button
+                  key={tab.id}
+                  onClick={handleTabClick}
+                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm bg-transparent ${
+                    activeTab === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500'
+                  }`}
+                >
+                  <span className="mr-2">{tab.icon}</span>
+                  {tab.name}
+                </button>
+              );
+            })}
           </nav>
         </div>
       </div>
@@ -466,83 +477,87 @@ export default function AmbulanceDashboard() {
                   description="Add new ambulance driver"
                   icon="👨‍⚕️"
                   onClick={() => setActiveTab('register')}
-                  color="hover:border-blue-500"
+                  gradient="from-blue-500 via-blue-600 to-blue-700"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Update ambulance location"
                   icon="📍"
                   onClick={() => setActiveTab('vehicles')}
-                  color="hover:border-green-500"
+                  gradient="from-green-500 via-green-600 to-emerald-700"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Check active emergencies"
                   icon="🚨"
                   onClick={() => setActiveTab('emergencies')}
-                  color="hover:border-red-500"
+                  gradient="from-red-500 via-red-600 to-red-700"
                 />
                 <QuickActionCard
                   title="Driver Rankings"
                   description="View performance rankings"
                   icon="🏆"
                   onClick={() => setActiveTab('rankings')}
-                  color="hover:border-yellow-500"
+                  gradient="from-yellow-500 via-orange-500 to-amber-600"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create performance reports"
                   icon="📊"
                   onClick={() => setActiveTab('reports')}
-                  color="hover:border-purple-500"
+                  gradient="from-purple-500 via-purple-600 to-indigo-700"
                 />
                 <QuickActionCard
                   title="Profile Management"
                   description="Manage driver profiles"
                   icon="👤"
                   onClick={() => setActiveTab('profile')}
-                  color="hover:border-indigo-500"
+                  gradient="from-indigo-500 via-purple-600 to-pink-600"
                 />
               </div>
             </div>
 
             {/* Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <div className="text-3xl mr-4">🚑</div>
+              <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                <div className="flex items-center relative z-10">
+                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚑</div>
                   <div>
-                    <p className="text-sm text-gray-600">Total Ambulances</p>
-                    <p className="text-2xl font-bold text-gray-900">{ambulanceData.totalAmbulances}</p>
+                    <p className="text-sm text-blue-100 font-medium">Total Ambulances</p>
+                    <p className="text-3xl font-bold text-white">{ambulanceData.totalAmbulances}</p>
                   </div>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <div className="text-3xl mr-4">👨‍⚕️</div>
+              <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                <div className="flex items-center relative z-10">
+                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">👨‍⚕️</div>
                   <div>
-                    <p className="text-sm text-gray-600">Active Drivers</p>
-                    <p className="text-2xl font-bold text-green-600">{ambulanceData.activeDrivers}</p>
+                    <p className="text-sm text-green-100 font-medium">Active Drivers</p>
+                    <p className="text-3xl font-bold text-white">{ambulanceData.activeDrivers}</p>
                   </div>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <div className="text-3xl mr-4">🚨</div>
+              <div className="bg-gradient-to-br from-red-500 to-red-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                <div className="flex items-center relative z-10">
+                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚨</div>
                   <div>
-                    <p className="text-sm text-gray-600">Emergencies</p>
-                    <p className="text-2xl font-bold text-blue-600">{ambulanceData.totalEmergencies}</p>
+                    <p className="text-sm text-red-100 font-medium">Emergencies</p>
+                    <p className="text-3xl font-bold text-white">{ambulanceData.totalEmergencies}</p>
                   </div>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <div className="text-3xl mr-4">⏱️</div>
+              <div className="bg-gradient-to-br from-purple-500 to-indigo-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                <div className="flex items-center relative z-10">
+                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">⏱️</div>
                   <div>
-                    <p className="text-sm text-gray-600">Avg Response</p>
-                    <p className="text-2xl font-bold text-purple-600">{ambulanceData.averageResponseTime}</p>
+                    <p className="text-sm text-purple-100 font-medium">Avg Response</p>
+                    <p className="text-3xl font-bold text-white">{ambulanceData.averageResponseTime}</p>
                   </div>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
               </div>
             </div>
 
