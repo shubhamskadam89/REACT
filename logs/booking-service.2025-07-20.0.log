@@ -1,0 +1,90 @@
+00:33:18.708 [http-nio-8080-exec-6] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: sangita@gmal.com
+00:33:18.710 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 41 for issue 'Medical Emergency'
+00:33:18.710 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.52304, 76.88567]
+00:33:19.020 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:33:19.021 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:33:19.102 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:23
+00:33:19.103 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+00:33:19.108 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status NONE || Fire brigade Assignment statusNONE
+00:33:19.132 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 23
+00:33:19.132 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+00:33:19.134 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user sangita@gmal.com. Returning response.
+00:44:03.401 [http-nio-8080-exec-2] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: sangita@gmal.com
+00:44:03.405 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 41 for issue 'Car Accident'
+00:44:03.406 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.5104, 73.8467]
+00:44:03.666 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:44:03.666 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:44:03.666 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.5104, 73.8467]
+00:44:04.862 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+00:44:04.970 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:24
+00:44:04.971 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+00:44:04.974 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status NONE || Fire brigade Assignment statusNONE
+00:44:04.996 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 24
+00:44:04.996 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+00:44:04.997 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user sangita@gmal.com. Returning response.
+00:51:57.714 [http-nio-8080-exec-6] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: reeta@gmal.com
+00:51:57.718 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 43 for issue 'Bus Crash at pune'
+00:51:57.719 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.52304, 76.88567]
+00:51:58.040 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:51:58.041 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: []
+00:51:58.174 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:25
+00:51:58.174 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+00:51:58.177 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status NONE || Fire brigade Assignment statusN/A
+00:51:58.208 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 25
+00:51:58.208 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+00:51:58.209 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user reeta@gmal.com. Returning response.
+01:46:20.250 [http-nio-8080-exec-2] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: sangita@gmal.com
+01:46:20.259 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 41 for issue 'Car Accident'
+01:46:20.259 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.5104, 73.8467]
+01:46:20.502 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [3]
+01:46:20.502 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.5104, 73.8467]
+01:46:20.528 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+01:46:20.529 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 1 units near [18.5104, 73.8467]
+01:46:20.646 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:1
+01:46:20.669 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+01:46:20.670 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusFULL
+01:46:20.689 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 1
+01:46:20.689 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+01:46:20.689 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user sangita@gmal.com. Returning response.
+02:43:34.845 [http-nio-8080-exec-8] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: jiya@gmal.com
+02:43:34.846 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 47 for issue 'Fire'
+02:43:34.846 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.520492, 73.853767]
+02:43:35.400 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [5]
+02:43:35.400 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.520492, 73.853767]
+02:43:35.423 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+02:43:35.423 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 1 units near [18.520492, 73.853767]
+02:43:35.644 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:2
+02:43:35.651 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+02:43:35.654 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusFULL
+02:43:35.674 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 2
+02:43:35.675 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+02:43:35.675 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user jiya@gmal.com. Returning response.
+07:37:19.962 [http-nio-8080-exec-3] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: sangita@gmal.com
+07:37:19.978 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 41 for issue 'Fire'
+07:37:19.978 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.520492, 73.853767]
+07:37:21.271 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [8]
+07:37:21.271 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.520492, 73.853767]
+07:37:21.452 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+07:37:21.452 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 1 units near [18.520492, 73.853767]
+07:37:22.314 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:6
+07:37:22.321 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+07:37:22.323 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusFULL
+07:37:22.543 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 6
+07:37:22.543 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+07:37:22.544 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user sangita@gmal.com. Returning response.
+07:38:01.808 [http-nio-8080-exec-9] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: sangita@gmal.com
+07:38:01.812 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 41 for issue 'Fire'
+07:38:01.813 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.520492, 73.853767]
+07:38:01.888 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [8]
+07:38:01.889 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.520492, 73.853767]
+07:38:01.920 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+07:38:01.921 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 1 units near [18.520492, 73.853767]
+07:38:02.145 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:7
+07:38:02.146 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+07:38:02.147 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusFULL
+07:38:02.167 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 7
+07:38:02.167 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+07:38:02.168 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user sangita@gmal.com. Returning response.
+10:37:22.235 [http-nio-8080-exec-4] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: reeta@gmal.com
+10:37:22.253 [http-nio-8080-exec-4] INFO  c.R.b.b.service.BookingServiceImpl - ? New booking request received from userId 43 for issue 'Bus Crash at pune'
+10:37:22.261 [http-nio-8080-exec-4] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.52304, 76.88567]

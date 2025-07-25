@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import LiveMap from "./LiveMap";
 
 // SVG Icons
@@ -86,6 +86,10 @@ export default function Tracking() {
   const [fireTruckStatus, setFireTruckStatus] = useState("");
   const [ambulanceStatus, setAmbulanceStatus] = useState("");
   const [notes, setNotes] = useState("");
+  const [ambulanceArrived, setAmbulanceArrived] = useState(false);
+  const [fireTruckArrived, setFireTruckArrived] = useState(false);
+  const [ambulanceRoute, setAmbulanceRoute] = useState([]);
+  const routeIndexRef = useRef(0);
 
   // Hardcoded hospital location
   const hospitalCoords = { latitude: 18.5310, longitude: 73.8446 };
@@ -101,6 +105,19 @@ export default function Tracking() {
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+  }
+
+  // Helper to move a point towards a target by a small step
+  function moveTowards(current, target, stepKm = 0.1) {
+    const distance = getDistanceKm(current.latitude, current.longitude, target.latitude, target.longitude);
+    if (distance < stepKm) return { ...target };
+    const latDiff = target.latitude - current.latitude;
+    const lonDiff = target.longitude - current.longitude;
+    const factor = stepKm / distance;
+    return {
+      latitude: current.latitude + latDiff * factor,
+      longitude: current.longitude + lonDiff * factor,
+    };
   }
 
   useEffect(() => {
@@ -119,6 +136,68 @@ export default function Tracking() {
       setAmbulances(lastBooking.ambulances);
     }
   }, []);
+
+  // Only fetch the route when a new ambulance is assigned or user location changes
+  useEffect(() => {
+    if (ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude && ambulances[0].regNumber) {
+      const start = ambulances[0];
+      const end = userCoords;
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?geometries=geojson&access_token=pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.routes && data.routes[0] && data.routes[0].geometry && data.routes[0].geometry.coordinates) {
+            setAmbulanceRoute(data.routes[0].geometry.coordinates);
+            routeIndexRef.current = 0;
+            // Reset ambulance position to start of route
+            const [lng, lat] = data.routes[0].geometry.coordinates[0];
+            setAmbulances(prev => prev.length > 0 ? [{ ...prev[0], latitude: lat, longitude: lng }, ...prev.slice(1)] : prev);
+            setAmbulanceArrived(false);
+          }
+        });
+    }
+  }, [ambulances.length, ambulances[0]?.regNumber, userCoords.latitude, userCoords.longitude]);
+
+  // Simulation for ambulance movement along the route
+  useEffect(() => {
+    if (!ambulances.length || ambulanceArrived || ambulanceRoute.length === 0) return;
+    const interval = setInterval(() => {
+      let index = routeIndexRef.current;
+      setAmbulances(prev => {
+        if (!prev.length) return prev;
+        if (index >= ambulanceRoute.length - 1) {
+          setAmbulanceArrived(true);
+          clearInterval(interval);
+          return [{ ...prev[0], latitude: userCoords.latitude, longitude: userCoords.longitude }, ...prev.slice(1)];
+        }
+        const [lng, lat] = ambulanceRoute[index];
+        index++;
+        routeIndexRef.current = index;
+        return [{ ...prev[0], latitude: lat, longitude: lng }, ...prev.slice(1)];
+      });
+    }, 1000); // 3 seconds
+    return () => clearInterval(interval);
+  }, [ambulances.length, ambulanceArrived, ambulanceRoute, userCoords.latitude, userCoords.longitude]);
+
+  // Simulation for fire truck movement
+  useEffect(() => {
+    if (!fireTrucks.length || fireTruckArrived) return;
+    if (!fireTrucks[0].latitude || !fireTrucks[0].longitude) return;
+    const interval = setInterval(() => {
+      setFireTrucks(prev => {
+        if (!prev.length) return prev;
+        const current = prev[0];
+        const distance = getDistanceKm(current.latitude, current.longitude, userCoords.latitude, userCoords.longitude);
+        if (distance < 0.05) {
+          setFireTruckArrived(true);
+          clearInterval(interval);
+          return [{ ...current, latitude: userCoords.latitude, longitude: userCoords.longitude }, ...prev.slice(1)];
+        }
+        const moved = moveTowards(current, userCoords, 0.1);
+        return [{ ...current, ...moved }, ...prev.slice(1)];
+      });
+    }, 3000); // 3 seconds
+    return () => clearInterval(interval);
+  }, [fireTrucks, userCoords, fireTruckArrived]);
 
   const handleCallHospital = () => {
     alert("Calling Sunrise Hospital...");
@@ -141,6 +220,17 @@ export default function Tracking() {
           ambulanceCoords={ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude ? { latitude: ambulances[0].latitude, longitude: ambulances[0].longitude } : undefined}
           fireTruckCoords={fireTrucks.length > 0 && fireTrucks[0].latitude && fireTrucks[0].longitude ? { latitude: fireTrucks[0].latitude, longitude: fireTrucks[0].longitude } : undefined}
         />
+        {/* Dialogs for arrival */}
+        {ambulanceArrived && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50">
+            Ambulance has arrived!
+          </div>
+        )}
+        {fireTruckArrived && (
+          <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50">
+            Fire Truck has arrived!
+          </div>
+        )}
         {/* TODO: Replace this image with Google Maps API integration. */}
         {/* Collapse button */}
         

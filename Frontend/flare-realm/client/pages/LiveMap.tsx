@@ -45,102 +45,189 @@ const fireTruckSVG = `
 
 export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoords }: LiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const ambulanceMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  const fireTruckMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  const homeMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  const routeRef = useRef<string | null>(null);
+  const fireRouteRef = useRef<string | null>(null);
 
+  // Initialize map only once
   useEffect(() => {
-    if (!patientCoords) return;
-
-    const map = new mapboxgl.Map({
+    if (!patientCoords || mapRef.current) return;
+    mapRef.current = new mapboxgl.Map({
       container: mapContainer.current!,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [patientCoords.longitude, patientCoords.latitude],
       zoom: 13,
     });
+  }, [patientCoords]);
 
-    // Patient Home Marker (custom home icon)
-    const homeEl = document.createElement('div');
-    homeEl.innerHTML = homeSVG;
-    homeEl.style.transform = 'translate(-50%, -100%)';
-    new mapboxgl.Marker({ element: homeEl })
-      .setLngLat([patientCoords.longitude, patientCoords.latitude])
-      .setPopup(new mapboxgl.Popup().setText('Patient Home'))
-      .addTo(map);
+  // Home marker (patient)
+  useEffect(() => {
+    if (!mapRef.current || !patientCoords) return;
+    if (homeMarkerRef.current) {
+      homeMarkerRef.current.setLngLat([patientCoords.longitude, patientCoords.latitude]);
+    } else {
+      const homeEl = document.createElement('div');
+      homeEl.innerHTML = homeSVG;
+      homeEl.style.transform = 'translate(-50%, -100%)';
+      homeMarkerRef.current = new mapboxgl.Marker({ element: homeEl })
+        .setLngLat([patientCoords.longitude, patientCoords.latitude])
+        .setPopup(new mapboxgl.Popup().setText('Patient Home'))
+        .addTo(mapRef.current);
+    }
+  }, [patientCoords]);
 
-    // Ambulance Marker (custom ambulance icon)
+  // Ambulance marker
+  useEffect(() => {
+    if (!mapRef.current) return;
     if (ambulanceCoords) {
-      const ambulanceEl = document.createElement('div');
-      ambulanceEl.innerHTML = ambulanceSVG;
-      ambulanceEl.style.transform = 'translate(-50%, -100%)';
-      new mapboxgl.Marker({ element: ambulanceEl })
-        .setLngLat([ambulanceCoords.longitude, ambulanceCoords.latitude])
-        .setPopup(new mapboxgl.Popup().setText('Ambulance'))
-        .addTo(map);
+      if (ambulanceMarkerRef.current) {
+        ambulanceMarkerRef.current.setLngLat([ambulanceCoords.longitude, ambulanceCoords.latitude]);
+      } else {
+        const ambulanceEl = document.createElement('div');
+        ambulanceEl.innerHTML = ambulanceSVG;
+        ambulanceEl.style.transform = 'translate(-50%, -100%)';
+        ambulanceMarkerRef.current = new mapboxgl.Marker({ element: ambulanceEl })
+          .setLngLat([ambulanceCoords.longitude, ambulanceCoords.latitude])
+          .setPopup(new mapboxgl.Popup().setText('Ambulance'))
+          .addTo(mapRef.current);
+      }
+    } else if (ambulanceMarkerRef.current) {
+      ambulanceMarkerRef.current.remove();
+      ambulanceMarkerRef.current = null;
+    }
+  }, [ambulanceCoords]);
 
-      // Draw route from ambulance to patient
+  // Fire truck marker
+  useEffect(() => {
+    if (!mapRef.current) return;
+    if (fireTruckCoords) {
+      if (fireTruckMarkerRef.current) {
+        fireTruckMarkerRef.current.setLngLat([fireTruckCoords.longitude, fireTruckCoords.latitude]);
+      } else {
+        const fireTruckEl = document.createElement('div');
+        fireTruckEl.innerHTML = fireTruckSVG;
+        fireTruckEl.style.transform = 'translate(-50%, -100%)';
+        fireTruckMarkerRef.current = new mapboxgl.Marker({ element: fireTruckEl })
+          .setLngLat([fireTruckCoords.longitude, fireTruckCoords.latitude])
+          .setPopup(new mapboxgl.Popup().setText('Fire Truck'))
+          .addTo(mapRef.current);
+      }
+    } else if (fireTruckMarkerRef.current) {
+      fireTruckMarkerRef.current.remove();
+      fireTruckMarkerRef.current = null;
+    }
+  }, [fireTruckCoords]);
+
+  // Draw/Update ambulance route
+  useEffect(() => {
+    if (!mapRef.current) return;
+    if (ambulanceCoords) {
       fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${ambulanceCoords.longitude},${ambulanceCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
         .then(res => res.json())
         .then(data => {
           const route = data.routes[0].geometry;
-
-          map.addSource('route', {
-            type: 'geojson',
-            data: {
+          if (routeRef.current && mapRef.current!.getSource(routeRef.current)) {
+            (mapRef.current!.getSource(routeRef.current) as mapboxgl.GeoJSONSource).setData({
               type: 'Feature',
               properties: {},
               geometry: route
+            });
+          } else {
+            const routeId = 'route';
+            routeRef.current = routeId;
+            if (mapRef.current!.getLayer(routeId)) {
+              mapRef.current!.removeLayer(routeId);
             }
-          });
-
-          map.addLayer({
-            id: 'route',
-            type: 'line',
-            source: 'route',
-            layout: { 'line-join': 'round', 'line-cap': 'round' },
-            paint: { 'line-color': '#080500', 'line-width': 3 }
-          });
+            if (mapRef.current!.getSource(routeId)) {
+              mapRef.current!.removeSource(routeId);
+            }
+            mapRef.current!.addSource(routeId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                properties: {},
+                geometry: route
+              }
+            });
+            mapRef.current!.addLayer({
+              id: routeId,
+              type: 'line',
+              source: routeId,
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: { 'line-color': '#080500', 'line-width': 3 }
+            });
+          }
         });
+    } else if (routeRef.current && mapRef.current!.getLayer(routeRef.current)) {
+      mapRef.current!.removeLayer(routeRef.current);
+      mapRef.current!.removeSource(routeRef.current);
+      routeRef.current = null;
     }
+  }, [ambulanceCoords, patientCoords]);
 
-    // Fire Truck Marker and Path
+  // Draw/Update fire truck route
+  useEffect(() => {
+    if (!mapRef.current) return;
     if (fireTruckCoords) {
-      const fireTruckEl = document.createElement('div');
-      fireTruckEl.innerHTML = fireTruckSVG;
-      fireTruckEl.style.transform = 'translate(-50%, -100%)';
-      new mapboxgl.Marker({ element: fireTruckEl })
-        .setLngLat([fireTruckCoords.longitude, fireTruckCoords.latitude])
-        .setPopup(new mapboxgl.Popup().setText('Fire Truck'))
-        .addTo(map);
-
-      // Draw dotted red route from fire truck to patient
       fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${fireTruckCoords.longitude},${fireTruckCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
         .then(res => res.json())
         .then(data => {
           const route = data.routes[0].geometry;
-
-          map.addSource('fireRoute', {
-            type: 'geojson',
-            data: {
+          if (fireRouteRef.current && mapRef.current!.getSource(fireRouteRef.current)) {
+            (mapRef.current!.getSource(fireRouteRef.current) as mapboxgl.GeoJSONSource).setData({
               type: 'Feature',
               properties: {},
               geometry: route
+            });
+          } else {
+            const fireRouteId = 'fireRoute';
+            fireRouteRef.current = fireRouteId;
+            if (mapRef.current!.getLayer(fireRouteId)) {
+              mapRef.current!.removeLayer(fireRouteId);
             }
-          });
-
-          map.addLayer({
-            id: 'fireRoute',
-            type: 'line',
-            source: 'fireRoute',
-            layout: { 'line-join': 'round', 'line-cap': 'round' },
-            paint: {
-              'line-color': '#e53935',
-              'line-width': 3,
-              'line-dasharray': [2, 4]
+            if (mapRef.current!.getSource(fireRouteId)) {
+              mapRef.current!.removeSource(fireRouteId);
             }
-          });
+            mapRef.current!.addSource(fireRouteId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                properties: {},
+                geometry: route
+              }
+            });
+            mapRef.current!.addLayer({
+              id: fireRouteId,
+              type: 'line',
+              source: fireRouteId,
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: {
+                'line-color': '#e53935',
+                'line-width': 3,
+                'line-dasharray': [2, 4]
+              }
+            });
+          }
         });
+    } else if (fireRouteRef.current && mapRef.current!.getLayer(fireRouteRef.current)) {
+      mapRef.current!.removeLayer(fireRouteRef.current);
+      mapRef.current!.removeSource(fireRouteRef.current);
+      fireRouteRef.current = null;
     }
+  }, [fireTruckCoords, patientCoords]);
 
-    return () => map.remove();
-  }, [patientCoords, ambulanceCoords, fireTruckCoords]);
+  // Cleanup map on unmount
+  useEffect(() => {
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, []);
 
   return <div ref={mapContainer} className="w-full h-full rounded-xl shadow" />;
 } 
