@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MdLocalFireDepartment, MdEmojiEvents, MdPerson, MdAdd, MdEmergency, MdAccessTime, MdLocationOn, MdOutlineLeaderboard, MdOutlineReport, MdPhone, MdMap, MdStar, MdDirectionsCar } from 'react-icons/md';
+import { FaFireExtinguisher, FaTrophy, FaUser, FaPlus, FaMapMarkerAlt, FaRegClock, FaBuilding, FaTruck, FaClipboardList } from 'react-icons/fa';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 
 function decodeJWT(token) {
   if (!token) return {};
@@ -399,36 +402,43 @@ export default function FireDashboard() {
   const userInfo = decodeJWT(jwt);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-600 via-red-600 to-yellow-600 shadow-lg backdrop-blur-sm border-b border-white/20">
+      <div className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 shadow-lg border-b border-blue-100/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent drop-shadow-sm">Fire Dashboard</h1>
-              <p className="text-orange-100">Emergency Response Management System</p>
+            <div className="flex items-center gap-4">
+              <ReactLogo />
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Fire Admin Dashboard</h1>
+                <p className="text-gray-600 mt-1">Emergency Fire Services Management</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600">Welcome, {profileData.name.split(' ')[1]}</p>
+                <p className="text-sm text-gray-600">Emergency Fire Services</p>
                 <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
-              <button
-                onClick={() => {
-                  localStorage.removeItem('jwt');
-                  localStorage.removeItem('token');
-                  navigate('/login');
-                }}
-                className="text-red-600 hover:text-red-700 text-sm font-medium"
-              >
-                Logout
-              </button>
-              <button 
-                onClick={() => setShowProfile(!showProfile)}
-                className="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-semibold hover:bg-orange-700 transition"
-              >
-                F
-              </button>
+              <div className="flex items-center space-x-3">
+                <button 
+                  onClick={() => navigate('/')} 
+                  className="text-gray-600 hover:text-gray-800 text-sm font-medium"
+                >
+                  Home
+                </button>
+                <button 
+                  onClick={() => {
+                    localStorage.removeItem('jwt');
+                    navigate('/login');
+                  }}
+                  className="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                  Logout
+                </button>
+                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  <FaAmbulance className="text-xl" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -439,13 +449,13 @@ export default function FireDashboard() {
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: '📊' },
-              { id: 'stations', name: 'Stations', icon: '🏢' },
-              { id: 'trucks', name: 'Trucks', icon: '🚒' },
-              { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
-              { id: 'reports', name: 'Reports', icon: '📋' },
-              { id: 'ranking', name: 'Rankings', icon: '🏆' },
-              { id: 'profile', name: 'Profile', icon: '👤' }
+              { id: 'overview', name: 'Overview', icon: <MdOutlineLeaderboard className="inline text-xl align-middle" /> },
+              { id: 'stations', name: 'Stations', icon: <FaBuilding className="inline text-xl align-middle" /> },
+              { id: 'trucks', name: 'Trucks', icon: <FaTruck className="inline text-xl align-middle" /> },
+              { id: 'emergencies', name: 'Emergencies', icon: <MdEmergency className="inline text-xl align-middle" /> },
+              { id: 'reports', name: 'Reports', icon: <FaClipboardList className="inline text-xl align-middle" /> },
+              { id: 'ranking', name: 'Rankings', icon: <FaTrophy className="inline text-xl align-middle" /> },
+              { id: 'profile', name: 'Profile', icon: <FaUser className="inline text-xl align-middle" /> }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -511,56 +521,56 @@ export default function FireDashboard() {
                 <QuickActionCard
                   title="Add Station"
                   description="Create a new fire station"
-                  icon="🏢"
+                  icon={<FaBuilding />}
                   onClick={() => setActiveTab('stations')}
                   gradient="bg-gradient-to-br from-orange-500 to-orange-600"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Update truck locations"
-                  icon="📍"
+                  icon={<FaMapMarkerAlt />}
                   onClick={() => setActiveTab('trucks')}
                   gradient="bg-gradient-to-br from-green-500 to-green-600"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor active emergencies"
-                  icon="🚨"
+                  icon={<MdEmergency />}
                   onClick={() => setActiveTab('emergencies')}
                   gradient="bg-gradient-to-br from-red-500 to-red-600"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
-                  icon="📋"
+                  icon={<FaClipboardList />}
                   onClick={() => setActiveTab('reports')}
                   gradient="bg-gradient-to-br from-purple-500 to-purple-600"
                 />
                 <QuickActionCard
                   title="Live Map"
                   description="View real-time locations"
-                  icon="🗺️"
+                  icon={<MdMap />}
                   onClick={() => window.open('/navigation/fire_truck/1', '_blank')}
                   gradient="bg-gradient-to-br from-indigo-500 to-indigo-600"
                 />
                 <QuickActionCard
                   title="Station Rankings"
                   description="View performance metrics"
-                  icon="🏆"
+                  icon={<FaTrophy />}
                   onClick={() => setActiveTab('ranking')}
                   gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
                 />
                 <QuickActionCard
                   title="My Profile"
                   description="Update personal information"
-                  icon="👤"
+                  icon={<FaUser />}
                   onClick={() => setActiveTab('profile')}
                   gradient="bg-gradient-to-br from-blue-500 to-blue-600"
                 />
                 <QuickActionCard
                   title="Emergency Contacts"
                   description="Quick contact list"
-                  icon="📞"
+                  icon={<MdPhone />}
                   onClick={() => alert('Emergency contacts feature coming soon!')}
                   gradient="bg-gradient-to-br from-pink-500 to-pink-600"
                 />
@@ -1264,17 +1274,17 @@ export default function FireDashboard() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2">🏆</div>
+                    <div className="text-2xl mb-2"><FaTrophy /></div>
                     <h4 className="font-semibold">Firefighter of the Year</h4>
                     <p className="text-sm opacity-90">2024</p>
                   </div>
                   <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2">⭐</div>
+                    <div className="text-2xl mb-2"><MdStar /></div>
                     <h4 className="font-semibold">Bravery Award</h4>
                     <p className="text-sm opacity-90">Rescue Operations</p>
                   </div>
                   <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2">🎯</div>
+                    <div className="text-2xl mb-2"><MdOutlineLeaderboard /></div>
                     <h4 className="font-semibold">Perfect Attendance</h4>
                     <p className="text-sm opacity-90">12 months</p>
                   </div>

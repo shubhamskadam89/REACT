@@ -1,12 +1,31 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { FaFireExtinguisher, FaPhoneAlt, FaStar, FaCheckCircle, FaTruck, FaTrophy, FaGasPump, FaWater, FaTools } from 'react-icons/fa';
+import { MdAccessTime, MdCloud, MdAssignment } from 'react-icons/md';
 // If you use dotenv or Vite, you can use import.meta.env.VITE_MAPBOX_TOKEN or process.env.REACT_APP_MAPBOX_TOKEN
 const MAPBOX_TOKEN ='pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
+
+function getProfileFromJWT() {
+  try {
+    const jwt = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!jwt) return null;
+    const payload = JSON.parse(atob(jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return {
+      name: payload.name || payload.sub || 'Unknown',
+      phone: payload.phone || payload.phoneNumber || '',
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(payload.name || payload.sub || 'User')}&background=f97316&color=fff&size=128`,
+    };
+  } catch {
+    return null;
+  }
+}
 
 const mockProfile = {
   name: 'Jane Smith',
   phone: '+91 9876543211',
   avatar: 'https://ui-avatars.com/api/?name=Jane+Smith&background=f97316&color=fff&size=128',
 };
+
+const profile = getProfileFromJWT() || mockProfile;
 const mockHistory = [
   { id: 1, date: '2025-07-23', status: 'Completed', from: '18.53, 73.81', to: '18.54, 73.82' },
   { id: 2, date: '2025-07-22', status: 'Completed', from: '18.51, 73.80', to: '18.52, 73.83' },
@@ -238,10 +257,10 @@ export default function FireTruckDriverPage() {
       {/* Top Bar */}
       <header className="flex items-center justify-between bg-orange-600 text-white px-6 py-3 shadow-md">
         <div className="flex items-center gap-3">
-          <img src={mockProfile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white" />
+          <img src={profile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white" />
           <div>
-            <div className="font-bold text-lg">{mockProfile.name}</div>
-            <div className="text-sm opacity-80">{mockProfile.phone}</div>
+            <div className="font-bold text-lg">{profile.name}</div>
+            <div className="text-sm opacity-80 flex items-center gap-1"><FaPhoneAlt className="inline mr-1" />{profile.phone}</div>
           </div>
         </div>
         <button onClick={handleLogout} className="bg-orange-500 hover:bg-orange-700 px-4 py-2 rounded text-white font-semibold transition">Logout</button>
@@ -259,7 +278,7 @@ export default function FireTruckDriverPage() {
             <>
               <div className="flex items-center justify-between w-full mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl">🚒</span>
+                  <FaTruck className="text-3xl text-orange-700" />
                   <h1 className="text-2xl font-bold text-orange-700">Fire Truck Driver Dashboard</h1>
                 </div>
                 <button
@@ -278,7 +297,7 @@ export default function FireTruckDriverPage() {
                       <p className="text-sm text-blue-600 font-medium">Current Status</p>
                       <p className="text-lg font-bold text-blue-800">{completed ? 'Completed' : 'Active'}</p>
                     </div>
-                    <div className="text-2xl">{completed ? '✅' : '🔥'}</div>
+                    <div className="text-2xl">{completed ? <FaCheckCircle className="text-green-600" /> : <FaFireExtinguisher className="text-orange-600" />}</div>
                   </div>
                 </div>
                 
@@ -288,7 +307,7 @@ export default function FireTruckDriverPage() {
                       <p className="text-sm text-green-600 font-medium">Response Time</p>
                       <p className="text-lg font-bold text-green-800">{performanceMetrics.averageResponseTime}</p>
                     </div>
-                    <div className="text-2xl">⏱️</div>
+                    <MdAccessTime className="text-2xl text-green-600" />
                   </div>
                 </div>
                 
@@ -296,9 +315,9 @@ export default function FireTruckDriverPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-purple-600 font-medium">Rating</p>
-                      <p className="text-lg font-bold text-purple-800">{performanceMetrics.rating}/5.0 ⭐</p>
+                      <div className="text-xl font-bold text-yellow-600 flex items-center"><FaStar className="mr-1" />{performanceMetrics.rating}</div>
                     </div>
-                    <div className="text-2xl">🏆</div>
+                    <FaTrophy className="text-2xl text-purple-600" />
                   </div>
                 </div>
               </div>
@@ -306,7 +325,7 @@ export default function FireTruckDriverPage() {
               {/* Vehicle Status */}
               <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="text-xl">🚛</span>
+                  <FaTruck className="text-xl text-orange-700" />
                   Vehicle Status
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -337,7 +356,7 @@ export default function FireTruckDriverPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-lg p-4 border shadow-sm">
                   <h4 className="font-semibold text-sky-800 mb-2 flex items-center gap-2">
-                    <span className="text-lg">🌤️</span>
+                    <MdCloud className="text-lg text-sky-700" />
                     Weather Conditions
                   </h4>
                   <div className="space-y-1 text-sm">
@@ -350,7 +369,7 @@ export default function FireTruckDriverPage() {
                 
                 <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border shadow-sm">
                   <h4 className="font-semibold text-orange-800 mb-2 flex items-center gap-2">
-                    <span className="text-lg">📊</span>
+                    <MdAssignment className="text-lg text-orange-700" />
                     Today's Performance
                   </h4>
                   <div className="space-y-1 text-sm">
@@ -467,9 +486,9 @@ export default function FireTruckDriverPage() {
             <div className="bg-white rounded-xl shadow p-6 max-w-md mx-auto">
               <h2 className="text-xl font-bold mb-4 text-orange-700">Profile</h2>
               <div className="flex flex-col items-center gap-4">
-                <img src={mockProfile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-orange-500" />
-                <div className="font-bold text-lg">{mockProfile.name}</div>
-                <div className="text-gray-600">{mockProfile.phone}</div>
+                <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-orange-500" />
+                <div className="font-bold text-lg">{profile.name}</div>
+                <div className="text-gray-600 flex items-center gap-1"><FaPhoneAlt className="inline mr-1" />{profile.phone}</div>
                 <button className="mt-4 bg-orange-500 text-white px-4 py-2 rounded font-semibold hover:bg-orange-600 transition">Edit Profile</button>
               </div>
             </div>

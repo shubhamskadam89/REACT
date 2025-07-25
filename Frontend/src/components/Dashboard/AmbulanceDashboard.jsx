@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MdLocalHospital, MdEmojiEvents, MdPerson, MdAdd, MdEmergency, MdAccessTime, MdLocationOn, MdDirectionsCar, MdOutlineLeaderboard } from 'react-icons/md';
+import { FaUserMd, FaAmbulance, FaTrophy, FaUser, FaPlus, FaMapMarkerAlt, FaRegClock } from 'react-icons/fa';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 
 // Add a simple JWT decode function (if jwt-decode is not available)
 function decodeJWT(token) {
@@ -520,7 +523,7 @@ export default function AmbulanceDashboard() {
                   Logout
                 </button>
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                  🚑
+                  <FaAmbulance className="text-xl" />
                 </div>
               </div>
             </div>
@@ -532,13 +535,13 @@ export default function AmbulanceDashboard() {
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: '📊' },
-              { id: 'drivers', name: 'Drivers', icon: '👨‍⚕️' },
-              { id: 'vehicles', name: 'Vehicles', icon: '🚑' },
-              { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
-              { id: 'rankings', name: 'Rankings', icon: '🏆' },
-              { id: 'profile', name: 'Profile', icon: '👤' },
-              { id: 'register', name: 'Register', icon: '➕' }
+              { id: 'overview', name: 'Overview', icon: <MdOutlineLeaderboard className="inline text-xl align-middle" /> },
+              { id: 'drivers', name: 'Drivers', icon: <FaUserMd className="inline text-xl align-middle" /> },
+              { id: 'vehicles', name: 'Vehicles', icon: <FaAmbulance className="inline text-xl align-middle" /> },
+              { id: 'emergencies', name: 'Emergencies', icon: <MdEmergency className="inline text-xl align-middle" /> },
+              { id: 'rankings', name: 'Rankings', icon: <FaTrophy className="inline text-xl align-middle" /> },
+              { id: 'profile', name: 'Profile', icon: <FaUser className="inline text-xl align-middle" /> },
+              { id: 'register', name: 'Register', icon: <FaPlus className="inline text-xl align-middle" /> }
             ].map((tab) => {
               const handleTabClick = () => {
                 console.log('Tab clicked:', tab.id);
@@ -577,35 +580,35 @@ export default function AmbulanceDashboard() {
                 <QuickActionCard
                   title="Register Driver"
                   description="Add new ambulance driver"
-                  icon="👨‍⚕️"
+                  icon={<FaUserMd />}
                   onClick={() => setActiveTab('register')}
                   gradient="from-blue-500 via-blue-600 to-blue-700"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Update ambulance location"
-                  icon="📍"
+                  icon={<FaMapMarkerAlt />}
                   onClick={() => setActiveTab('vehicles')}
                   gradient="from-green-500 via-green-600 to-emerald-700"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Check active emergencies"
-                  icon="🚨"
+                  icon={<MdEmergency />}
                   onClick={() => setActiveTab('emergencies')}
                   gradient="from-red-500 via-red-600 to-red-700"
                 />
                 <QuickActionCard
                   title="Driver Rankings"
                   description="View performance rankings"
-                  icon="🏆"
+                  icon={<FaTrophy />}
                   onClick={() => setActiveTab('rankings')}
                   gradient="from-yellow-500 via-orange-500 to-amber-600"
                 />
                 <QuickActionCard
                   title="Profile Management"
                   description="Manage driver profiles"
-                  icon="👤"
+                  icon={<FaUser />}
                   onClick={() => setActiveTab('profile')}
                   gradient="from-indigo-500 via-purple-600 to-pink-600"
                 />
@@ -622,7 +625,7 @@ export default function AmbulanceDashboard() {
                 <>
                   <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
                     <div className="flex items-center relative z-10">
-                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚑</div>
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"><FaAmbulance /></div>
                       <div>
                         <p className="text-sm text-blue-100 font-medium">Total Ambulances</p>
                         <p className="text-3xl font-bold text-white">{dashboardStats.total_ambulances}</p>
@@ -632,7 +635,7 @@ export default function AmbulanceDashboard() {
                   </div>
                   <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
                     <div className="flex items-center relative z-10">
-                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">👨‍⚕️</div>
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"><FaUserMd /></div>
                       <div>
                         <p className="text-sm text-green-100 font-medium">Available Ambulances</p>
                         <p className="text-3xl font-bold text-white">{dashboardStats.available_ambulances}</p>
@@ -642,7 +645,7 @@ export default function AmbulanceDashboard() {
                   </div>
                   <div className="bg-gradient-to-br from-red-500 to-red-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
                     <div className="flex items-center relative z-10">
-                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚨</div>
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"><MdEmergency /></div>
                       <div>
                         <p className="text-sm text-red-100 font-medium">Total Bookings</p>
                         <p className="text-3xl font-bold text-white">{dashboardStats.ambulance_bookings}</p>
@@ -652,7 +655,7 @@ export default function AmbulanceDashboard() {
                   </div>
                   <div className="bg-gradient-to-br from-purple-500 to-indigo-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
                     <div className="flex items-center relative z-10">
-                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">⏱️</div>
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"><MdAccessTime /></div>
                       <div>
                         <p className="text-sm text-purple-100 font-medium">Avg Completion Time</p>
                         <p className="text-3xl font-bold text-white">{dashboardStats.average_completion_time_minutes} min</p>
@@ -666,7 +669,7 @@ export default function AmbulanceDashboard() {
 
             {/* Recent Emergencies */}
             <div className="bg-white/90 rounded-lg shadow-emergency p-6 animate-fade-in">
-              <SectionHeader icon="🚨" title="Recent Emergencies" />
+              <SectionHeader icon={<MdEmergency />} title="Recent Emergencies" />
               {emergenciesLoading ? (
                 <div className="text-center py-8 text-blue-600 font-semibold">Loading emergencies...</div>
               ) : emergenciesError ? (
@@ -1130,7 +1133,7 @@ export default function AmbulanceDashboard() {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
                       <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                        🚑
+                        <FaAmbulance className="text-xl" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900">{userInfo.role || 'N/A'}</h4>

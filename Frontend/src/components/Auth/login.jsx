@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { authAPI, tokenUtils } from '../../services/api';
 import LoginImage from '../../assets/login.png';
+import { MdEmergency } from 'react-icons/md';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -84,7 +85,7 @@ function Login() {
             {/* Header */}
             <div className="text-center">
               <div className="mx-auto h-12 w-12 bg-gradient-to-r from-blue-600 to-red-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-xl font-bold">🚨</span>
+                <MdEmergency className="text-white text-2xl" />
               </div>
               <h2 className="mt-6 text-3xl font-bold text-gray-900">
                 Welcome Back

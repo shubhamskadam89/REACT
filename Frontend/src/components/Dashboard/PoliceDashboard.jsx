@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MdOutlineLeaderboard, MdEmergency, MdAccessTime, MdLocationOn, MdOutlineReport, MdPhone, MdMap, MdStar, MdPerson, MdAdd } from 'react-icons/md';
+import { FaUser, FaTrophy, FaBuilding, FaClipboardList, FaMapMarkerAlt, FaRegClock, FaUserShield, FaUserTie, FaUserSecret } from 'react-icons/fa';
 
 function decodeJWT(token) {
   if (!token) return {};
@@ -232,28 +234,27 @@ export default function PoliceDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg backdrop-blur-sm">
+      <div className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 shadow-lg border-b border-blue-100/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="animate-fade-in-up">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent animate-pulse">Police Dashboard</h1>
-              <p className="text-blue-100">Emergency Response Management System</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Police Dashboard</h1>
+              <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
                 <p className="text-sm text-blue-100">Welcome, {profileData.name.split(' ')[1]}</p>
                 <p className="text-xs text-blue-200">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
-              <button
-                onClick={() => {
-                  localStorage.removeItem('jwt');
-                  localStorage.removeItem('token');
-                  navigate('/login');
-                }}
-                className="text-red-200 hover:text-red-100 text-sm font-medium transition-colors duration-200"
-              >
-                Logout
-              </button>
+              <button 
+                  onClick={() => {
+                    localStorage.removeItem('jwt');
+                    navigate('/login');
+                  }}
+                  className="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                  Logout
+                </button>
               <button 
                 onClick={() => setShowProfile(!showProfile)}
                 className="w-10 h-10 bg-gradient-to-r from-white/20 to-white/30 rounded-full flex items-center justify-center text-white font-semibold hover:from-white/30 hover:to-white/40 transition-all duration-200 backdrop-blur-sm"
@@ -270,11 +271,11 @@ export default function PoliceDashboard() {
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: '📊' },
-              { id: 'stations', name: 'Stations', icon: '🏢' },
-            { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
-            { id: 'reports', name: 'Reports', icon: '📋' },
-            { id: 'profile', name: 'Profile', icon: '👤' }
+              { id: 'overview', name: 'Overview', icon: <MdOutlineLeaderboard className="inline text-xl align-middle" /> },
+              { id: 'stations', name: 'Stations', icon: <FaBuilding className="inline text-xl align-middle" /> },
+              { id: 'emergencies', name: 'Emergencies', icon: <MdEmergency className="inline text-xl align-middle" /> },
+              { id: 'reports', name: 'Reports', icon: <FaClipboardList className="inline text-xl align-middle" /> },
+              { id: 'profile', name: 'Profile', icon: <FaUser className="inline text-xl align-middle" /> }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -310,28 +311,28 @@ export default function PoliceDashboard() {
                     value={dashboardStats.total_police_stations}
                     subtitle="Active police stations"
                     gradient="bg-gradient-to-br from-blue-500 to-blue-600"
-                    icon="🏢"
+                    icon={<FaBuilding />}
                   />
                   <StatCard
                     title="Total Officers"
                     value={dashboardStats.total_police_officers}
                     subtitle="On duty officers"
                     gradient="bg-gradient-to-br from-green-500 to-green-600"
-                    icon="👮"
+                    icon={<FaUserShield />}
                   />
                   <StatCard
                     title="Police Service Bookings"
                     value={dashboardStats.police_service_bookings}
                     subtitle="Today's calls"
                     gradient="bg-gradient-to-br from-red-500 to-red-600"
-                    icon="🚨"
+                    icon={<MdEmergency />}
                   />
                   <StatCard
                     title="Avg Completion Time"
                     value={dashboardStats.average_completion_time_minutes + ' min'}
                     subtitle="Emergency response"
                     gradient="bg-gradient-to-br from-yellow-500 to-orange-500"
-                    icon="⏱️"
+                    icon={<MdAccessTime />}
                   />
                 </>
               ) : null}
@@ -344,42 +345,42 @@ export default function PoliceDashboard() {
                 <QuickActionCard
                   title="Create Station"
                   description="Add a new police station"
-                  icon="🏢"
+                  icon={<MdAdd />}
                   onClick={() => setActiveTab('stations')}
                   gradient="bg-gradient-to-br from-blue-500 to-blue-600"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor active emergencies"
-                  icon="🚨"
+                  icon={<MdEmergency />}
                   onClick={() => setActiveTab('emergencies')}
                   gradient="bg-gradient-to-br from-red-500 to-red-600"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
-                  icon="📋"
+                  icon={<FaClipboardList />}
                   onClick={() => setActiveTab('reports')}
                   gradient="bg-gradient-to-br from-purple-500 to-purple-600"
                 />
                 <QuickActionCard
                   title="Live Map"
                   description="View real-time locations"
-                  icon="🗺️"
+                  icon={<MdMap />}
                   onClick={() => window.open('/navigation/ambulance/1', '_blank')}
                   gradient="bg-gradient-to-br from-indigo-500 to-indigo-600"
                 />
                                  <QuickActionCard
                    title="Emergency Contacts"
                    description="Quick contact list"
-                   icon="📞"
+                   icon={<MdPhone />}
                    onClick={() => alert('Emergency contacts feature coming soon!')}
                    gradient="bg-gradient-to-br from-orange-500 to-orange-600"
                  />
                  <QuickActionCard
                    title="My Profile"
                    description="Update personal information"
-                   icon="👤"
+                   icon={<FaUser />}
                    onClick={() => setActiveTab('profile')}
                    gradient="bg-gradient-to-br from-pink-500 to-pink-600"
                  />
@@ -799,17 +800,17 @@ export default function PoliceDashboard() {
                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
-                     <div className="text-2xl mb-2">🏆</div>
+                     <div className="text-2xl mb-2"><FaTrophy /></div>
                      <h4 className="font-semibold">Officer of the Month</h4>
                      <p className="text-sm opacity-90">January 2024</p>
                    </div>
                    <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
-                     <div className="text-2xl mb-2">⭐</div>
+                     <div className="text-2xl mb-2"><MdStar /></div>
                      <h4 className="font-semibold">Excellence Award</h4>
                      <p className="text-sm opacity-90">Community Service</p>
                    </div>
                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-lg">
-                     <div className="text-2xl mb-2">🎯</div>
+                     <div className="text-2xl mb-2"><MdOutlineLeaderboard /></div>
                      <h4 className="font-semibold">Perfect Attendance</h4>
                      <p className="text-sm opacity-90">6 months</p>
                    </div>

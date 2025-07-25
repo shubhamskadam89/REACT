@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenUtils } from '../../services/api';
+import { MdOutlineLeaderboard, MdEmergency, MdAccessTime, MdLocationOn, MdOutlineReport, MdPhone, MdMap, MdStar, MdPerson, MdAdd } from 'react-icons/md';
+import { FaUser, FaTrophy, FaBuilding, FaClipboardList, FaMapMarkerAlt, FaRegClock, FaUserMd, FaAmbulance, FaUserShield, FaFireExtinguisher } from 'react-icons/fa';
 
 function decodeJWT(token) {
   if (!token) return {};
@@ -483,12 +485,12 @@ const FireBookings = () => {
 };
 
 const TABS = [
-  { key: 'dashboard', label: 'Dashboard' },
-  { key: 'userHistory', label: 'User History' },
-  { key: 'allBookings', label: 'All Bookings' },
-  { key: 'ambulances', label: 'Ambulances' },
-  { key: 'fireBookings', label: 'Fire Bookings' },
-  { key: 'profile', label: 'Profile' },
+  { key: 'dashboard', label: <><MdOutlineLeaderboard className="inline text-lg mr-1 align-middle" /> Dashboard</> },
+  { key: 'userHistory', label: <><FaUser className="inline text-lg mr-1 align-middle" /> User History</> },
+  { key: 'allBookings', label: <><FaClipboardList className="inline text-lg mr-1 align-middle" /> All Bookings</> },
+  { key: 'ambulances', label: <><FaAmbulance className="inline text-lg mr-1 align-middle" /> Ambulances</> },
+  { key: 'fireBookings', label: <><FaFireExtinguisher className="inline text-lg mr-1 align-middle" /> Fire Bookings</> },
+  { key: 'profile', label: <><FaUserShield className="inline text-lg mr-1 align-middle" /> Profile</> },
 ];
 
 const AdminDashboard = () => {
@@ -564,23 +566,57 @@ const AdminDashboard = () => {
               <div className="text-red-500">{error}</div>
             ) : stats ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded shadow">Total Users: <span className="font-bold">{stats.total_users}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Bookings: <span className="font-bold">{stats.total_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Pending Bookings: <span className="font-bold">{stats.pending_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Completed Bookings: <span className="font-bold">{stats.completed_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Ambulances: <span className="font-bold">{stats.total_ambulances}</span></div>
-                <div className="bg-white p-4 rounded shadow">Available Ambulances: <span className="font-bold">{stats.available_ambulances}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Fire Trucks: <span className="font-bold">{stats.total_fire_trucks}</span></div>
-                <div className="bg-white p-4 rounded shadow">Available Fire Trucks: <span className="font-bold">{stats.available_fire_trucks}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Police Officers: <span className="font-bold">{stats.total_police_officers}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Police Stations: <span className="font-bold">{stats.total_police_stations}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Hospitals: <span className="font-bold">{stats.total_hospitals}</span></div>
-                <div className="bg-white p-4 rounded shadow">Total Fire Stations: <span className="font-bold">{stats.total_fire_stations}</span></div>
-                <div className="bg-white p-4 rounded shadow">Ambulance Bookings: <span className="font-bold">{stats.ambulance_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Fire Service Bookings: <span className="font-bold">{stats.fire_service_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Police Service Bookings: <span className="font-bold">{stats.police_service_bookings}</span></div>
-                <div className="bg-white p-4 rounded shadow">Avg. Completion Time (min): <span className="font-bold">{stats.average_completion_time_minutes}</span></div>
-                <div className="bg-white p-4 rounded shadow">Booking Completion Rate: <span className="font-bold">{stats.booking_completion_rate?.toFixed(2)}%</span></div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdOutlineLeaderboard className="inline text-lg mr-2" /> Total Users: <span className="font-bold ml-2">{stats.total_users}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaClipboardList className="inline text-lg mr-2" /> Total Bookings: <span className="font-bold ml-2">{stats.total_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdEmergency className="inline text-lg mr-2" /> Pending Bookings: <span className="font-bold ml-2">{stats.pending_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdAccessTime className="inline text-lg mr-2" /> Completed Bookings: <span className="font-bold ml-2">{stats.completed_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaAmbulance className="inline text-lg mr-2" /> Total Ambulances: <span className="font-bold ml-2">{stats.total_ambulances}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdLocationOn className="inline text-lg mr-2" /> Available Ambulances: <span className="font-bold ml-2">{stats.available_ambulances}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaFireExtinguisher className="inline text-lg mr-2" /> Total Fire Trucks: <span className="font-bold ml-2">{stats.total_fire_trucks}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdLocationOn className="inline text-lg mr-2" /> Available Fire Trucks: <span className="font-bold ml-2">{stats.available_fire_trucks}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaUserShield className="inline text-lg mr-2" /> Total Police Officers: <span className="font-bold ml-2">{stats.total_police_officers}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaBuilding className="inline text-lg mr-2" /> Total Police Stations: <span className="font-bold ml-2">{stats.total_police_stations}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaUserMd className="inline text-lg mr-2" /> Total Hospitals: <span className="font-bold ml-2">{stats.total_hospitals}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaFireExtinguisher className="inline text-lg mr-2" /> Total Fire Stations: <span className="font-bold ml-2">{stats.total_fire_stations}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaAmbulance className="inline text-lg mr-2" /> Ambulance Bookings: <span className="font-bold ml-2">{stats.ambulance_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaFireExtinguisher className="inline text-lg mr-2" /> Fire Service Bookings: <span className="font-bold ml-2">{stats.fire_service_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <FaUserShield className="inline text-lg mr-2" /> Police Service Bookings: <span className="font-bold ml-2">{stats.police_service_bookings}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdAccessTime className="inline text-lg mr-2" /> Avg. Completion Time (min): <span className="font-bold ml-2">{stats.average_completion_time_minutes}</span>
+                </div>
+                <div className="bg-white p-4 rounded shadow flex items-center">
+                  <MdStar className="inline text-lg mr-2" /> Booking Completion Rate: <span className="font-bold ml-2">{stats.booking_completion_rate?.toFixed(2)}%</span>
+                </div>
               </div>
             ) : null}
           </section>

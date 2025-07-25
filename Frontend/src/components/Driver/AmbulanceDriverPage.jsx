@@ -1,11 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { FaAmbulance, FaPhoneAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
+import { MdAccessTime, MdCloud, MdAssignment, MdLocalHospital } from 'react-icons/md';
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
+
+function getProfileFromJWT() {
+  try {
+    const jwt = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!jwt) return null;
+    const payload = JSON.parse(atob(jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return {
+      name: payload.name || payload.sub || 'Unknown',
+      phone: payload.phone || payload.phoneNumber || '',
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(payload.name || payload.sub || 'User')}&background=2563eb&color=fff&size=128`,
+    };
+  } catch {
+    return null;
+  }
+}
 
 const mockProfile = {
   name: 'John Doe',
   phone: '+91 9876543210',
   avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&size=128',
 };
+
+const profile = getProfileFromJWT() || mockProfile;
 const mockHistory = [
   { id: 1, date: '2025-07-23', status: 'Completed', from: '18.53, 73.81', to: '18.54, 73.82' },
   { id: 2, date: '2025-07-22', status: 'Completed', from: '18.51, 73.80', to: '18.52, 73.83' },
@@ -249,10 +268,10 @@ export default function AmbulanceDriverPage() {
       {/* Top Bar */}
       <header className="flex items-center justify-between bg-primary text-white px-6 py-3 shadow-md animate-fade-in">
         <div className="flex items-center gap-3">
-          <img src={mockProfile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white" />
+          <img src={profile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white" />
           <div>
-            <div className="font-bold text-lg">{mockProfile.name}</div>
-            <div className="text-sm opacity-80">{mockProfile.phone}</div>
+            <div className="font-bold text-lg">{profile.name}</div>
+            <div className="text-sm opacity-80 flex items-center gap-1"><FaPhoneAlt className="inline mr-1" />{profile.phone}</div>
           </div>
         </div>
         <button onClick={handleLogout} className="bg-secondary hover:bg-accent px-4 py-2 rounded text-white font-semibold transition">Logout</button>
@@ -270,7 +289,7 @@ export default function AmbulanceDriverPage() {
             <>
               <div className="flex items-center justify-between w-full mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl">🚑</span>
+                  <FaAmbulance className="text-3xl text-blue-700" />
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent drop-shadow">Ambulance Driver Dashboard</h1>
                 </div>
                 <div className="text-right">
@@ -287,7 +306,7 @@ export default function AmbulanceDriverPage() {
                       <div className="text-sm text-blue-600 font-medium">Shift Started</div>
                       <div className="text-xl font-bold text-blue-800">{shiftStartTime}</div>
                     </div>
-                    <div className="text-3xl">⏰</div>
+                    <MdAccessTime className="text-3xl text-blue-600" />
                   </div>
                 </div>
                 
@@ -297,7 +316,7 @@ export default function AmbulanceDriverPage() {
                       <div className="text-sm text-green-600 font-medium">Status</div>
                       <div className="text-xl font-bold text-green-800">On Duty</div>
                     </div>
-                    <div className="text-3xl">✅</div>
+                    <FaCheckCircle className="text-3xl text-green-600" />
                   </div>
                 </div>
                 
@@ -307,7 +326,7 @@ export default function AmbulanceDriverPage() {
                       <div className="text-sm text-purple-600 font-medium">Calls Today</div>
                       <div className="text-xl font-bold text-purple-800">{performanceMetrics.callsCompleted}</div>
                     </div>
-                    <div className="text-3xl">📞</div>
+                    <FaPhoneAlt className="text-3xl text-purple-600" />
                   </div>
                 </div>
               </div>
@@ -315,7 +334,7 @@ export default function AmbulanceDriverPage() {
               {/* Vehicle Status Card */}
               <div className="bg-gradient-to-br from-cyan-50 to-blue-100 border border-cyan-200 rounded-xl p-6 mb-6 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">🚑</span>
+                  <FaAmbulance className="text-3xl text-cyan-700" />
                   <h3 className="text-xl font-bold text-cyan-800">Vehicle Status - {vehicleStatus.ambulanceId}</h3>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -338,7 +357,7 @@ export default function AmbulanceDriverPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-gradient-to-br from-amber-50 to-orange-100 border border-amber-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:rotate-1 animate-fade-in">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl">🌤️</span>
+                    <MdCloud className="text-3xl text-amber-700" />
                     <h3 className="text-xl font-bold text-amber-800">Weather Today</h3>
                   </div>
                   <div className="grid grid-cols-3 gap-4 text-center">
@@ -359,7 +378,7 @@ export default function AmbulanceDriverPage() {
                 
                 <div className="bg-gradient-to-br from-indigo-50 to-blue-100 border border-indigo-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-rotate-1 animate-fade-in">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl">📊</span>
+                    <MdAssignment className="text-3xl text-indigo-700" />
                     <h3 className="text-xl font-bold text-indigo-800">Today's Performance</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-center">
@@ -372,7 +391,7 @@ export default function AmbulanceDriverPage() {
                       <div className="text-sm text-indigo-600">Patients Helped</div>
                     </div>
                     <div>
-                      <div className="text-xl font-bold text-yellow-600">⭐ {performanceMetrics.rating}</div>
+                      <div className="text-xl font-bold text-yellow-600 flex items-center"><FaStar className="mr-1" />{performanceMetrics.rating}</div>
                       <div className="text-sm text-indigo-600">Rating</div>
                     </div>
                     <div>
@@ -555,9 +574,9 @@ export default function AmbulanceDriverPage() {
             <div className="bg-white rounded-xl shadow p-6 max-w-md mx-auto animate-fade-in">
               <h2 className="text-xl font-bold mb-4 text-blue-700">Profile</h2>
               <div className="flex flex-col items-center gap-4">
-                <img src={mockProfile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-600" />
-                <div className="font-bold text-lg">{mockProfile.name}</div>
-                <div className="text-gray-600">{mockProfile.phone}</div>
+                <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-600" />
+                <div className="font-bold text-lg">{profile.name}</div>
+                <div className="text-gray-600 flex items-center gap-1"><FaPhoneAlt className="inline mr-1" />{profile.phone}</div>
                 <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition">Edit Profile</button>
               </div>
             </div>
