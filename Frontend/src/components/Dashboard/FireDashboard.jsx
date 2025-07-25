@@ -1,8 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdLocalFireDepartment, MdEmojiEvents, MdPerson, MdAdd, MdEmergency, MdAccessTime, MdLocationOn, MdOutlineLeaderboard, MdOutlineReport, MdPhone, MdMap, MdStar, MdDirectionsCar } from 'react-icons/md';
-import { FaFireExtinguisher, FaTrophy, FaUser, FaPlus, FaMapMarkerAlt, FaRegClock, FaBuilding, FaTruck, FaClipboardList } from 'react-icons/fa';
-import { HiOutlineUserGroup } from 'react-icons/hi';
+import { motion } from 'framer-motion';
+import {
+  FireIcon,
+  BuildingOfficeIcon,
+  TruckIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  ChartBarIcon,
+  UserIcon,
+  MapPinIcon,
+  PhoneIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  InformationCircleIcon,
+  PlusIcon,
+  ArrowLeftIcon,
+  TrophyIcon,
+  ClipboardDocumentListIcon,
+  MagnifyingGlassIcon,
+  PencilIcon
+} from '@heroicons/react/24/outline';
 
 function decodeJWT(token) {
   if (!token) return {};
@@ -12,6 +30,49 @@ function decodeJWT(token) {
   } catch {
     return {};
   }
+}
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.1,
+      duration: 0.5,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.98 }, // Slightly less scale for minimalism
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  hover: { scale: 1.01, boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.06)" }, // Even softer shadow
+};
+
+const headerVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
+function SectionHeader({ icon, title }) {
+  return (
+    <motion.h2
+      className="flex items-center gap-3 text-2xl md:text-3xl font-bold mb-6 text-gray-800 border-b-2 border-gray-200 pb-2"
+      variants={headerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <span className="text-blue-500 text-3xl">{icon}</span> {/* Still a very subtle cool blue for icons */}
+      {title}
+    </motion.h2>
+  );
 }
 
 export default function FireDashboard() {
@@ -34,7 +95,6 @@ export default function FireDashboard() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [showProfile, setShowProfile] = useState(false);
   const [profileData, setProfileData] = useState({
     name: 'Firefighter Sarah Johnson',
     badge: 'F-2024-001',
@@ -55,6 +115,24 @@ export default function FireDashboard() {
   const [statsLoading, setStatsLoading] = useState(false);
   const [statsError, setStatsError] = useState('');
 
+  const [stationFormErrors, setStationFormErrors] = useState({
+    name: '',
+    latitude: '',
+    longitude: ''
+  });
+  const [locationFormErrors, setLocationFormErrors] = useState({
+    truckId: '',
+    latitude: '',
+    longitude: ''
+  });
+  const [queryFormErrors, setQueryFormErrors] = useState({
+    stationId: '',
+    truckId: ''
+  });
+
+  const latRegex = /^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$/;
+  const lonRegex = /^-?((1?[0-7]?\d(\.\d+)?)|180(\.0+)?)$/;
+
   useEffect(() => {
     setStatsLoading(true);
     setStatsError('');
@@ -63,12 +141,15 @@ export default function FireDashboard() {
         'Authorization': `Bearer ${localStorage.getItem('jwt') || ''}`
       }
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch dashboard stats');
+      .then(async res => {
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ message: 'Failed to parse error response.' }));
+          throw new Error(errorData.message || 'Failed to fetch dashboard stats');
+        }
         return res.json();
       })
       .then(data => setDashboardStats(data))
-      .catch(() => setStatsError('Could not load dashboard stats.'))
+      .catch(err => setStatsError(err.message || 'Could not load dashboard stats.'))
       .finally(() => setStatsLoading(false));
   }, []);
 
@@ -77,43 +158,140 @@ export default function FireDashboard() {
       setFireBookingsLoading(true);
       setFireBookingsError('');
       const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setFireBookingsError('Authentication required to view emergencies.');
+        setFireBookingsLoading(false);
+        return;
+      }
       fetch('http://localhost:8080/booking/fire', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to fetch fire bookings');
+        .then(async res => {
+          if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ message: 'Failed to parse error response.' }));
+            throw new Error(errorData.message || 'Failed to fetch fire bookings');
+          }
           return res.json();
         })
         .then(data => setFireBookings(data))
-        .catch(() => setFireBookingsError('Could not load fire bookings.'))
+        .catch(err => setFireBookingsError(err.message || 'Could not load fire bookings.'))
         .finally(() => setFireBookingsLoading(false));
     }
   }, [activeTab]);
 
+  const validateStationField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'name':
+        if (!value.trim()) error = 'Station Name is required.';
+        else if (value.length > 100) error = 'Station Name cannot exceed 100 characters.';
+        break;
+      case 'latitude':
+        if (!value.toString().trim()) error = 'Latitude is required.';
+        else if (!latRegex.test(value)) error = 'Invalid latitude (-90 to 90).';
+        break;
+      case 'longitude':
+        if (!value.toString().trim()) error = 'Longitude is required.';
+        else if (!lonRegex.test(value)) error = 'Invalid longitude (-180 to 180).';
+        break;
+      default:
+        break;
+    }
+    setStationFormErrors(prev => ({ ...prev, [name]: error }));
+    return error === '';
+  };
+
   const handleStationChange = (e) => {
     const { name, value } = e.target;
     setStationForm((prev) => ({ ...prev, [name]: value }));
+    validateStationField(name, value);
+  };
+
+  const handleStationBlur = (e) => {
+    const { name, value } = e.target;
+    validateStationField(name, value);
+  };
+
+  const validateAllStationFields = () => {
+    let isValid = true;
+    for (const key in stationForm) {
+      if (!validateStationField(key, stationForm[key])) {
+        isValid = false;
+      }
+    }
+    return isValid;
+  };
+
+  const validateLocationField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'truckId':
+        if (!value.toString().trim()) error = 'Truck ID is required.';
+        else if (isNaN(Number(value)) || Number(value) <= 0) error = 'Truck ID must be a positive number.';
+        break;
+      case 'latitude':
+        if (!value.toString().trim()) error = 'Latitude is required.';
+        else if (!latRegex.test(value)) error = 'Invalid latitude (-90 to 90).';
+        break;
+      case 'longitude':
+        if (!value.toString().trim()) error = 'Longitude is required.';
+        else if (!lonRegex.test(value)) error = 'Invalid longitude (-180 to 180).';
+        break;
+      default:
+        break;
+    }
+    setLocationFormErrors(prev => ({ ...prev, [name]: error }));
+    return error === '';
   };
 
   const handleLocationChange = (e) => {
     const { name, value } = e.target;
     setLocationForm((prev) => ({ ...prev, [name]: value }));
+    validateLocationField(name, value);
+  };
+
+  const handleLocationBlur = (e) => {
+    const { name, value } = e.target;
+    validateLocationField(name, value);
+  };
+
+  const validateAllLocationFields = () => {
+    let isValid = true;
+    for (const key in locationForm) {
+      if (!validateLocationField(key, locationForm[key])) {
+        isValid = false;
+      }
+    }
+    return isValid;
+  };
+
+  const validateQueryField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'stationId':
+        if (value.toString().trim() && (isNaN(Number(value)) || Number(value) <= 0)) error = 'Station ID must be a positive number.';
+        break;
+      case 'truckId':
+        if (value.toString().trim() && (isNaN(Number(value)) || Number(value) <= 0)) error = 'Truck ID must be a positive number.';
+        break;
+      default:
+        break;
+    }
+    setQueryFormErrors(prev => ({ ...prev, [name]: error }));
+    return error === '';
   };
 
   const handleQueryChange = (e) => {
     const { name, value } = e.target;
     setQueryForm((prev) => ({ ...prev, [name]: value }));
+    validateQueryField(name, value);
   };
 
-  // Mock statistics data
-  const stats = {
-    totalStations: 18,
-    activeTrucks: 42,
-    emergencyCalls: 67,
-    responseTime: '3.8 min'
+  const handleQueryBlur = (e) => {
+    const { name, value } = e.target;
+    validateQueryField(name, value);
   };
 
-  // Mock station ranking data
   const stationRankings = [
     { name: 'Central Fire Station', score: 98, trucks: 8, calls: 234, responseTime: '2.8 min' },
     { name: 'North Fire Station', score: 95, trucks: 6, calls: 189, responseTime: '3.1 min' },
@@ -123,21 +301,15 @@ export default function FireDashboard() {
     { name: 'Downtown Fire Station', score: 83, trucks: 10, calls: 267, responseTime: '4.2 min' }
   ];
 
-  // Mock recent emergencies
-  const recentEmergencies = [
-    { id: 'E-2024-001', type: 'Fire Emergency', status: 'Resolved', time: '1 hour ago', location: 'Industrial Area' },
-    { id: 'E-2024-002', type: 'Medical Emergency', status: 'In Progress', time: '3 hours ago', location: 'Residential Zone' },
-    { id: 'E-2024-003', type: 'Vehicle Accident', status: 'Under Investigation', time: '5 hours ago', location: 'Highway 101' },
-    { id: 'E-2024-004', type: 'Building Fire', status: 'Resolved', time: '7 hours ago', location: 'Commercial District' },
-    { id: 'E-2024-005', type: 'Chemical Spill', status: 'In Progress', time: '9 hours ago', location: 'Industrial Park' }
-  ];
-
   const handleStationSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    if (!validateAllStationFields()) {
+      setMessage('Please correct the errors in the form.');
+      return;
+    }
     setLoading(true);
-    
-    // Get JWT token
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setMessage('Authentication token not found. Please login again.');
@@ -154,18 +326,19 @@ export default function FireDashboard() {
 
       const res = await fetch('http://localhost:8080/fire/station/add', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(requestBody),
       });
-      
+
       if (res.ok) {
         setMessage('Fire station created successfully!');
         setStationForm({ name: '', latitude: '', longitude: '' });
+        setStationFormErrors({ name: '', latitude: '', longitude: '' });
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setMessage(data.message || 'Failed to create fire station.');
       }
     } catch (err) {
@@ -178,9 +351,12 @@ export default function FireDashboard() {
   const handleLocationSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    if (!validateAllLocationFields()) {
+      setMessage('Please correct the errors in the form.');
+      return;
+    }
     setLoading(true);
-    
-    // Get JWT token
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setMessage('Authentication token not found. Please login again.');
@@ -197,18 +373,19 @@ export default function FireDashboard() {
 
       const res = await fetch('http://localhost:8080/fire/truck-driver/v1/update-location', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(requestBody),
       });
-      
+
       if (res.ok) {
         setMessage('Fire truck location updated successfully!');
         setLocationForm({ truckId: '', latitude: '', longitude: '' });
+        setLocationFormErrors({ truckId: '', latitude: '', longitude: '' });
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setMessage(data.message || 'Failed to update fire truck location.');
       }
     } catch (err) {
@@ -219,15 +396,15 @@ export default function FireDashboard() {
   };
 
   const handleGetTrucks = async () => {
-    if (!queryForm.stationId) {
-      setMessage('Please enter a station ID.');
+    if (!queryForm.stationId.toString().trim() || !validateQueryField('stationId', queryForm.stationId)) {
+      setMessage('Please enter a valid positive Station ID to get trucks.');
       return;
     }
-    
+
     setMessage('');
     setLoading(true);
-    
-    // Get JWT token
+    setData(null);
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setMessage('Authentication token not found. Please login again.');
@@ -238,17 +415,21 @@ export default function FireDashboard() {
     try {
       const res = await fetch(`http://localhost:8080/fire/admin/station/${queryForm.stationId}/trucks`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (res.ok) {
         const result = await res.json();
         setData(result);
-        setMessage('Trucks data retrieved successfully!');
+        if (result.length === 0) {
+          setMessage('No trucks found for this station ID.');
+        } else {
+          setMessage('Trucks data retrieved successfully!');
+        }
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setMessage(data.message || 'Failed to get trucks data.');
       }
     } catch (err) {
@@ -259,15 +440,15 @@ export default function FireDashboard() {
   };
 
   const handleGetStationHistory = async () => {
-    if (!queryForm.stationId) {
-      setMessage('Please enter a station ID.');
+    if (!queryForm.stationId.toString().trim() || !validateQueryField('stationId', queryForm.stationId)) {
+      setMessage('Please enter a valid positive Station ID to get history.');
       return;
     }
-    
+
     setMessage('');
     setLoading(true);
-    
-    // Get JWT token
+    setData(null);
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setMessage('Authentication token not found. Please login again.');
@@ -278,17 +459,21 @@ export default function FireDashboard() {
     try {
       const res = await fetch(`http://localhost:8080/fire/admin/station/${queryForm.stationId}/history`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (res.ok) {
         const result = await res.json();
         setData(result);
-        setMessage('Station history retrieved successfully!');
+        if (result.length === 0) {
+          setMessage('No history found for this station ID.');
+        } else {
+          setMessage('Station history retrieved successfully!');
+        }
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setMessage(data.message || 'Failed to get station history.');
       }
     } catch (err) {
@@ -299,15 +484,15 @@ export default function FireDashboard() {
   };
 
   const handleGetTruckHistory = async () => {
-    if (!queryForm.truckId) {
-      setMessage('Please enter a truck ID.');
+    if (!queryForm.truckId.toString().trim() || !validateQueryField('truckId', queryForm.truckId)) {
+      setMessage('Please enter a valid positive Truck ID to get history.');
       return;
     }
-    
+
     setMessage('');
     setLoading(true);
-    
-    // Get JWT token
+    setData(null);
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setMessage('Authentication token not found. Please login again.');
@@ -318,17 +503,21 @@ export default function FireDashboard() {
     try {
       const res = await fetch(`http://localhost:8080/fire/admin/truck/${queryForm.truckId}/history`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (res.ok) {
         const result = await res.json();
         setData(result);
-        setMessage('Truck history retrieved successfully!');
+        if (result.length === 0) {
+          setMessage('No history found for this truck ID.');
+        } else {
+          setMessage('Truck history retrieved successfully!');
+        }
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setMessage(data.message || 'Failed to get truck history.');
       }
     } catch (err) {
@@ -339,13 +528,19 @@ export default function FireDashboard() {
   };
 
   const fetchReportTruckHistory = async () => {
-    if (!reportTruckId) {
+    if (!reportTruckId.toString().trim()) {
       setReportError('Please enter a truck ID.');
       return;
     }
+    if (isNaN(Number(reportTruckId)) || Number(reportTruckId) <= 0) {
+      setReportError('Truck ID must be a positive number.');
+      return;
+    }
+
     setReportLoading(true);
     setReportError('');
-    // Get JWT token
+    setReportTruckHistory([]);
+
     const token = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!token) {
       setReportError('Authentication token not found. Please login again.');
@@ -362,8 +557,11 @@ export default function FireDashboard() {
       if (res.ok) {
         const result = await res.json();
         setReportTruckHistory(result);
+        if (result.length === 0) {
+          setReportError('No history found for this truck ID.');
+        }
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setReportError(data.message || 'Failed to fetch truck history.');
       }
     } catch (err) {
@@ -373,101 +571,127 @@ export default function FireDashboard() {
     }
   };
 
-  const QuickActionCard = ({ title, description, icon, onClick, gradient }) => (
-    <div 
+  const QuickActionCard = ({ title, description, icon, onClick, bgColorClass }) => (
+    <motion.div
       onClick={onClick}
-      className={`${gradient} p-6 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:rotate-1 border border-white/20 backdrop-blur-sm animate-fadeInUp`}
+      className={`${bgColorClass} p-6 rounded-lg cursor-pointer flex items-center space-x-4 text-gray-800 relative overflow-hidden transition-all duration-200`} // Text will be dark
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="flex items-center space-x-4">
-        <div className="text-3xl drop-shadow-sm">{icon}</div>
-        <div>
-          <h3 className="font-semibold text-white drop-shadow-sm">{title}</h3>
-          <p className="text-sm text-white/80">{description}</p>
-        </div>
+      <div className="text-3xl relative z-10 text-gray-600"> {/* Icons are slightly muted */}
+        {icon}
       </div>
-    </div>
+      <div className="relative z-10">
+        <h3 className="font-semibold">{title}</h3>
+        <p className="text-sm opacity-90">{description}</p>
+      </div>
+      <motion.div
+        className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg pointer-events-none" // Hover overlay
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0 }}
+        whileHover={{ opacity: 0.7 }}
+      ></motion.div>
+    </motion.div>
   );
 
-  const StatCard = ({ title, value, subtitle, gradient }) => (
-    <div className={`${gradient} p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border border-white/20 backdrop-blur-sm animate-fadeInUp`}>
-      <div className="text-right">
-        <h3 className="text-2xl font-bold text-white drop-shadow-sm">{value}</h3>
-        <p className="text-sm text-white/80">{title}</p>
-        {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
+  const StatCard = ({ title, value, subtitle, bgColorClass, icon }) => (
+    <motion.div
+      className={`${bgColorClass} p-6 rounded-lg shadow-md text-gray-800 relative overflow-hidden flex items-center justify-between`} // Text will be dark
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
+    >
+      <div className="relative z-10">
+        <motion.div
+          className="text-4xl text-blue-600 opacity-75" // Cool blue for icons
+          initial={{ rotate: 0 }}
+          whileHover={{ rotate: 8 }} // Less dramatic rotation
+          transition={{ duration: 0.2 }}
+        >
+          {icon}
+        </motion.div>
       </div>
-    </div>
+      <div className="text-right relative z-10">
+        <h3 className="text-3xl font-bold">{value}</h3>
+        <p className="text-sm opacity-90">{title}</p>
+        {subtitle && <p className="text-xs opacity-80">{subtitle}</p>}
+      </div>
+      <motion.div
+        className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg pointer-events-none" // Hover overlay
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0 }}
+        whileHover={{ opacity: 0.7 }}
+      ></motion.div>
+    </motion.div>
   );
 
   const jwt = localStorage.getItem('jwt');
   const userInfo = decodeJWT(jwt);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900"> {/* Lighter base background */}
       {/* Header */}
-      <div className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 shadow-lg border-b border-blue-100/50 backdrop-blur-sm">
+      <div className="bg-white shadow-sm border-b border-gray-200"> {/* White header with subtle shadow */}
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <ReactLogo />
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Fire Admin Dashboard</h1>
-                <p className="text-gray-600 mt-1">Emergency Fire Services Management</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">Fire Dashboard</h1> {/* Dark text */}
+              <p className="text-gray-500">Emergency Response Management System</p> {/* Muted text */}
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600">Emergency Fire Services</p>
+                <p className="text-sm text-gray-600">Welcome, {profileData.name.split(' ')[1]}</p>
                 <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
-              <div className="flex items-center space-x-3">
-                <button 
-                  onClick={() => navigate('/')} 
-                  className="text-gray-600 hover:text-gray-800 text-sm font-medium"
-                >
-                  Home
-                </button>
-                <button 
-                  onClick={() => {
-                    localStorage.removeItem('jwt');
-                    navigate('/login');
-                  }}
-                  className="text-red-600 hover:text-red-700 text-sm font-medium"
-                >
-                  Logout
-                </button>
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                  <FaAmbulance className="text-xl" />
-                </div>
-              </div>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('jwt');
+                  localStorage.removeItem('token');
+                  navigate('/login');
+                }}
+                className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                Logout
+              </button>
+              <button
+                onClick={() => setActiveTab('profile')}
+                className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold hover:bg-blue-600 transition" // Blue accent for profile icon
+              >
+                <UserIcon className="h-6 w-6" />
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white border-b">
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: <MdOutlineLeaderboard className="inline text-xl align-middle" /> },
-              { id: 'stations', name: 'Stations', icon: <FaBuilding className="inline text-xl align-middle" /> },
-              { id: 'trucks', name: 'Trucks', icon: <FaTruck className="inline text-xl align-middle" /> },
-              { id: 'emergencies', name: 'Emergencies', icon: <MdEmergency className="inline text-xl align-middle" /> },
-              { id: 'reports', name: 'Reports', icon: <FaClipboardList className="inline text-xl align-middle" /> },
-              { id: 'ranking', name: 'Rankings', icon: <FaTrophy className="inline text-xl align-middle" /> },
-              { id: 'profile', name: 'Profile', icon: <FaUser className="inline text-xl align-middle" /> }
+              { id: 'overview', name: 'Overview', icon: <ChartBarIcon className="h-5 w-5" /> },
+              { id: 'stations', name: 'Stations', icon: <BuildingOfficeIcon className="h-5 w-5" /> },
+              { id: 'trucks', name: 'Trucks', icon: <TruckIcon className="h-5 w-5" /> },
+              { id: 'emergencies', name: 'Emergencies', icon: <FireIcon className="h-5 w-5" /> },
+              { id: 'reports', name: 'Reports', icon: <DocumentTextIcon className="h-5 w-5" /> },
+              { id: 'ranking', name: 'Rankings', icon: <TrophyIcon className="h-5 w-5" /> },
+              { id: 'profile', name: 'Profile', icon: <UserIcon className="h-5 w-5" /> }
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                className={`py-4 px-1 border-b-2 flex items-center space-x-2 font-medium text-sm transition-colors duration-200 ${
                   activeTab === tab.id
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-blue-500 text-blue-600' // Blue accent for active tab
+                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
                 }`}
               >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.name}
+                <span>{tab.icon}</span>
+                <span>{tab.name}</span>
               </button>
             ))}
           </nav>
@@ -475,40 +699,49 @@ export default function FireDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <motion.div
+        className="max-w-7xl mx-auto px-4 py-8"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {activeTab === 'overview' && (
-          <div className="space-y-8">
+          <motion.div className="space-y-8" variants={itemVariants}>
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {statsLoading ? (
-                <div className="col-span-4 text-center py-8 text-orange-600 font-semibold">Loading statistics...</div>
+                <motion.div className="col-span-4 text-center py-8 text-blue-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading statistics...</motion.div>
               ) : statsError ? (
-                <div className="col-span-4 text-center py-8 text-red-600 font-semibold">{statsError}</div>
+                <motion.div className="col-span-4 text-center py-8 text-red-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{statsError}</motion.div>
               ) : dashboardStats ? (
                 <>
                   <StatCard
                     title="Total Stations"
                     value={dashboardStats.total_fire_stations}
                     subtitle="Active fire stations"
-                    gradient="bg-gradient-to-br from-orange-500 to-orange-600"
+                    bgColorClass="bg-white" // Minimal white card
+                    icon={<BuildingOfficeIcon />}
                   />
                   <StatCard
                     title="Total Fire Trucks"
                     value={dashboardStats.total_fire_trucks}
                     subtitle="Available fire trucks"
-                    gradient="bg-gradient-to-br from-red-500 to-red-600"
+                    bgColorClass="bg-white" // Minimal white card
+                    icon={<TruckIcon />}
                   />
                   <StatCard
                     title="Fire Service Bookings"
                     value={dashboardStats.fire_service_bookings}
                     subtitle="Today's calls"
-                    gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
+                    bgColorClass="bg-white" // Minimal white card
+                    icon={<FireIcon />}
                   />
                   <StatCard
                     title="Avg Completion Time"
                     value={dashboardStats.average_completion_time_minutes + ' min'}
                     subtitle="Emergency response"
-                    gradient="bg-gradient-to-br from-green-500 to-green-600"
+                    bgColorClass="bg-white" // Minimal white card
+                    icon={<ClockIcon />}
                   />
                 </>
               ) : null}
@@ -516,70 +749,63 @@ export default function FireDashboard() {
 
             {/* Quick Actions */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+              <SectionHeader icon={<ClipboardDocumentListIcon />} title="Quick Actions" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <QuickActionCard
                   title="Add Station"
                   description="Create a new fire station"
-                  icon={<FaBuilding />}
-                  onClick={() => setActiveTab('stations')}
-                  gradient="bg-gradient-to-br from-orange-500 to-orange-600"
+                  icon={<PlusIcon className="h-6 w-6" />}
+                  onClick={() => setActiveTab('add-station')}
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Update truck locations"
-                  icon={<FaMapMarkerAlt />}
-                  onClick={() => setActiveTab('trucks')}
-                  gradient="bg-gradient-to-br from-green-500 to-green-600"
+                  icon={<MapPinIcon className="h-6 w-6" />}
+                  onClick={() => setActiveTab('update-location')}
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor active emergencies"
-                  icon={<MdEmergency />}
+                  icon={<FireIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('emergencies')}
-                  gradient="bg-gradient-to-br from-red-500 to-red-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
-                  icon={<FaClipboardList />}
+                  icon={<DocumentTextIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('reports')}
-                  gradient="bg-gradient-to-br from-purple-500 to-purple-600"
-                />
-                <QuickActionCard
-                  title="Live Map"
-                  description="View real-time locations"
-                  icon={<MdMap />}
-                  onClick={() => window.open('/navigation/fire_truck/1', '_blank')}
-                  gradient="bg-gradient-to-br from-indigo-500 to-indigo-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Station Rankings"
                   description="View performance metrics"
-                  icon={<FaTrophy />}
+                  icon={<TrophyIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('ranking')}
-                  gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="My Profile"
                   description="Update personal information"
-                  icon={<FaUser />}
+                  icon={<UserIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('profile')}
-                  gradient="bg-gradient-to-br from-blue-500 to-blue-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Emergency Contacts"
                   description="Quick contact list"
-                  icon={<MdPhone />}
+                  icon={<PhoneIcon className="h-6 w-6" />}
                   onClick={() => alert('Emergency contacts feature coming soon!')}
-                  gradient="bg-gradient-to-br from-pink-500 to-pink-600"
+                  bgColorClass="bg-white"
                 />
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h3>
               <div className="space-y-4">
                 {[
                   { time: '2 min ago', action: 'New fire emergency reported', location: 'Industrial Area' },
@@ -587,34 +813,42 @@ export default function FireDashboard() {
                   { time: '12 min ago', action: 'Station status updated', location: 'North District' },
                   { time: '18 min ago', action: 'Emergency resolved', location: 'South Station' }
                 ].map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                  <motion.div
+                    key={index}
+                    className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors duration-150"
+                    variants={itemVariants}
+                  >
                     <div>
                       <p className="text-sm font-medium text-gray-900">{activity.action}</p>
                       <p className="text-xs text-gray-500">{activity.location}</p>
                     </div>
                     <span className="text-xs text-gray-400">{activity.time}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Recent Emergencies */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Emergencies</h3>
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Recent Emergencies</h3>
               <div className="space-y-3">
                 {fireBookingsLoading ? (
-                  <div className="text-blue-600">Loading fire bookings...</div>
+                  <motion.div className="text-blue-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading fire bookings...</motion.div>
                 ) : fireBookingsError ? (
-                  <div className="text-red-600">{fireBookingsError}</div>
+                  <motion.div className="text-red-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{fireBookingsError}</motion.div>
                 ) : fireBookings.length === 0 ? (
-                  <div className="text-gray-500">No recent emergencies found.</div>
+                  <motion.div className="text-gray-500" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>No recent emergencies found.</motion.div>
                 ) : (
                   fireBookings.slice(0, 5).map((b) => (
-                    <div key={b.booking_id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                    <motion.div
+                      key={b.booking_id}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-150"
+                      variants={itemVariants}
+                    >
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
                           b.status === 'COMPLETED' ? 'bg-green-500' :
-                          b.status === 'PENDING' ? 'bg-yellow-500' : 'bg-red-500'
+                            b.status === 'PENDING' ? 'bg-yellow-500' : 'bg-red-500'
                         }`}></div>
                         <div>
                           <p className="text-sm font-medium text-gray-900">{b.issue_type}</p>
@@ -624,524 +858,630 @@ export default function FireDashboard() {
                       <div className="text-right">
                         <span className={`text-xs px-2 py-1 rounded ${
                           b.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                          b.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                            b.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
                         }`}>
                           {b.status}
                         </span>
                         <p className="text-xs text-gray-400 mt-1">{new Date(b.created_at).toLocaleString()}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))
                 )}
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {activeTab === 'stations' && (
-          <div className="space-y-8">
+          <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Fire Stations</h2>
-              <button 
+              <SectionHeader icon={<BuildingOfficeIcon />} title="Fire Stations" />
+              <motion.button
                 onClick={() => setActiveTab('add-station')}
-                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                + Add Station
-              </button>
+                <PlusIcon className="h-5 w-5" /> <span>Add Station</span>
+              </motion.button>
             </div>
 
             {/* Station List */}
-            <div className="bg-white rounded-lg shadow-md">
+            <motion.div className="bg-white rounded-lg shadow-md" variants={itemVariants}>
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Active Stations</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Active Stations</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[
-                    { name: 'Central Fire Station', trucks: 8, status: 'Active' },
-                    { name: 'North Fire Station', trucks: 6, status: 'Active' },
-                    { name: 'South Fire Station', trucks: 7, status: 'Active' },
-                    { name: 'East Fire Station', trucks: 5, status: 'Active' },
-                    { name: 'West Fire Station', trucks: 6, status: 'Active' },
-                    { name: 'Downtown Fire Station', trucks: 10, status: 'Active' }
-                  ].map((station, index) => (
-                    <div key={index} className="border rounded-lg p-4 hover:shadow-md transition">
+                  {stationRankings.map((station, index) => (
+                    <motion.div
+                      key={index}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow duration-200"
+                      variants={itemVariants}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
                       <h4 className="font-semibold text-gray-900">{station.name}</h4>
                       <p className="text-sm text-gray-600">Trucks: {station.trucks}</p>
-                      <span className="inline-block px-2 py-1 text-xs bg-green-100 text-green-800 rounded">
-                        {station.status}
+                      <span className="inline-block px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full mt-2">
+                        <CheckCircleIcon className="h-3 w-3 inline-block mr-1" /> Active
                       </span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {activeTab === 'add-station' && (
-          <div className="max-w-2xl mx-auto">
+          <motion.div className="max-w-2xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Create Fire Station</h2>
-                <button 
+                <SectionHeader icon={<BuildingOfficeIcon />} title="Create Fire Station" />
+                <button
                   onClick={() => setActiveTab('stations')}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 flex items-center space-x-1"
                 >
-                  ← Back to Stations
+                  <ArrowLeftIcon className="h-4 w-4" /> <span>Back to Stations</span>
                 </button>
               </div>
-              
-              <form onSubmit={handleStationSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Station Name</label>
-                  <input 
-                    name="name" 
-                    value={stationForm.name} 
-                    onChange={handleStationChange} 
-                    placeholder="Enter station name" 
-                    required 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+
+              <form onSubmit={handleStationSubmit} className="space-y-6">
+                <motion.div variants={itemVariants}>
+                  <label htmlFor="stationName" className="block text-sm font-medium text-gray-700 mb-1">Station Name</label>
+                  <input
+                    id="stationName"
+                    name="name"
+                    value={stationForm.name}
+                    onChange={handleStationChange}
+                    onBlur={handleStationBlur}
+                    placeholder="Enter station name"
+                    required
+                    maxLength="100"
+                    className={`w-full px-4 py-2 border ${stationFormErrors.name ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                   />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-                    <input 
-                      name="latitude" 
-                      value={stationForm.latitude} 
-                      onChange={handleStationChange} 
-                      placeholder="e.g., 18.5204" 
-                      type="number" 
+                  {stationFormErrors.name && <p className="mt-1 text-sm text-red-600">{stationFormErrors.name}</p>}
+                </motion.div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="stationLatitude" className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+                    <input
+                      id="stationLatitude"
+                      name="latitude"
+                      value={stationForm.latitude}
+                      onChange={handleStationChange}
+                      onBlur={handleStationBlur}
+                      placeholder="e.g., 18.5204"
+                      type="number"
                       step="any"
-                      required 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+                      required
+                      min="-90"
+                      max="90"
+                      className={`w-full px-4 py-2 border ${stationFormErrors.latitude ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-                    <input 
-                      name="longitude" 
-                      value={stationForm.longitude} 
-                      onChange={handleStationChange} 
-                      placeholder="e.g., 73.8567" 
-                      type="number" 
+                    {stationFormErrors.latitude && <p className="mt-1 text-sm text-red-600">{stationFormErrors.latitude}</p>}
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="stationLongitude" className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+                    <input
+                      id="stationLongitude"
+                      name="longitude"
+                      value={stationForm.longitude}
+                      onChange={handleStationChange}
+                      onBlur={handleStationBlur}
+                      placeholder="e.g., 73.8567"
+                      type="number"
                       step="any"
-                      required 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+                      required
+                      min="-180"
+                      max="180"
+                      className={`w-full px-4 py-2 border ${stationFormErrors.longitude ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                     />
-                  </div>
+                    {stationFormErrors.longitude && <p className="mt-1 text-sm text-red-600">{stationFormErrors.longitude}</p>}
+                  </motion.div>
                 </div>
-                
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="w-full bg-orange-600 text-white py-3 rounded-md hover:bg-orange-700 disabled:opacity-50 font-medium"
+
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 disabled:opacity-50 font-semibold transition-colors duration-200"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  {loading ? 'Creating Station...' : 'Create Fire Station'}
-                </button>
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24"> {/* Spinner */} </svg>
+                      Creating Station...
+                    </>
+                  ) : 'Create Fire Station'}
+                </motion.button>
               </form>
-              
+
               {message && (
-                <div className={`mt-4 p-3 rounded-md ${
-                  message.includes('success') 
-                    ? 'bg-green-100 text-green-700 border border-green-200' 
-                    : 'bg-red-100 text-red-700 border border-red-200'
-                }`}>
-                  {message}
-                </div>
+                <motion.div
+                  className={`mt-6 p-4 rounded-md flex items-center space-x-2 ${
+                    message.includes('success')
+                      ? 'bg-green-100 text-green-700 border border-green-200'
+                      : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {message.includes('success') ? <CheckCircleIcon className="h-5 w-5" /> : <XCircleIcon className="h-5 w-5" />}
+                  <span>{message}</span>
+                </motion.div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {activeTab === 'trucks' && (
-          <div className="space-y-8">
+          <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Fire Trucks</h2>
-              <button 
+              <SectionHeader icon={<TruckIcon />} title="Fire Trucks" />
+              <motion.button
                 onClick={() => setActiveTab('update-location')}
-                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Update Location
-              </button>
+                <MapPinIcon className="h-5 w-5" /> <span>Update Location</span>
+              </motion.button>
             </div>
 
             {/* Truck Management */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Query Truck Data</h3>
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Query Truck Data</h3>
               <div className="space-y-4 max-w-md">
-                <div>
-                  <input 
-                    name="stationId" 
-                    value={queryForm.stationId} 
-                    onChange={handleQueryChange} 
-                    placeholder="Station ID" 
+                <motion.div variants={itemVariants}>
+                  <label htmlFor="queryStationId" className="block text-sm font-medium text-gray-700 mb-1">Station ID</label>
+                  <input
+                    id="queryStationId"
+                    name="stationId"
+                    value={queryForm.stationId}
+                    onChange={handleQueryChange}
+                    onBlur={handleQueryBlur}
+                    placeholder="Enter Station ID"
                     type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" 
+                    min="1"
+                    className={`w-full px-4 py-2 border ${queryFormErrors.stationId ? 'border-red-500' : 'border-gray-300'} rounded-md mb-2 focus:ring-blue-500 focus:border-blue-500`}
                   />
+                  {queryFormErrors.stationId && <p className="mt-1 text-sm text-red-600">{queryFormErrors.stationId}</p>}
                   <div className="flex gap-2">
-                    <button 
-                      onClick={handleGetTrucks} 
+                    <motion.button
+                      onClick={handleGetTrucks}
                       disabled={loading}
-                      className="flex-1 bg-orange-600 text-white py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+                      className="flex-1 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors duration-200"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      Get Trucks
-                    </button>
-                    <button 
-                      onClick={handleGetStationHistory} 
+                      <TruckIcon className="h-5 w-5 inline-block mr-1" /> Get Trucks
+                    </motion.button>
+                    <motion.button
+                      onClick={handleGetStationHistory}
                       disabled={loading}
-                      className="flex-1 bg-orange-600 text-white py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+                      className="flex-1 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors duration-200"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      Get History
-                    </button>
+                      <ClockIcon className="h-5 w-5 inline-block mr-1" /> Get Station History
+                    </motion.button>
                   </div>
-                </div>
-                <div>
-                  <input 
-                    name="truckId" 
-                    value={queryForm.truckId} 
-                    onChange={handleQueryChange} 
-                    placeholder="Truck ID" 
+                </motion.div>
+                <motion.div className="pt-4 border-t border-gray-200" variants={itemVariants}>
+                  <label htmlFor="queryTruckId" className="block text-sm font-medium text-gray-700 mb-1">Truck ID</label>
+                  <input
+                    id="queryTruckId"
+                    name="truckId"
+                    value={queryForm.truckId}
+                    onChange={handleQueryChange}
+                    onBlur={handleQueryBlur}
+                    placeholder="Enter Truck ID"
                     type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" 
+                    min="1"
+                    className={`w-full px-4 py-2 border ${queryFormErrors.truckId ? 'border-red-500' : 'border-gray-300'} rounded-md mb-2 focus:ring-blue-500 focus:border-blue-500`}
                   />
-                  <button 
-                    onClick={handleGetTruckHistory} 
+                  {queryFormErrors.truckId && <p className="mt-1 text-sm text-red-600">{queryFormErrors.truckId}</p>}
+                  <motion.button
+                    onClick={handleGetTruckHistory}
                     disabled={loading}
-                    className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+                    className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors duration-200"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Get Truck History
-                  </button>
-                </div>
+                    <ClockIcon className="h-5 w-5 inline-block mr-1" /> Get Truck History
+                  </motion.button>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
-            {message && <div className={`mt-4 p-3 rounded-md ${message.includes('success') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{message}</div>}
-            
+            {message && <motion.div className={`mt-4 p-3 rounded-md flex items-center space-x-2 ${message.includes('success') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>{message.includes('success') ? <CheckCircleIcon className="h-5 w-5" /> : <XCircleIcon className="h-5 w-5" />}<span>{message}</span></motion.div>}
+
             {data && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Response Data</h3>
-                {Array.isArray(data) && data.length > 0 && (
+              <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Response Data</h3>
+                {Array.isArray(data) && data.length > 0 ? (
                   <div className="overflow-x-auto">
                     {data[0].registrationNumber ? (
-                      <table className="w-full text-sm bg-white border border-gray-300">
-                        <thead className="bg-orange-100">
+                      <motion.table className="w-full text-sm bg-white border border-gray-200 rounded-lg overflow-hidden" initial="hidden" animate="visible" variants={containerVariants}>
+                        <motion.thead className="bg-gray-50" variants={itemVariants}> {/* Minimal table header */}
                           <tr>
-                            <th className="px-3 py-2 border-b text-left">ID</th>
-                            <th className="px-3 py-2 border-b text-left">Registration</th>
-                            <th className="px-3 py-2 border-b text-left">Driver Name</th>
-                            <th className="px-3 py-2 border-b text-left">Phone</th>
-                            <th className="px-3 py-2 border-b text-left">Status</th>
-                            <th className="px-3 py-2 border-b text-left">Last Updated</th>
-                            <th className="px-3 py-2 border-b text-left">Location</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">ID</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Registration</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Driver Name</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Phone</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Status</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Last Updated</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Location</th>
                           </tr>
-                        </thead>
-                        <tbody>
+                        </motion.thead>
+                        <motion.tbody className="bg-white">
                           {data.map((truck, index) => (
-                            <tr key={index} className="hover:bg-gray-50">
-                              <td className="px-3 py-2 border-b">{truck.id}</td>
-                              <td className="px-3 py-2 border-b font-mono">{truck.registrationNumber}</td>
-                              <td className="px-3 py-2 border-b">{truck.driverName}</td>
-                              <td className="px-3 py-2 border-b">{truck.driverPhoneNumber}</td>
-                              <td className="px-3 py-2 border-b">
-                                <span className={`px-2 py-1 rounded text-xs ${
+                            <motion.tr key={index} className="hover:bg-gray-50 border-b border-gray-100 last:border-b-0" variants={itemVariants}>
+                              <td className="px-4 py-3">{truck.id}</td>
+                              <td className="px-4 py-3 font-mono">{truck.registrationNumber}</td>
+                              <td className="px-4 py-3">{truck.driverName}</td>
+                              <td className="px-4 py-3">{truck.driverPhoneNumber}</td>
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                                   truck.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
-                                  truck.status === 'EN_ROUTE' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-gray-100 text-gray-800'
+                                    truck.status === 'EN_ROUTE' ? 'bg-blue-100 text-blue-800' :
+                                      'bg-gray-100 text-gray-800'
                                 }`}>
                                   {truck.status}
                                 </span>
                               </td>
-                              <td className="px-3 py-2 border-b text-xs">
+                              <td className="px-4 py-3 text-xs text-gray-500">
                                 {new Date(truck.lastUpdated).toLocaleString()}
                               </td>
-                              <td className="px-3 py-2 border-b text-xs">
+                              <td className="px-4 py-3 text-xs text-gray-500">
                                 {truck.latitude?.toFixed(4)}, {truck.longitude?.toFixed(4)}
                               </td>
-                            </tr>
+                            </motion.tr>
                           ))}
-                        </tbody>
-                      </table>
+                        </motion.tbody>
+                      </motion.table>
                     ) : data[0].bookingId ? (
-                      <table className="w-full text-sm bg-white border border-gray-300">
-                        <thead className="bg-orange-100">
+                      <motion.table className="w-full text-sm bg-white border border-gray-200 rounded-lg overflow-hidden" initial="hidden" animate="visible" variants={containerVariants}>
+                        <motion.thead className="bg-gray-50" variants={itemVariants}> {/* Minimal table header */}
                           <tr>
-                            <th className="px-3 py-2 border-b text-left">Booking ID</th>
-                            <th className="px-3 py-2 border-b text-left">Pickup Location</th>
-                            <th className="px-3 py-2 border-b text-left">Issue Type</th>
-                            <th className="px-3 py-2 border-b text-left">Status</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Booking ID</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Pickup Location</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Issue Type</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Status</th>
+                            <th className="px-4 py-2 border-b text-left text-gray-600">Created At</th>
                           </tr>
-                        </thead>
-                        <tbody>
+                        </motion.thead>
+                        <motion.tbody className="bg-white">
                           {data.map((booking, index) => (
-                            <tr key={index} className="hover:bg-gray-50">
-                              <td className="px-3 py-2 border-b">{booking.bookingId}</td>
-                              <td className="px-3 py-2 border-b text-xs">
+                            <motion.tr key={index} className="hover:bg-gray-50 border-b border-gray-100 last:border-b-0" variants={itemVariants}>
+                              <td className="px-4 py-3">{booking.bookingId}</td>
+                              <td className="px-4 py-3 text-xs text-gray-500">
                                 {booking.pickupLatitude?.toFixed(6)}, {booking.pickupLongitude?.toFixed(6)}
                               </td>
-                              <td className="px-3 py-2 border-b">
-                                <span className="px-2 py-1 rounded text-xs bg-red-100 text-red-800">
+                              <td className="px-4 py-3">
+                                <span className="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
                                   {booking.issueType}
                                 </span>
                               </td>
-                              <td className="px-3 py-2 border-b">
-                                <span className={`px-2 py-1 rounded text-xs ${
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                                   booking.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                                  booking.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                                  'bg-gray-100 text-gray-800'
+                                    booking.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                      'bg-gray-100 text-gray-800'
                                 }`}>
                                   {booking.status}
                                 </span>
                               </td>
-                            </tr>
+                              <td className="px-4 py-3 text-xs text-gray-500">{new Date(booking.createdAt).toLocaleString()}</td>
+                            </motion.tr>
                           ))}
-                        </tbody>
-                      </table>
+                        </motion.tbody>
+                      </motion.table>
                     ) : (
-                      <div className="text-xs text-gray-600 font-mono bg-gray-50 p-3 rounded border overflow-auto max-h-40">
+                      <pre className="text-xs text-gray-700 bg-gray-50 p-4 rounded-md border border-gray-200 overflow-auto max-h-60">
                         {JSON.stringify(data, null, 2)}
-                      </div>
+                      </pre>
                     )}
                   </div>
+                ) : (
+                  <motion.p className="text-gray-600 mt-4" variants={itemVariants}>No data available for the given query. Try a different ID.</motion.p>
                 )}
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {activeTab === 'update-location' && (
-          <div className="max-w-2xl mx-auto">
+          <motion.div className="max-w-2xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Update Fire Truck Location</h2>
-                <button 
+                <SectionHeader icon={<MapPinIcon />} title="Update Fire Truck Location" />
+                <button
                   onClick={() => setActiveTab('trucks')}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 flex items-center space-x-1"
                 >
-                  ← Back to Trucks
+                  <ArrowLeftIcon className="h-4 w-4" /> <span>Back to Trucks</span>
                 </button>
               </div>
-              
-              <form onSubmit={handleLocationSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Truck ID</label>
-                  <input 
-                    name="truckId" 
-                    value={locationForm.truckId} 
-                    onChange={handleLocationChange} 
-                    placeholder="Enter truck ID" 
+
+              <form onSubmit={handleLocationSubmit} className="space-y-6">
+                <motion.div variants={itemVariants}>
+                  <label htmlFor="truckIdUpdate" className="block text-sm font-medium text-gray-700 mb-1">Truck ID</label>
+                  <input
+                    id="truckIdUpdate"
+                    name="truckId"
+                    value={locationForm.truckId}
+                    onChange={handleLocationChange}
+                    onBlur={handleLocationBlur}
+                    placeholder="Enter truck ID"
                     type="number"
-                    required 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+                    required
+                    min="1"
+                    className={`w-full px-4 py-2 border ${locationFormErrors.truckId ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                   />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-                    <input 
-                      name="latitude" 
-                      value={locationForm.latitude} 
-                      onChange={handleLocationChange} 
-                      placeholder="e.g., 19.12345" 
-                      type="number" 
+                  {locationFormErrors.truckId && <p className="mt-1 text-sm text-red-600">{locationFormErrors.truckId}</p>}
+                </motion.div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="locationLatitude" className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+                    <input
+                      id="locationLatitude"
+                      name="latitude"
+                      value={locationForm.latitude}
+                      onChange={handleLocationChange}
+                      onBlur={handleLocationBlur}
+                      placeholder="e.g., 19.12345"
+                      type="number"
                       step="any"
-                      required 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+                      required
+                      min="-90"
+                      max="90"
+                      className={`w-full px-4 py-2 border ${locationFormErrors.latitude ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-                    <input 
-                      name="longitude" 
-                      value={locationForm.longitude} 
-                      onChange={handleLocationChange} 
-                      placeholder="e.g., 72.54321" 
-                      type="number" 
+                    {locationFormErrors.latitude && <p className="mt-1 text-sm text-red-600">{locationFormErrors.latitude}</p>}
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="locationLongitude" className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+                    <input
+                      id="locationLongitude"
+                      name="longitude"
+                      value={locationForm.longitude}
+                      onChange={handleLocationChange}
+                      onBlur={handleLocationBlur}
+                      placeholder="e.g., 72.54321"
+                      type="number"
                       step="any"
-                      required 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500" 
+                      required
+                      min="-180"
+                      max="180"
+                      className={`w-full px-4 py-2 border ${locationFormErrors.longitude ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out`}
                     />
-                  </div>
+                    {locationFormErrors.longitude && <p className="mt-1 text-sm text-red-600">{locationFormErrors.longitude}</p>}
+                  </motion.div>
                 </div>
-                
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="w-full bg-orange-600 text-white py-3 rounded-md hover:bg-orange-700 disabled:opacity-50 font-medium"
+
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 disabled:opacity-50 font-semibold transition-colors duration-200"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  {loading ? 'Updating Location...' : 'Update Location'}
-                </button>
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24"> {/* Spinner */} </svg>
+                      Updating Location...
+                    </>
+                  ) : 'Update Location'}
+                </motion.button>
               </form>
-              
+
               {message && (
-                <div className={`mt-4 p-3 rounded-md ${
-                  message.includes('success') 
-                    ? 'bg-green-100 text-green-700 border border-green-200' 
-                    : 'bg-red-100 text-red-700 border border-red-200'
-                }`}>
-                  {message}
-                </div>
+                <motion.div
+                  className={`mt-6 p-4 rounded-md flex items-center space-x-2 ${
+                    message.includes('success')
+                      ? 'bg-green-100 text-green-700 border border-green-200'
+                      : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {message.includes('success') ? <CheckCircleIcon className="h-5 w-5" /> : <XCircleIcon className="h-5 w-5" />}
+                  <span>{message}</span>
+                </motion.div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {activeTab === 'emergencies' && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Fire Emergency Requests</h2>
+          <motion.div className="bg-white rounded-lg shadow-md p-6" variants={containerVariants} initial="hidden" animate="visible">
+            <SectionHeader icon={<FireIcon />} title="Fire Emergency Requests" />
             {fireBookingsLoading ? (
-              <div className="text-blue-600">Loading fire bookings...</div>
+              <motion.div className="text-blue-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading fire bookings...</motion.div>
             ) : fireBookingsError ? (
-              <div className="text-red-600">{fireBookingsError}</div>
+              <motion.div className="text-red-600" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{fireBookingsError}</motion.div>
             ) : fireBookings.length === 0 ? (
-              <div className="text-gray-500">No fire bookings found.</div>
+              <motion.div className="text-gray-500" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>No fire bookings found.</motion.div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full bg-white rounded shadow">
-                  <thead>
+                <motion.table className="min-w-full bg-white rounded-lg shadow-sm border border-gray-200" initial="hidden" animate="visible" variants={containerVariants}>
+                  <motion.thead className="bg-gray-50" variants={itemVariants}> {/* Minimal table header */}
                     <tr>
-                      <th className="px-4 py-2 border-b">Booking ID</th>
-                      <th className="px-4 py-2 border-b">Issue Type</th>
-                      <th className="px-4 py-2 border-b">Status</th>
-                      <th className="px-4 py-2 border-b">Created At</th>
-                      <th className="px-4 py-2 border-b">Victim Phone</th>
-                      <th className="px-4 py-2 border-b">Requested By</th>
-                      <th className="px-4 py-2 border-b">For Self</th>
-                      <th className="px-4 py-2 border-b">Ambulance?</th>
-                      <th className="px-4 py-2 border-b">Police?</th>
-                      <th className="px-4 py-2 border-b">Fire Brigade?</th>
-                      <th className="px-4 py-2 border-b">Ambulance Count</th>
-                      <th className="px-4 py-2 border-b">Police Count</th>
-                      <th className="px-4 py-2 border-b">Fire Truck Count</th>
-                      <th className="px-4 py-2 border-b">Pickup Lat</th>
-                      <th className="px-4 py-2 border-b">Pickup Lng</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Booking ID</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Issue Type</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Status</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Created At</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Victim Phone</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Requested By</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">For Self</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Ambulance?</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Police?</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Fire Brigade?</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Ambulance Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Police Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Fire Truck Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Pickup Lat</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Pickup Lng</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                  </motion.thead>
+                  <motion.tbody className="bg-white">
                     {fireBookings.map(b => (
-                      <tr key={b.booking_id}>
-                        <td className="px-4 py-2 border-b text-center">{b.booking_id}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.issue_type}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.status}</td>
-                        <td className="px-4 py-2 border-b text-center">{new Date(b.created_at).toLocaleString()}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.victim_phone_number}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.requested_by_user_id}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.is_for_self ? 'Yes' : 'No'}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.needs_ambulance ? 'Yes' : 'No'}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.needs_police ? 'Yes' : 'No'}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.needs_fire_brigade ? 'Yes' : 'No'}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.requested_ambulance_count}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.requested_police_count}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.requested_fire_truck_count}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.pickup_latitude}</td>
-                        <td className="px-4 py-2 border-b text-center">{b.pickup_longitude}</td>
-                      </tr>
+                      <motion.tr key={b.booking_id} className="hover:bg-gray-50 border-b border-gray-100 last:border-b-0" variants={itemVariants}>
+                        <td className="px-4 py-3 text-center">{b.booking_id}</td>
+                        <td className="px-4 py-3 text-center">{b.issue_type}</td>
+                        <td className="px-4 py-3 text-center">
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            b.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                            b.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                          }`}>
+                            {b.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-center text-xs text-gray-500">{new Date(b.created_at).toLocaleString()}</td>
+                        <td className="px-4 py-3 text-center">{b.victim_phone_number}</td>
+                        <td className="px-4 py-3 text-center">{b.requested_by_user_id}</td>
+                        <td className="px-4 py-3 text-center">{b.is_for_self ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3 text-center">{b.needs_ambulance ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3 text-center">{b.needs_police ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3 text-center">{b.needs_fire_brigade ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3 text-center">{b.requested_ambulance_count}</td>
+                        <td className="px-4 py-3 text-center">{b.requested_police_count}</td>
+                        <td className="px-4 py-3 text-center">{b.requested_fire_truck_count}</td>
+                        <td className="px-4 py-3 text-center text-xs text-gray-500">{b.pickup_latitude}, {b.pickup_longitude}</td>
+                      </motion.tr>
                     ))}
-                  </tbody>
-                </table>
+                  </motion.tbody>
+                </motion.table>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {activeTab === 'reports' && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Reports</h2>
-            <div className="flex items-center mb-4 gap-2">
+          <motion.div className="bg-white rounded-lg shadow-md p-6" variants={containerVariants} initial="hidden" animate="visible">
+            <SectionHeader icon={<DocumentTextIcon />} title="Reports" />
+            <motion.div className="flex items-center mb-6 space-x-3" variants={itemVariants}>
               <input
                 type="number"
                 min="1"
                 placeholder="Enter Truck ID"
                 value={reportTruckId}
                 onChange={e => setReportTruckId(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500 w-48"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 w-60"
               />
-              <button
+              <motion.button
                 onClick={fetchReportTruckHistory}
                 disabled={reportLoading}
-                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+                className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {reportLoading ? 'Loading...' : 'Get Truck History by ID'}
-              </button>
-            </div>
+                {reportLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24"> {/* Spinner */} </svg>
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <ClipboardDocumentListIcon className="h-5 w-5" />
+                    <span>Get Truck History</span>
+                  </>
+                )}
+              </motion.button>
+            </motion.div>
             {reportError && (
-              <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200">{reportError}</div>
+              <motion.div
+                className="mb-4 p-4 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center space-x-2"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <InformationCircleIcon className="h-5 w-5" /> <span>{reportError}</span>
+              </motion.div>
             )}
-            {reportTruckHistory && Array.isArray(reportTruckHistory) && reportTruckHistory.length > 0 && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm bg-white border border-gray-300">
-                  <thead className="bg-orange-100">
+            {reportTruckHistory && Array.isArray(reportTruckHistory) && reportTruckHistory.length > 0 ? (
+              <motion.div className="overflow-x-auto border border-gray-200 rounded-lg" variants={itemVariants}>
+                <motion.table className="w-full text-sm bg-white" initial="hidden" animate="visible" variants={containerVariants}>
+                  <motion.thead className="bg-gray-50" variants={itemVariants}> {/* Minimal table header */}
                     <tr>
-                      <th className="px-3 py-2 border-b text-left">Booking ID</th>
-                      <th className="px-3 py-2 border-b text-left">Pickup Location</th>
-                      <th className="px-3 py-2 border-b text-left">Issue Type</th>
-                      <th className="px-3 py-2 border-b text-left">Status</th>
-                      <th className="px-3 py-2 border-b text-left">Created At</th>
-                      <th className="px-3 py-2 border-b text-left">Victim Phone</th>
-                      <th className="px-3 py-2 border-b text-left">Requested By</th>
-                      <th className="px-3 py-2 border-b text-left">For Self</th>
-                      <th className="px-3 py-2 border-b text-left">Ambulance</th>
-                      <th className="px-3 py-2 border-b text-left">Police</th>
-                      <th className="px-3 py-2 border-b text-left">Fire Brigade</th>
-                      <th className="px-3 py-2 border-b text-left">Ambulance Count</th>
-                      <th className="px-3 py-2 border-b text-left">Police Count</th>
-                      <th className="px-3 py-2 border-b text-left">Fire Truck Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Booking ID</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Pickup Location</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Issue Type</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Status</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Created At</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Victim Phone</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Requested By</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">For Self</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Ambulance</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Police</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Fire Brigade</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Ambulance Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Police Count</th>
+                      <th className="px-4 py-3 border-b text-left text-gray-700">Fire Truck Count</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                  </motion.thead>
+                  <motion.tbody className="bg-white">
                     {reportTruckHistory.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50">
-                        <td className="px-3 py-2 border-b">{item.booking_id}</td>
-                        <td className="px-3 py-2 border-b text-xs">{item.pickup_latitude?.toFixed(4)}, {item.pickup_longitude?.toFixed(4)}</td>
-                        <td className="px-3 py-2 border-b">{item.issue_type}</td>
-                        <td className="px-3 py-2 border-b">
-                          <span className={`px-2 py-1 rounded text-xs ${
+                      <motion.tr key={idx} className="hover:bg-gray-50 border-b border-gray-100 last:border-b-0" variants={itemVariants}>
+                        <td className="px-4 py-3">{item.booking_id}</td>
+                        <td className="px-4 py-3 text-xs text-gray-500">{item.pickup_latitude?.toFixed(4)}, {item.pickup_longitude?.toFixed(4)}</td>
+                        <td className="px-4 py-3">{item.issue_type}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                             item.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                            item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                            'bg-gray-100 text-gray-800'
+                              item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-gray-800'
                           }`}>
                             {item.status}
                           </span>
                         </td>
-                        <td className="px-3 py-2 border-b text-xs">{new Date(item.created_at).toLocaleString()}</td>
-                        <td className="px-3 py-2 border-b">{item.victim_phone_number}</td>
-                        <td className="px-3 py-2 border-b">{item.requested_by_user_id}</td>
-                        <td className="px-3 py-2 border-b">{item.is_for_self ? 'Yes' : 'No'}</td>
-                        <td className="px-3 py-2 border-b">{item.needs_ambulance ? 'Yes' : 'No'}</td>
-                        <td className="px-3 py-2 border-b">{item.needs_police ? 'Yes' : 'No'}</td>
-                        <td className="px-3 py-2 border-b">{item.needs_fire_brigade ? 'Yes' : 'No'}</td>
-                        <td className="px-3 py-2 border-b">{item.requested_ambulance_count}</td>
-                        <td className="px-3 py-2 border-b">{item.requested_police_count}</td>
-                        <td className="px-3 py-2 border-b">{item.requested_fire_truck_count}</td>
-                      </tr>
+                        <td className="px-4 py-3 text-xs text-gray-500">{new Date(item.created_at).toLocaleString()}</td>
+                        <td className="px-4 py-3">{item.victim_phone_number}</td>
+                        <td className="px-4 py-3">{item.requested_by_user_id}</td>
+                        <td className="px-4 py-3">{item.is_for_self ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3">{item.needs_ambulance ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3">{item.needs_police ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3">{item.needs_fire_brigade ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-3">{item.requested_ambulance_count}</td>
+                        <td className="px-4 py-3">{item.requested_police_count}</td>
+                        <td className="px-4 py-3">{item.requested_fire_truck_count}</td>
+                      </motion.tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
+                  </motion.tbody>
+                </motion.table>
+              </motion.div>
+            ) : (
+              !reportLoading && <motion.p className="text-gray-600 mt-4" variants={itemVariants}>No truck history data available. Enter a truck ID and click the button above to fetch.</motion.p>
             )}
-            {(!reportLoading && (!reportTruckHistory || reportTruckHistory.length === 0)) && (
-              <p className="text-gray-600">No truck history data available. Enter a truck ID and click the button above to fetch.</p>
-            )}
-          </div>
+          </motion.div>
         )}
 
         {activeTab === 'ranking' && (
-          <div className="space-y-8">
+          <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Station Rankings</h2>
+              <SectionHeader icon={<TrophyIcon />} title="Station Rankings" />
               <div className="text-sm text-gray-600">Performance Metrics</div>
             </div>
 
             {/* Top Performers */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Top Performing Stations</h3>
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Top Performing Stations</h3>
               <div className="space-y-4">
                 {stationRankings.slice(0, 3).map((station, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <motion.div
+                    key={index}
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <div className="flex items-center space-x-4">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                        index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-500'
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+                        index === 0 ? 'bg-amber-400' : index === 1 ? 'bg-gray-400' : 'bg-blue-400' // Desaturated gold, silver, bronze
                       }`}>
                         {index + 1}
                       </div>
@@ -1154,146 +1494,187 @@ export default function FireDashboard() {
                       <div className="text-lg font-bold text-green-600">{station.responseTime}</div>
                       <div className="text-xs text-gray-500">Response Time</div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Detailed Rankings */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Complete Rankings</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-3 px-4">Rank</th>
-                      <th className="text-left py-3 px-4">Station</th>
-                      <th className="text-left py-3 px-4">Score</th>
-                      <th className="text-left py-3 px-4">Trucks</th>
-                      <th className="text-left py-3 px-4">Calls</th>
-                      <th className="text-left py-3 px-4">Response Time</th>
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Complete Rankings</h3>
+              <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                <motion.table className="w-full text-sm bg-white" initial="hidden" animate="visible" variants={containerVariants}>
+                  <motion.thead className="bg-gray-50" variants={itemVariants}> {/* Minimal table header */}
+                    <tr>
+                      <th className="text-left py-3 px-4 text-gray-700">Rank</th>
+                      <th className="text-left py-3 px-4 text-gray-700">Station</th>
+                      <th className="text-left py-3 px-4 text-gray-700">Score</th>
+                      <th className="text-left py-3 px-4 text-gray-700">Trucks</th>
+                      <th className="text-left py-3 px-4 text-gray-700">Calls</th>
+                      <th className="text-left py-3 px-4 text-gray-700">Response Time</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                  </motion.thead>
+                  <motion.tbody className="bg-white">
                     {stationRankings.map((station, index) => (
-                      <tr key={index} className="border-b hover:bg-gray-50">
-                        <td className="py-3 px-4 font-semibold">{index + 1}</td>
+                      <motion.tr key={index} className="border-b border-gray-100 hover:bg-gray-50 last:border-b-0" variants={itemVariants}>
+                        <td className="py-3 px-4 font-semibold text-gray-800">{index + 1}</td>
                         <td className="py-3 px-4">{station.name}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
-                            <div className="w-16 bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-orange-500 h-2 rounded-full" 
+                            <div className="w-20 bg-gray-200 rounded-full h-2">
+                              <div
+                                className="bg-blue-500 h-2 rounded-full" // Use blue accent for progress bar
                                 style={{ width: `${station.score}%` }}
                               ></div>
                             </div>
-                            <span className="text-sm">{station.score}</span>
+                            <span className="text-sm text-gray-700">{station.score}</span>
                           </div>
                         </td>
                         <td className="py-3 px-4">{station.trucks}</td>
                         <td className="py-3 px-4">{station.calls}</td>
                         <td className="py-3 px-4 text-green-600 font-semibold">{station.responseTime}</td>
-                      </tr>
+                      </motion.tr>
                     ))}
-                  </tbody>
-                </table>
+                  </motion.tbody>
+                </motion.table>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {activeTab === 'profile' && (
-          <div className="max-w-4xl mx-auto">
+          <motion.div className="max-w-4xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
             <div className="bg-white rounded-lg shadow-md p-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Firefighter Profile</h2>
-                <button className="text-orange-600 hover:text-orange-700 text-sm">Edit Profile</button>
+                <SectionHeader icon={<UserIcon />} title="Firefighter Profile" />
+                <button className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1">
+                  <PencilIcon className="h-4 w-4" /> <span>Edit Profile</span>
+                </button>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Profile Information */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b">
+                <motion.div variants={itemVariants}>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
+                  <div className="space-y-3 border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between py-2 border-b border-gray-100">
                       <span className="text-gray-600">User ID:</span>
-                      <span className="font-medium">{userInfo.userId || 'N/A'}</span>
+                      <span className="font-medium text-gray-800">{userInfo.userId || 'N/A'}</span>
                     </div>
-                    <div className="flex justify-between py-2 border-b">
+                    <div className="flex justify-between py-2 border-b border-gray-100">
                       <span className="text-gray-600">Email:</span>
-                      <span className="font-medium">{userInfo.sub || 'N/A'}</span>
+                      <span className="font-medium text-gray-800">{userInfo.sub || 'N/A'}</span>
                     </div>
-                    <div className="flex justify-between py-2 border-b">
+                    <div className="flex justify-between py-2">
                       <span className="text-gray-600">Role:</span>
-                      <span className="font-medium">{userInfo.role || 'N/A'}</span>
+                      <span className="font-medium text-gray-800">{userInfo.role || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-t border-gray-100 mt-4">
+                      <span className="text-gray-600">Full Name:</span>
+                      <span className="font-medium text-gray-800">{profileData.name || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-gray-600">Badge:</span>
+                      <span className="font-medium text-gray-800">{profileData.badge || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-gray-600">Rank:</span>
+                      <span className="font-medium text-gray-800">{profileData.rank || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-gray-600">Department:</span>
+                      <span className="font-medium text-gray-800">{profileData.department || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-gray-600">Experience:</span>
+                      <span className="font-medium text-gray-800">{profileData.experience || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-gray-600">Phone:</span>
+                      <span className="font-medium text-gray-800">{profileData.phone || 'N/A'}</span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Performance Stats */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Statistics</h3>
+                <motion.div variants={itemVariants}>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Performance Statistics</h3>
                   <div className="space-y-4">
-                    <div className="bg-orange-50 p-4 rounded-lg">
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm"> {/* Light neutral background */}
                       <div className="flex items-center justify-between">
-                        <span className="text-orange-600 font-medium">Emergencies Responded</span>
-                        <span className="text-2xl font-bold text-orange-600">312</span>
+                        <span className="text-blue-700 font-medium">Emergencies Responded</span> {/* Blue text for numbers */}
+                        <span className="text-2xl font-bold text-blue-700">312</span>
                       </div>
-                      <p className="text-sm text-orange-600 mt-1">This year</p>
+                      <p className="text-sm text-gray-600 mt-1">This year</p>
                     </div>
-                    
-                    <div className="bg-green-50 p-4 rounded-lg">
+
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
                       <div className="flex items-center justify-between">
-                        <span className="text-green-600 font-medium">Success Rate</span>
-                        <span className="text-2xl font-bold text-green-600">96%</span>
+                        <span className="text-green-700 font-medium">Success Rate</span>
+                        <span className="text-2xl font-bold text-green-700">96%</span>
                       </div>
-                      <p className="text-sm text-green-600 mt-1">Resolved emergencies</p>
+                      <p className="text-sm text-gray-600 mt-1">Resolved emergencies</p>
                     </div>
-                    
-                    <div className="bg-yellow-50 p-4 rounded-lg">
+
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
                       <div className="flex items-center justify-between">
-                        <span className="text-yellow-600 font-medium">Response Time</span>
-                        <span className="text-2xl font-bold text-yellow-600">3.2 min</span>
+                        <span className="text-yellow-700 font-medium">Response Time</span>
+                        <span className="text-2xl font-bold text-yellow-700">3.2 min</span>
                       </div>
-                      <p className="text-sm text-yellow-600 mt-1">Average</p>
+                      <p className="text-sm text-gray-600 mt-1">Average</p>
                     </div>
-                    
-                    <div className="bg-red-50 p-4 rounded-lg">
+
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
                       <div className="flex items-center justify-between">
-                        <span className="text-red-600 font-medium">Service Hours</span>
-                        <span className="text-2xl font-bold text-red-600">2,156</span>
+                        <span className="text-red-700 font-medium">Service Hours</span>
+                        <span className="text-2xl font-bold text-red-700">2,156</span>
                       </div>
-                      <p className="text-sm text-red-600 mt-1">This year</p>
+                      <p className="text-sm text-gray-600 mt-1">This year</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Recent Achievements */}
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2"><FaTrophy /></div>
-                    <h4 className="font-semibold">Firefighter of the Year</h4>
-                    <p className="text-sm opacity-90">2024</p>
-                  </div>
-                  <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2"><MdStar /></div>
-                    <h4 className="font-semibold">Bravery Award</h4>
-                    <p className="text-sm opacity-90">Rescue Operations</p>
-                  </div>
-                  <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-4 rounded-lg">
-                    <div className="text-2xl mb-2"><MdOutlineLeaderboard /></div>
-                    <h4 className="font-semibold">Perfect Attendance</h4>
-                    <p className="text-sm opacity-90">12 months</p>
-                  </div>
+              <motion.div className="mt-10" variants={itemVariants}>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Achievements</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <motion.div
+                    className="bg-white p-5 rounded-lg shadow-md flex flex-col items-center text-center border border-gray-200" // Minimal card style
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    variants={itemVariants}
+                  >
+                    <div className="text-4xl mb-3 text-blue-500">🏆</div> {/* Icon with accent color */}
+                    <h4 className="font-semibold text-xl text-gray-800">Firefighter of the Year</h4>
+                    <p className="text-sm text-gray-600 opacity-90">2024</p>
+                  </motion.div>
+                  <motion.div
+                    className="bg-white p-5 rounded-lg shadow-md flex flex-col items-center text-center border border-gray-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    variants={itemVariants}
+                  >
+                    <div className="text-4xl mb-3 text-green-500">⭐</div>
+                    <h4 className="font-semibold text-xl text-gray-800">Bravery Award</h4>
+                    <p className="text-sm text-gray-600 opacity-90">Rescue Operations</p>
+                  </motion.div>
+                  <motion.div
+                    className="bg-white p-5 rounded-lg shadow-md flex flex-col items-center text-center border border-gray-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    variants={itemVariants}
+                  >
+                    <div className="text-4xl mb-3 text-gray-600">🎯</div>
+                    <h4 className="font-semibold text-xl text-gray-800">Perfect Attendance</h4>
+                    <p className="text-sm text-gray-600 opacity-90">12 months</p>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
-} 
+}
