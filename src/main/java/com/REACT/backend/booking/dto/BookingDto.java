@@ -23,6 +23,7 @@ public class BookingDto {
         this.issueType = request.getIssueType();
         this.status = request.getEmergencyRequestStatus().name();
     }
+
     public BookingDto(BookingLogEntity entity) {
         this.bookingId = entity.getId();
         this.pickupLatitude = entity.getEmergencyRequest().getLatitude();

@@ -1,27 +1,7 @@
-import { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-
-const patientRequests = [
-  {
-    name: "Manoj Patel",
-    address: "XYZ Road, City",
-    condition: "ABC",
-    severity: "Mild",
-  },
-  {
-    name: "Riya Sharma",
-    address: "XYZ Road, City",
-    condition: "ABC",
-    severity: "Severe",
-  },
-  {
-    name: "Shama Uzair",
-    address: "XYZ Road, City",
-    condition: "ABC",
-    severity: "Severe",
-  },
-];
+import LiveMap from "./LiveMap";
 
 function PhoneIcon({ className = "w-6 h-6" }: { className?: string }) {
   return (
@@ -52,15 +32,30 @@ function UserIcon({ className = "w-8 h-8" }: { className?: string }) {
 export default function DriverDashboard() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [requests, setRequests] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const driverId = localStorage.getItem('userId');
+    if (!driverId) return;
+    fetch(`http://localhost:8080/driver/${driverId}/pending-requests`)
+      .then(res => res.json())
+      .then(data => {
+        setRequests(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const handleLogout = () => {
     logout();
   };
+
   return (
     <div className="min-h-screen bg-white font-cantata max-w-md mx-auto border-4 border-black">
       {/* Header */}
       <div className="w-full h-[56px] bg-gray-200 flex items-center justify-between px-4">
-        <div className="text-black text-2xl font-normal">Hi, User!</div>
+        <div className="text-black text-2xl font-normal">Hi, Driver!</div>
         <div className="flex items-center gap-2">
           <LocationIcon className="w-5 h-6 text-black" />
           <div className="text-black text-[13px] font-normal leading-tight">
@@ -78,29 +73,31 @@ export default function DriverDashboard() {
         </div>
       </div>
 
-      {/* Live Patient Requests */}
+      {/* Assigned Patient Requests */}
       <div className="px-4 py-4">
-        <div className="text-black text-xl font-semibold mb-4">Live Patient Requests:</div>
-        {patientRequests.map((req, idx) => (
-          <div key={req.name} className="mb-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 text-black text-base">
-                <div><b>Name:</b> {req.name}</div>
-                <div><b>Address:</b> {req.address}</div>
-                <div><b>Condition:</b> {req.condition}</div>
-                <div><b>Severity:</b> {req.severity}</div>
-                <div className="flex gap-32 mt-4">
-                  <button className="bg-red-600 text-white px-6 py-2 rounded font-semibold">Reject</button>
-                  <button className="bg-green-600 text-white px-6 py-2 rounded font-semibold" onClick={() => navigate('/driver/accepted')}>Accept</button>
+        <div className="text-black text-xl font-semibold mb-4">Assigned Patient Requests:</div>
+        {loading ? (
+          <div className="text-gray-500">Loading...</div>
+        ) : requests.length === 0 ? (
+          <div className="text-gray-500">No assigned requests.</div>
+        ) : requests.map((req, idx) => (
+          <div key={req.id || idx} className="mb-8 bg-gray-50 rounded-2xl shadow-lg p-4">
+            <div className="mb-4">
+              <div className="text-lg font-bold text-red-700 mb-1">Patient Details</div>
+              <div className="text-black text-sm mb-1"><b>Name:</b> {req.patientName || '-'}</div>
+              <div className="text-black text-sm mb-1"><b>Address:</b> {req.address || '-'}</div>
+              <div className="text-black text-sm mb-1"><b>Phone:</b> {req.victimPhoneNumber || '-'}</div>
+              <div className="text-black text-sm mb-1"><b>Issue Type:</b> {req.issueType || '-'}</div>
+              <div className="text-black text-sm mb-1"><b>Notes:</b> {req.notes || '-'}</div>
                 </div>
+            {req.latitude && req.longitude && req.ambulanceLatitude && req.ambulanceLongitude && (
+              <div className="mb-2">
+                <LiveMap
+                  patientCoords={{ latitude: req.latitude, longitude: req.longitude }}
+                  ambulanceCoords={{ latitude: req.ambulanceLatitude, longitude: req.ambulanceLongitude }}
+                />
               </div>
-              <div className="flex flex-col items-center ml-4 mt-2">
-                <button className="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center">
-                  <PhoneIcon className="w-6 h-6 text-black" />
-                </button>
-              </div>
-            </div>
-            {idx < patientRequests.length - 1 && <hr className="my-4 border-gray-300" />}
+            )}
           </div>
         ))}
       </div>

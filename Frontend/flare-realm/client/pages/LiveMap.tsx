@@ -142,5 +142,5 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
     return () => map.remove();
   }, [patientCoords, ambulanceCoords, fireTruckCoords]);
 
-  return <div ref={mapContainer} className="w-full h-96 rounded-xl shadow" />;
+  return <div ref={mapContainer} className="w-full h-full rounded-xl shadow" />;
 } 

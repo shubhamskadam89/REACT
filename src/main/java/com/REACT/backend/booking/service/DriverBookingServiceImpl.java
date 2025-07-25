@@ -58,7 +58,6 @@ public class DriverBookingServiceImpl {
     public List<EmergencyRequestEntity> getPendingRequestsForDriver(Long driverId) {
         return requestRepo.findByDriver_UserIdAndEmergencyRequestStatus(
                 driverId,
-                EmergencyRequestStatus.PENDING
-        );
+                EmergencyRequestStatus.PENDING);
     }
 }

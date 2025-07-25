@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { FaAmbulance, FaFireExtinguisher, FaUserShield, FaHospitalAlt } from 'react-icons/fa';
 
 interface Hospital {
   id: string;
@@ -119,10 +120,19 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl" style={{ backgroundColor: '#F0FFFF' }}>
+    <div className="min-h-screen font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl flex flex-col relative bg-gradient-to-br from-blue-100 to-red-100 overflow-hidden">
+      {/* Emergency SVG/Icons background */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 flex justify-center items-center z-0">
+        <FaAmbulance size={180} className="text-red-400 mx-8" />
+        <FaFireExtinguisher size={140} className="text-orange-400 mx-8" />
+        <FaUserShield size={140} className="text-blue-400 mx-8" />
+      </div>
       {/* Header */}
-      <div className="w-full h-[56px] bg-sky-300 flex items-center justify-between px-4 shadow-md">
-        <div className="text-black text-xl font-bold tracking-wide">Hi, User!</div>
+      <div className="w-full h-[64px] bg-white/90 flex items-center justify-between px-6 shadow-lg rounded-b-3xl z-10 border-b-4 border-red-500 relative">
+        <div className="flex items-center gap-3">
+          <FaAmbulance className="text-red-500 animate-pulse" size={32} />
+          <span className="text-2xl font-extrabold text-red-600 tracking-tight drop-shadow">REACT</span>
+        </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <LocationIcon className="w-5 h-6 text-black" />
@@ -130,22 +140,19 @@ export default function Index() {
               Location:<br />{city}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => navigate('/profile')} className="focus:outline-none">
-              <UserIcon className="w-8 h-8 text-black hover:scale-110 transition-transform" />
-            </button>
-            <button
-              onClick={handleLogout}
-              className="text-black text-sm hover:underline"
-            >
-              Logout
-            </button>
-          </div>
+          <button onClick={() => navigate('/profile')} className="focus:outline-none">
+            <UserIcon className="w-8 h-8 text-black hover:scale-110 transition-transform" />
+          </button>
+          <button
+            onClick={handleLogout}
+            className="text-black text-sm hover:underline font-semibold"
+          >
+            Logout
+          </button>
         </div>
       </div>
-
       {/* Emergency Question & SOS */}
-      <div className="w-full text-center py-8">
+      <div className="w-full text-center py-8 z-10">
         <h1 className="text-black text-3xl font-extrabold mb-2 tracking-tight drop-shadow">24/7 Emergency Ambulance Care</h1>
         <div className="text-blue-700 text-lg mb-8 font-medium">Rescues the Patient in case of Emergency by just a click.</div>
         <div className="text-red-600 text-2xl font-semibold mb-2">Are you in Emergency?</div>
@@ -153,46 +160,44 @@ export default function Index() {
         <div className="flex justify-center py-4">
           <button
             onClick={handleSOSClick}
-            className="relative w-40 h-40 bg-red-600 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform duration-500 animate-pulse"
+            className="relative w-44 h-44 bg-red-600 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-transform duration-500 animate-pulse border-8 border-white z-20"
           >
-            <span className="text-white text-5xl font-extrabold tracking-wider">SOS</span>
+            <span className="text-white text-6xl font-extrabold tracking-wider drop-shadow">SOS</span>
             <span className="absolute inset-0 rounded-full border-4 border-red-300 opacity-50 animate-ping"></span>
           </button>
         </div>
       </div>
-
       {/* Choose Ambulance Type */}
-      <div className="px-4 lg:px-6 py-6">
+      <div className="px-4 lg:px-6 py-6 z-10">
         <h2 className="text-black text-xl font-semibold mb-6 flex items-center gap-2">
-          <span>🚑</span> Choose ambulance type:
+          <FaAmbulance className="text-red-500" /> Choose ambulance type:
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {ambulanceTypes.map((type, index) => (
             <button
               key={type.label}
               onClick={() => handleAmbulanceTypeClick(type.label)}
-              className={`bg-white rounded-xl shadow-md flex flex-col items-center justify-center p-4 border-2 transition-all hover:border-blue-400 hover:shadow-lg ${selectedAmbulanceType === type.label ? "border-blue-600 ring-2 ring-blue-200" : "border-transparent"}`}
+              className={`bg-white/90 rounded-2xl shadow-lg flex flex-col items-center justify-center p-6 border-2 transition-all hover:border-blue-400 hover:shadow-2xl ${selectedAmbulanceType === type.label ? "border-blue-600 ring-2 ring-blue-200" : "border-transparent"}`}
             >
-              <span className="text-3xl mb-2">{type.icon}</span>
-              <span className="text-black text-sm font-semibold text-center leading-tight">
+              <span className="text-4xl mb-2">{type.icon}</span>
+              <span className="text-black text-base font-bold text-center leading-tight">
                 {type.label}
               </span>
             </button>
           ))}
         </div>
       </div>
-
       {/* Hospitals Near You */}
-      <div className="px-4 lg:px-6 pb-8">
-        <div className="rounded-2xl p-6 lg:p-8 bg-white shadow-md">
+      <div className="px-4 lg:px-6 pb-8 z-10">
+        <div className="rounded-3xl p-8 bg-white/90 shadow-2xl border-t-4 border-blue-400">
           <h2 className="text-black text-xl font-semibold mb-6 flex items-center gap-2">
-            <span>🏥</span> Hospitals near you:
+            <FaHospitalAlt className="text-blue-600" /> Hospitals near you:
           </h2>
           <div className="space-y-6">
             {hospitals.map((hospital) => (
-              <div key={hospital.id} className="bg-blue-50 rounded-xl shadow flex items-center gap-4 p-4 hover:shadow-lg transition">
+              <div key={hospital.id} className="bg-blue-50 rounded-xl shadow flex items-center gap-4 p-4 hover:shadow-lg transition border border-blue-100">
                 <div className="bg-blue-200 rounded-full p-2">
-                  <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+                  <FaHospitalAlt className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-lg text-gray-800">{hospital.name}</div>
@@ -201,7 +206,7 @@ export default function Index() {
                 </div>
                 <button
                   onClick={() => handleCallHospital(hospital.name)}
-                  className="ml-auto bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition"
+                  className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold shadow"
                 >
                   Call
                 </button>
@@ -209,6 +214,10 @@ export default function Index() {
             ))}
           </div>
         </div>
+      </div>
+      {/* Footer */}
+      <div className="mt-auto py-4 text-center text-xs text-gray-500 z-10">
+        &copy; {new Date().getFullYear()} Emergency Response Portal. All rights reserved.
       </div>
     </div>
   );

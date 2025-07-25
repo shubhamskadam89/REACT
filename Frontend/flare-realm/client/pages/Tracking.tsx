@@ -313,25 +313,7 @@ export default function Tracking() {
             </div>
           </div>
           {/* Payment Panel (Sticky to bottom of gray panel) */}
-          <div className="p-2 sticky bottom-0 left-0 right-0 bg-gray-100 z-10">
-            <div className="bg-emergency-yellow flex items-center justify-between px-3 py-2 rounded-xl w-full shadow-md">
-              <span className="text-black text-base font-normal">
-                Total Amount: Rs. 1126.18
-              </span>
-              <button
-                onClick={handlePayment}
-                className="bg-emergency-blue px-4 py-1.5 rounded-xl flex items-center gap-2"
-              >
-                <span className="text-white text-sm font-normal">Pay Now</span>
-                <svg width="8" height="12" viewBox="0 0 8 13" fill="none">
-                  <path
-                    d="M1.4546 0.0305786L0 1.3638L5.09119 6.03035L0 10.6974L1.4546 12.0306L8 6.03053L1.4546 0.0305786Z"
-                    fill="white"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
