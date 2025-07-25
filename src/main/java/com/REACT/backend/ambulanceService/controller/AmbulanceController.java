@@ -32,6 +32,11 @@ public class AmbulanceController {
         ambulanceLocationServiceImplementation.updateLocation(dto);
         return ResponseEntity.ok("Location updated and broadcasted");
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<AmbulanceDto> getAmbulance(@PathVariable Long id) {
+        AmbulanceDto dto = ambulanceLocationServiceImplementation.getAmbulanceById(id);
+        return ResponseEntity.ok(dto);
+    }
 
 
 }

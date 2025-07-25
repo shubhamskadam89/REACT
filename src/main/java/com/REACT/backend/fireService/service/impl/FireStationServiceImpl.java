@@ -4,11 +4,12 @@ import com.REACT.backend.fireService.model.FireStationEntity;
 import com.REACT.backend.fireService.repository.FireStationRepository;
 import com.REACT.backend.fireService.service.FireStationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FireStationServiceImpl implements FireStationService {
