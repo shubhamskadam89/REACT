@@ -1,6 +1,40 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Add a simple JWT decode function (if jwt-decode is not available)
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
+
+function SectionHeader({ icon, title }) {
+  return (
+    <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-fade-in">
+      <span className="text-3xl">{icon}</span>
+      {title}
+    </h2>
+  );
+}
+
+// Add a React logo SVG as a component
+const ReactLogo = () => (
+  <svg width="36" height="36" viewBox="0 0 841.9 595.3" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <circle cx="420.9" cy="296.5" r="45.7" fill="#61DAFB"/>
+      <g stroke="#61DAFB" strokeWidth="30" fill="none">
+        <ellipse rx="218.7" ry="545.9" transform="rotate(60 420.9 296.5)"/>
+        <ellipse rx="218.7" ry="545.9" transform="rotate(120 420.9 296.5)"/>
+        <ellipse rx="218.7" ry="545.9" transform="rotate(180 420.9 296.5)"/>
+      </g>
+    </g>
+  </svg>
+);
+
 export default function AmbulanceDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
@@ -43,21 +77,84 @@ export default function AmbulanceDashboard() {
   const [allDrivers, setAllDrivers] = useState([]);
   const [allDriversLoading, setAllDriversLoading] = useState(false);
   const [allDriversError, setAllDriversError] = useState('');
-  // Add role selection state
-  // const [role, setRole] = useState('DRIVER'); // DRIVER or ADMIN
+  const [ambulances, setAmbulances] = useState([]);
+  const [ambulancesLoading, setAmbulancesLoading] = useState(false);
+  const [ambulancesError, setAmbulancesError] = useState('');
+  const [recentEmergencies, setRecentEmergencies] = useState([]);
+  const [emergenciesLoading, setEmergenciesLoading] = useState(false);
+  const [emergenciesError, setEmergenciesError] = useState('');
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState('');
 
-  // Mock ambulance data
-  const ambulanceData = {
-    totalAmbulances: 45,
-    availableAmbulances: 32,
-    onCallAmbulances: 8,
-    maintenanceAmbulances: 5,
-    totalDrivers: 52,
-    activeDrivers: 48,
-    totalEmergencies: 156,
-    resolvedEmergencies: 142,
-    averageResponseTime: '3.2 min'
-  };
+  useEffect(() => {
+    setStatsLoading(true);
+    setStatsError('');
+    fetch('http://localhost:8080/api/dashboard/stats', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt') || ''}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch dashboard stats');
+        return res.json();
+      })
+      .then(data => setDashboardStats(data))
+      .catch(() => setStatsError('Could not load dashboard stats.'))
+      .finally(() => setStatsLoading(false));
+  }, []);
+
+  // Fetch ambulance data from API when drivers or rankings tab is active
+  useEffect(() => {
+    if (activeTab === 'drivers' || activeTab === 'rankings') {
+      setAmbulancesLoading(true);
+      setAmbulancesError('');
+      const jwt = localStorage.getItem('jwt');
+      fetch('http://localhost:8080/ambulance/all', {
+        headers: {
+          'Authorization': `Bearer ${jwt}`
+        }
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch ambulances');
+          return res.json();
+        })
+        .then((data) => {
+          // Sort by lastUpdated descending for rankings
+          const sorted = [...data].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+          setAmbulances(sorted);
+        })
+        .catch(() => {
+          setAmbulancesError('Could not load ambulances.');
+        })
+        .finally(() => setAmbulancesLoading(false));
+    }
+  }, [activeTab]);
+
+  // Fetch recent emergencies from API when overview tab is active
+  useEffect(() => {
+    if (activeTab === 'overview') {
+      setEmergenciesLoading(true);
+      setEmergenciesError('');
+      const jwt = localStorage.getItem('jwt');
+      fetch('http://localhost:8080/booking/ambulance', {
+        headers: {
+          'Authorization': `Bearer ${jwt}`
+        }
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch emergencies');
+          return res.json();
+        })
+        .then((data) => {
+          setRecentEmergencies(data);
+        })
+        .catch(() => {
+          setEmergenciesError('Could not load recent emergencies.');
+        })
+        .finally(() => setEmergenciesLoading(false));
+    }
+  }, [activeTab]);
 
   // Mock ambulance drivers
   const ambulanceDrivers = [
@@ -94,7 +191,7 @@ export default function AmbulanceDashboard() {
   ];
 
   // Mock recent emergencies
-  const recentEmergencies = [
+  const recentEmergenciesMock = [
     {
       id: 'E-2024-001',
       type: 'Medical Emergency',
@@ -385,15 +482,21 @@ export default function AmbulanceDashboard() {
     </div>
   );
 
+  const jwt = localStorage.getItem('jwt');
+  const userInfo = decodeJWT(jwt);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 shadow-lg border-b border-blue-100/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div className="opacity-100 translate-x-0">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Ambulance Admin Dashboard</h1>
-              <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
+            <div className="flex items-center gap-4">
+              <ReactLogo />
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Ambulance Admin Dashboard</h1>
+                <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
@@ -433,7 +536,6 @@ export default function AmbulanceDashboard() {
               { id: 'drivers', name: 'Drivers', icon: '👨‍⚕️' },
               { id: 'vehicles', name: 'Vehicles', icon: '🚑' },
               { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
-              { id: 'reports', name: 'Reports', icon: '📋' },
               { id: 'rankings', name: 'Rankings', icon: '🏆' },
               { id: 'profile', name: 'Profile', icon: '👤' },
               { id: 'register', name: 'Register', icon: '➕' }
@@ -501,13 +603,6 @@ export default function AmbulanceDashboard() {
                   gradient="from-yellow-500 via-orange-500 to-amber-600"
                 />
                 <QuickActionCard
-                  title="Generate Reports"
-                  description="Create performance reports"
-                  icon="📊"
-                  onClick={() => setActiveTab('reports')}
-                  gradient="from-purple-500 via-purple-600 to-indigo-700"
-                />
-                <QuickActionCard
                   title="Profile Management"
                   description="Manage driver profiles"
                   icon="👤"
@@ -519,67 +614,97 @@ export default function AmbulanceDashboard() {
 
             {/* Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
-                <div className="flex items-center relative z-10">
-                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚑</div>
-                  <div>
-                    <p className="text-sm text-blue-100 font-medium">Total Ambulances</p>
-                    <p className="text-3xl font-bold text-white">{ambulanceData.totalAmbulances}</p>
+              {statsLoading ? (
+                <div className="col-span-4 text-center py-8 text-blue-600 font-semibold">Loading statistics...</div>
+              ) : statsError ? (
+                <div className="col-span-4 text-center py-8 text-red-600 font-semibold">{statsError}</div>
+              ) : dashboardStats ? (
+                <>
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                    <div className="flex items-center relative z-10">
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚑</div>
+                      <div>
+                        <p className="text-sm text-blue-100 font-medium">Total Ambulances</p>
+                        <p className="text-3xl font-bold text-white">{dashboardStats.total_ambulances}</p>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
                   </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-              </div>
-              <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
-                <div className="flex items-center relative z-10">
-                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">👨‍⚕️</div>
-                  <div>
-                    <p className="text-sm text-green-100 font-medium">Active Drivers</p>
-                    <p className="text-3xl font-bold text-white">{ambulanceData.activeDrivers}</p>
+                  <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                    <div className="flex items-center relative z-10">
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">👨‍⚕️</div>
+                      <div>
+                        <p className="text-sm text-green-100 font-medium">Available Ambulances</p>
+                        <p className="text-3xl font-bold text-white">{dashboardStats.available_ambulances}</p>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
                   </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-              </div>
-              <div className="bg-gradient-to-br from-red-500 to-red-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
-                <div className="flex items-center relative z-10">
-                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚨</div>
-                  <div>
-                    <p className="text-sm text-red-100 font-medium">Emergencies</p>
-                    <p className="text-3xl font-bold text-white">{ambulanceData.totalEmergencies}</p>
+                  <div className="bg-gradient-to-br from-red-500 to-red-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                    <div className="flex items-center relative z-10">
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">🚨</div>
+                      <div>
+                        <p className="text-sm text-red-100 font-medium">Total Bookings</p>
+                        <p className="text-3xl font-bold text-white">{dashboardStats.ambulance_bookings}</p>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
                   </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-500 to-indigo-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
-                <div className="flex items-center relative z-10">
-                  <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">⏱️</div>
-                  <div>
-                    <p className="text-sm text-purple-100 font-medium">Avg Response</p>
-                    <p className="text-3xl font-bold text-white">{ambulanceData.averageResponseTime}</p>
+                  <div className="bg-gradient-to-br from-purple-500 to-indigo-700 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group relative">
+                    <div className="flex items-center relative z-10">
+                      <div className="text-4xl mr-4 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">⏱️</div>
+                      <div>
+                        <p className="text-sm text-purple-100 font-medium">Avg Completion Time</p>
+                        <p className="text-3xl font-bold text-white">{dashboardStats.average_completion_time_minutes} min</p>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
                   </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-              </div>
+                </>
+              ) : null}
             </div>
 
             {/* Recent Emergencies */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Emergencies</h3>
-              <div className="space-y-4">
-                {recentEmergencies.map((emergency, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{emergency.type}</p>
-                      <p className="text-xs text-gray-500">{emergency.location} • {emergency.driver}</p>
-                      <p className="text-xs text-gray-500">Response: {emergency.responseTime}</p>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      emergency.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {emergency.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-white/90 rounded-lg shadow-emergency p-6 animate-fade-in">
+              <SectionHeader icon="🚨" title="Recent Emergencies" />
+              {emergenciesLoading ? (
+                <div className="text-center py-8 text-blue-600 font-semibold">Loading emergencies...</div>
+              ) : emergenciesError ? (
+                <div className="text-center py-8 text-red-600 font-semibold">{emergenciesError}</div>
+              ) : recentEmergencies.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">No recent emergencies found.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Victim Phone</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Lat</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Lng</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {recentEmergencies.map((em) => (
+                        <tr key={em.booking_id}>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.booking_id}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.issue_type}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${em.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{em.status}</span>
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">{new Date(em.created_at).toLocaleString()}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.victim_phone_number}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.pickup_latitude}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.pickup_longitude}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -917,14 +1042,16 @@ export default function AmbulanceDashboard() {
                 <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 transition">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-gray-900">{emergency.type}</h3>
-                      <p className="text-sm text-gray-600">ID: {emergency.id}</p>
-                      <p className="text-sm text-gray-600">{emergency.location} • {emergency.driver}</p>
-                      <p className="text-sm text-gray-600">Response Time: {emergency.responseTime}</p>
-                      <p className="text-sm text-gray-600">{emergency.timestamp}</p>
+                      <h3 className="font-semibold text-gray-900">{emergency.issue_type}</h3>
+                      <p className="text-sm text-gray-600">ID: {emergency.booking_id}</p>
+                      <p className="text-sm text-gray-600">Status: {emergency.status}</p>
+                      <p className="text-sm text-gray-600">Created At: {new Date(emergency.created_at).toLocaleString()}</p>
+                      <p className="text-sm text-gray-600">Victim Phone: {emergency.victim_phone_number}</p>
+                      <p className="text-sm text-gray-600">Pickup Lat: {emergency.pickup_latitude}</p>
+                      <p className="text-sm text-gray-600">Pickup Lng: {emergency.pickup_longitude}</p>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      emergency.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                      emergency.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {emergency.status}
                     </span>
@@ -935,93 +1062,56 @@ export default function AmbulanceDashboard() {
           </div>
         )}
 
-        {activeTab === 'reports' && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Generate Reports</h2>
-              <form className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
-                    <select
-                      name="queryType"
-                      value={queryForm.queryType}
-                      onChange={handleQueryChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="all">All Emergencies</option>
-                      <option value="medical">Medical Emergencies</option>
-                      <option value="traffic">Traffic Accidents</option>
-                      <option value="cardiac">Cardiac Emergencies</option>
-                      <option value="response">Response Times</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-                    <select
-                      name="dateRange"
-                      value={queryForm.dateRange}
-                      onChange={handleQueryChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="today">Today</option>
-                      <option value="week">This Week</option>
-                      <option value="month">This Month</option>
-                      <option value="quarter">This Quarter</option>
-                      <option value="year">This Year</option>
-                    </select>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200"
-                >
-                  Generate Report
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
         {activeTab === 'rankings' && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Driver Rankings</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Emergencies</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Response</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Efficiency</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {ambulanceRankings.map((driver) => (
-                    <tr key={driver.rank}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-lg font-bold text-gray-900">#{driver.rank}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{driver.driver}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.vehicle}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.emergenciesHandled}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.avgResponseTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">⭐ {driver.rating}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                          {driver.efficiency}
-                        </span>
-                      </td>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Ambulance Rankings</h2>
+            {ambulancesLoading ? (
+              <div className="text-center py-8 text-blue-600 font-semibold">Loading rankings...</div>
+            ) : ambulancesError ? (
+              <div className="text-center py-8 text-red-600 font-semibold">{ambulancesError}</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">#</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Reg Number</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Driver Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Driver Phone</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Latitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Longitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Last Updated</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {ambulances.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="text-center py-8 text-gray-500">No ambulances found.</td>
+                      </tr>
+                    ) : ambulances.map((amb, idx) => (
+                      <tr key={amb.id} className="hover:bg-blue-50 transition">
+                        <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">{idx + 1}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.regNumber}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.driverName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.driverPhone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                            ${amb.status === 'AVAILABLE' ? 'bg-green-200 text-green-900 border border-green-400' : 
+                              amb.status === 'ON_CALL' ? 'bg-yellow-200 text-yellow-900 border border-yellow-400' : 
+                              amb.status === 'MAINTENANCE' ? 'bg-purple-200 text-purple-900 border border-purple-400' : 
+                              'bg-gray-200 text-gray-900 border border-gray-400'}
+                          `}>{amb.status}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{Number(amb.latitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{Number(amb.longitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{new Date(amb.lastUpdated).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -1036,34 +1126,29 @@ export default function AmbulanceDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Service Information */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Service Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
                       <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                         🚑
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">Emergency Medical Services</h4>
-                        <p className="text-sm text-gray-600">Professional Ambulance Service</p>
+                        <h4 className="font-semibold text-gray-900">{userInfo.role || 'N/A'}</h4>
+                        <p className="text-sm text-gray-600">{userInfo.sub || 'N/A'}</p>
                       </div>
                     </div>
-                    
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Total Ambulances:</span>
-                        <span className="font-medium">{ambulanceData.totalAmbulances}</span>
+                        <span className="text-gray-600">User ID:</span>
+                        <span className="font-medium">{userInfo.userId || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Active Drivers:</span>
-                        <span className="font-medium">{ambulanceData.activeDrivers}</span>
+                        <span className="text-gray-600">Email:</span>
+                        <span className="font-medium">{userInfo.sub || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Average Response Time:</span>
-                        <span className="font-medium">{ambulanceData.averageResponseTime}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Service Coverage:</span>
-                        <span className="font-medium">24/7 Emergency Response</span>
+                        <span className="text-gray-600">Role:</span>
+                        <span className="font-medium">{userInfo.role || 'N/A'}</span>
                       </div>
                     </div>
                   </div>

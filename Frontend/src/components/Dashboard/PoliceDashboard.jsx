@@ -1,5 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
 
 export default function PoliceDashboard() {
   const navigate = useNavigate();
@@ -30,14 +40,26 @@ export default function PoliceDashboard() {
   const [emergencyHistory, setEmergencyHistory] = useState([]);
   const [emergencyLoading, setEmergencyLoading] = useState(false);
   const [emergencyError, setEmergencyError] = useState('');
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState('');
 
-  // Mock statistics data
-  const stats = {
-    totalStations: 24,
-    activeOfficers: 156,
-    emergencyCalls: 89,
-    responseTime: '4.2 min'
-  };
+  useEffect(() => {
+    setStatsLoading(true);
+    setStatsError('');
+    fetch('http://localhost:8080/api/dashboard/stats', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt') || ''}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch dashboard stats');
+        return res.json();
+      })
+      .then(data => setDashboardStats(data))
+      .catch(() => setStatsError('Could not load dashboard stats.'))
+      .finally(() => setStatsLoading(false));
+  }, []);
 
   // Mock station ranking data
   const stationRankings = [
@@ -204,6 +226,9 @@ export default function PoliceDashboard() {
     </div>
   );
 
+  const jwt = localStorage.getItem('jwt');
+  const userInfo = decodeJWT(jwt);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
@@ -247,10 +272,8 @@ export default function PoliceDashboard() {
             {[
               { id: 'overview', name: 'Overview', icon: '📊' },
               { id: 'stations', name: 'Stations', icon: '🏢' },
-                          { id: 'officers', name: 'Officers', icon: '👮' },
             { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
             { id: 'reports', name: 'Reports', icon: '📋' },
-            { id: 'ranking', name: 'Rankings', icon: '🏆' },
             { id: 'profile', name: 'Profile', icon: '👤' }
             ].map((tab) => (
               <button
@@ -276,34 +299,42 @@ export default function PoliceDashboard() {
           <div className="space-y-8">
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard 
-                title="Total Stations" 
-                value={stats.totalStations} 
-                subtitle="Active police stations"
-                gradient="bg-gradient-to-br from-blue-500 to-blue-600"
-                icon="🏢"
-              />
-              <StatCard 
-                title="Active Officers" 
-                value={stats.activeOfficers} 
-                subtitle="On duty officers"
-                gradient="bg-gradient-to-br from-green-500 to-green-600"
-                icon="👮"
-              />
-              <StatCard 
-                title="Emergency Calls" 
-                value={stats.emergencyCalls} 
-                subtitle="Today's calls"
-                gradient="bg-gradient-to-br from-red-500 to-red-600"
-                icon="🚨"
-              />
-              <StatCard 
-                title="Avg Response Time" 
-                value={stats.responseTime} 
-                subtitle="Emergency response"
-                gradient="bg-gradient-to-br from-yellow-500 to-orange-500"
-                icon="⏱️"
-              />
+              {statsLoading ? (
+                <div className="col-span-4 text-center py-8 text-blue-600 font-semibold">Loading statistics...</div>
+              ) : statsError ? (
+                <div className="col-span-4 text-center py-8 text-red-600 font-semibold">{statsError}</div>
+              ) : dashboardStats ? (
+                <>
+                  <StatCard
+                    title="Total Stations"
+                    value={dashboardStats.total_police_stations}
+                    subtitle="Active police stations"
+                    gradient="bg-gradient-to-br from-blue-500 to-blue-600"
+                    icon="🏢"
+                  />
+                  <StatCard
+                    title="Total Officers"
+                    value={dashboardStats.total_police_officers}
+                    subtitle="On duty officers"
+                    gradient="bg-gradient-to-br from-green-500 to-green-600"
+                    icon="👮"
+                  />
+                  <StatCard
+                    title="Police Service Bookings"
+                    value={dashboardStats.police_service_bookings}
+                    subtitle="Today's calls"
+                    gradient="bg-gradient-to-br from-red-500 to-red-600"
+                    icon="🚨"
+                  />
+                  <StatCard
+                    title="Avg Completion Time"
+                    value={dashboardStats.average_completion_time_minutes + ' min'}
+                    subtitle="Emergency response"
+                    gradient="bg-gradient-to-br from-yellow-500 to-orange-500"
+                    icon="⏱️"
+                  />
+                </>
+              ) : null}
             </div>
 
             {/* Quick Actions */}
@@ -325,13 +356,6 @@ export default function PoliceDashboard() {
                   gradient="bg-gradient-to-br from-red-500 to-red-600"
                 />
                 <QuickActionCard
-                  title="Officer Management"
-                  description="Manage police officers"
-                  icon="👮"
-                  onClick={() => setActiveTab('officers')}
-                  gradient="bg-gradient-to-br from-green-500 to-green-600"
-                />
-                <QuickActionCard
                   title="Generate Reports"
                   description="Create incident reports"
                   icon="📋"
@@ -351,13 +375,6 @@ export default function PoliceDashboard() {
                    icon="📞"
                    onClick={() => alert('Emergency contacts feature coming soon!')}
                    gradient="bg-gradient-to-br from-orange-500 to-orange-600"
-                 />
-                 <QuickActionCard
-                   title="Station Rankings"
-                   description="View performance metrics"
-                   icon="🏆"
-                   onClick={() => setActiveTab('ranking')}
-                   gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
                  />
                  <QuickActionCard
                    title="My Profile"
@@ -564,13 +581,6 @@ export default function PoliceDashboard() {
           </div>
         )}
 
-        {activeTab === 'officers' && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Officer Management</h2>
-            <p className="text-gray-600">Officer management features coming soon...</p>
-          </div>
-        )}
-
         {activeTab === 'emergencies' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Emergency Monitoring</h2>
@@ -705,76 +715,6 @@ export default function PoliceDashboard() {
            </div>
          )}
 
-         {activeTab === 'ranking' && (
-           <div className="space-y-8">
-             <div className="flex items-center justify-between">
-               <h2 className="text-2xl font-bold text-gray-900">Station Rankings</h2>
-               <div className="text-sm text-gray-600">Performance Metrics</div>
-             </div>
-
-             {/* Top Performers */}
-             <div className="bg-white rounded-lg shadow-md p-6">
-               <h3 className="text-xl font-semibold text-gray-900 mb-4">Top Performing Stations</h3>
-               <div className="space-y-4">
-                 {stationRankings.slice(0, 3).map((station, index) => (
-                   <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                       index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-500'
-                     }`}>
-                       {index + 1}
-                     </div>
-                     <div>
-                       <h4 className="font-semibold text-gray-900">{station.name}</h4>
-                       <p className="text-sm text-gray-600">Score: {station.score}/100</p>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-             </div>
-
-             {/* Detailed Rankings */}
-             <div className="bg-white rounded-lg shadow-md p-6">
-               <h3 className="text-xl font-semibold text-gray-900 mb-4">Complete Rankings</h3>
-               <div className="overflow-x-auto">
-                 <table className="w-full">
-                   <thead>
-                     <tr className="border-b">
-                       <th className="text-left py-3 px-4">Rank</th>
-                       <th className="text-left py-3 px-4">Station</th>
-                       <th className="text-left py-3 px-4">Score</th>
-                       <th className="text-left py-3 px-4">Officers</th>
-                       <th className="text-left py-3 px-4">Cases</th>
-                       <th className="text-left py-3 px-4">Response Time</th>
-                     </tr>
-                   </thead>
-                   <tbody>
-                     {stationRankings.map((station, index) => (
-                       <tr key={index} className="border-b hover:bg-gray-50">
-                         <td className="py-3 px-4 font-semibold">{index + 1}</td>
-                         <td className="py-3 px-4">{station.name}</td>
-                         <td className="py-3 px-4">
-                           <div className="flex items-center space-x-2">
-                             <div className="w-16 bg-gray-200 rounded-full h-2">
-                               <div 
-                                 className="bg-green-500 h-2 rounded-full" 
-                                 style={{ width: `${station.score}%` }}
-                               ></div>
-                             </div>
-                             <span className="text-sm">{station.score}</span>
-                           </div>
-                         </td>
-                         <td className="py-3 px-4">{station.officers}</td>
-                         <td className="py-3 px-4">{station.cases}</td>
-                         <td className="py-3 px-4 text-green-600 font-semibold">{station.responseTime}</td>
-                       </tr>
-                     ))}
-                   </tbody>
-                 </table>
-               </div>
-             </div>
-           </div>
-         )}
-
          {activeTab === 'profile' && (
            <div className="max-w-4xl mx-auto">
              <div className="bg-white rounded-lg shadow-md p-8">
@@ -787,7 +727,7 @@ export default function PoliceDashboard() {
                  {/* Profile Information */}
                  <div>
                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                   <div className="space-y-4">
+                   <div className="space-y-3">
                      <div className="flex items-center space-x-4">
                        <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                          {profileData.name.split(' ').map(n => n[0]).join('')}
@@ -800,24 +740,16 @@ export default function PoliceDashboard() {
                      
                      <div className="space-y-3">
                        <div className="flex justify-between py-2 border-b">
-                         <span className="text-gray-600">Rank:</span>
-                         <span className="font-medium">{profileData.rank}</span>
-                       </div>
-                       <div className="flex justify-between py-2 border-b">
-                         <span className="text-gray-600">Department:</span>
-                         <span className="font-medium">{profileData.department}</span>
-                       </div>
-                       <div className="flex justify-between py-2 border-b">
-                         <span className="text-gray-600">Experience:</span>
-                         <span className="font-medium">{profileData.experience}</span>
+                         <span className="text-gray-600">User ID:</span>
+                         <span className="font-medium">{userInfo.userId || 'N/A'}</span>
                        </div>
                        <div className="flex justify-between py-2 border-b">
                          <span className="text-gray-600">Email:</span>
-                         <span className="font-medium">{profileData.email}</span>
+                         <span className="font-medium">{userInfo.sub || 'N/A'}</span>
                        </div>
                        <div className="flex justify-between py-2 border-b">
-                         <span className="text-gray-600">Phone:</span>
-                         <span className="font-medium">{profileData.phone}</span>
+                         <span className="text-gray-600">Role:</span>
+                         <span className="font-medium">{userInfo.role || 'N/A'}</span>
                        </div>
                      </div>
                    </div>

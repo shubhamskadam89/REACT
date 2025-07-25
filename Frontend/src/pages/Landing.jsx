@@ -107,7 +107,8 @@ export default function Landing() {
         <div className="relative max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Fast. Reliable. Life-saving
+            REACT (Rapid Emergency Action & Coordination Tool)
+            
             </h1>
             <h2 className="text-2xl md:text-4xl font-semibold text-white mb-8">
               Emergency Services at Your Fingertips

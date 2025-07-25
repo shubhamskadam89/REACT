@@ -1,5 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import mapboxgl from 'mapbox-gl';
+
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
 
 export default function UserDashboard() {
   const navigate = useNavigate();
@@ -20,6 +31,14 @@ export default function UserDashboard() {
   });
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [simType, setSimType] = useState('ambulance');
+  const [simActive, setSimActive] = useState(false);
+  const [simProgress, setSimProgress] = useState(0);
+  const [simCoords, setSimCoords] = useState({ lat: 18.5204, lng: 73.8567 });
+  const simInterval = useRef(null);
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // Mock user data
   const userData = {
@@ -112,6 +131,85 @@ export default function UserDashboard() {
     }
   };
 
+  const handleSimTypeChange = (e) => setSimType(e.target.value);
+  const handleStartSim = () => {
+    setSimActive(true);
+    setSimProgress(0);
+    setSimCoords({ lat: 18.5204, lng: 73.8567 });
+    if (markerRef.current && mapRef.current) {
+      markerRef.current.setLngLat([73.8567, 18.5204]);
+      mapRef.current.flyTo({ center: [73.8567, 18.5204], zoom: 13 });
+    }
+  };
+
+  // Mapbox simulation effect
+  useEffect(() => {
+    if (!simActive) return;
+    if (!window.mapboxgl) {
+      // Dynamically load Mapbox GL JS if not present
+      const script = document.createElement('script');
+      script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+      script.async = true;
+      script.onload = () => setMapLoaded(true);
+      document.body.appendChild(script);
+      const link = document.createElement('link');
+      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      return () => {
+        document.body.removeChild(script);
+        document.head.removeChild(link);
+      };
+    } else {
+      setMapLoaded(true);
+    }
+  }, [simActive]);
+
+  useEffect(() => {
+    if (!simActive || !mapLoaded) return;
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
+    if (!mapRef.current) {
+      mapRef.current = new mapboxgl.Map({
+        container: 'sim-mapbox',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [73.8567, 18.5204],
+        zoom: 13
+      });
+    }
+    if (!markerRef.current) {
+      markerRef.current = new mapboxgl.Marker({ color: simType === 'ambulance' ? '#2563eb' : '#f59e42' })
+        .setLngLat([73.8567, 18.5204])
+        .addTo(mapRef.current);
+    }
+    simInterval.current = setInterval(() => {
+      setSimProgress((p) => {
+        if (p >= 100) {
+          clearInterval(simInterval.current);
+          setSimActive(false);
+          return 100;
+        }
+        const newLat = 18.5204 + 0.01 * (p / 100);
+        const newLng = 73.8567 + 0.01 * (p / 100);
+        setSimCoords({ lat: newLat, lng: newLng });
+        if (markerRef.current) markerRef.current.setLngLat([newLng, newLat]);
+        if (mapRef.current) mapRef.current.flyTo({ center: [newLng, newLat], zoom: 13 });
+        return p + 2;
+      });
+    }, 200);
+    return () => clearInterval(simInterval.current);
+  }, [simActive, mapLoaded, simType]);
+
+  // Clean up map and marker on unmount or when simulation ends
+  useEffect(() => {
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      markerRef.current = null;
+    };
+  }, []);
+
   const QuickActionCard = ({ title, description, icon, onClick, color }) => (
     <div 
       onClick={onClick}
@@ -126,6 +224,9 @@ export default function UserDashboard() {
       </div>
     </div>
   );
+
+  const jwt = localStorage.getItem('jwt');
+  const userInfo = decodeJWT(jwt);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -476,7 +577,6 @@ export default function UserDashboard() {
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Track Emergency Response</h2>
                 <p className="text-gray-600">Monitor real-time location and estimated arrival time of emergency vehicles</p>
               </div>
-              
               <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded-2xl p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
@@ -487,22 +587,42 @@ export default function UserDashboard() {
                       type="text"
                       placeholder="Enter request ID"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      disabled={simActive}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Vehicle Type
                     </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select
+                      value={simType}
+                      onChange={handleSimTypeChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      disabled={simActive}
+                    >
                       <option value="ambulance">Ambulance</option>
                       <option value="fire_truck">Fire Truck</option>
-                      <option value="police">Police</option>
                     </select>
                   </div>
                 </div>
-                <button className="w-full bg-gradient-to-r from-blue-600 to-red-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-red-700 transition duration-300 shadow-lg">
-                  Track Emergency Vehicle
+                <button
+                  className="w-full bg-gradient-to-r from-blue-600 to-red-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-red-700 transition duration-300 shadow-lg"
+                  onClick={handleStartSim}
+                  disabled={simActive}
+                >
+                  {simActive ? 'Simulating...' : 'Track Emergency Vehicle'}
                 </button>
+                <div className="mt-8 flex flex-col items-center">
+                  <div className="mb-4 w-full h-64 rounded-lg border shadow" id="sim-mapbox" />
+                  <div className="mb-2 text-gray-700">Current Coordinates: <span className="font-mono">{simCoords.lat.toFixed(5)}, {simCoords.lng.toFixed(5)}</span></div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className={`h-3 rounded-full ${simType === 'ambulance' ? 'bg-blue-500' : 'bg-orange-500'}`}
+                      style={{ width: `${simProgress}%` }}
+                    ></div>
+                  </div>
+                  <div className="mt-2 text-sm text-gray-500">{simProgress < 100 ? 'Vehicle en route...' : 'Arrived!'}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -558,16 +678,16 @@ export default function UserDashboard() {
                     
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b">
+                        <span className="text-gray-600">User ID:</span>
+                        <span className="font-medium">{userInfo.userId || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Email:</span>
-                        <span className="font-medium">{userData.email}</span>
+                        <span className="font-medium">{userInfo.sub || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Phone:</span>
-                        <span className="font-medium">{userData.phone}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Address:</span>
-                        <span className="font-medium">{userData.address}</span>
+                        <span className="text-gray-600">Role:</span>
+                        <span className="font-medium">{userInfo.role || 'N/A'}</span>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Animated Section Header
@@ -36,115 +36,59 @@ export default function AmbulanceDashboard() {
   });
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ambulances, setAmbulances] = useState([]);
+  const [ambulancesLoading, setAmbulancesLoading] = useState(false);
+  const [ambulancesError, setAmbulancesError] = useState('');
+  const [recentEmergencies, setRecentEmergencies] = useState([]);
+  const [emergenciesLoading, setEmergenciesLoading] = useState(false);
+  const [emergenciesError, setEmergenciesError] = useState('');
 
-  // Mock ambulance data
-  const ambulanceData = {
-    totalAmbulances: 45,
-    availableAmbulances: 32,
-    onCallAmbulances: 8,
-    maintenanceAmbulances: 5,
-    totalDrivers: 52,
-    activeDrivers: 48,
-    totalEmergencies: 156,
-    resolvedEmergencies: 142,
-    averageResponseTime: '3.2 min'
-  };
-
-  // Mock ambulance drivers
-  const ambulanceDrivers = [
-    {
-      id: 1,
-      name: 'Dr. Sarah Johnson',
-      license: 'AMB-2024-001',
-      vehicle: 'AMB-001',
-      status: 'Available',
-      rating: 4.8,
-      emergenciesHandled: 45,
-      experience: '8 years'
-    },
-    {
-      id: 2,
-      name: 'Dr. Michael Chen',
-      license: 'AMB-2024-002',
-      vehicle: 'AMB-002',
-      status: 'On Call',
-      rating: 4.9,
-      emergenciesHandled: 52,
-      experience: '12 years'
-    },
-    {
-      id: 3,
-      name: 'Dr. Emily Rodriguez',
-      license: 'AMB-2024-003',
-      vehicle: 'AMB-003',
-      status: 'Available',
-      rating: 4.7,
-      emergenciesHandled: 38,
-      experience: '6 years'
+  // Fetch ambulance data from API when drivers or rankings tab is active
+  useEffect(() => {
+    if (activeTab === 'drivers' || activeTab === 'rankings') {
+      setAmbulancesLoading(true);
+      setAmbulancesError('');
+      fetch('http://localhost:8080/ambulance/all')
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch ambulances');
+          return res.json();
+        })
+        .then((data) => {
+          // Sort by lastUpdated descending for rankings
+          const sorted = [...data].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+          setAmbulances(sorted);
+        })
+        .catch(() => {
+          setAmbulancesError('Could not load ambulances.');
+        })
+        .finally(() => setAmbulancesLoading(false));
     }
-  ];
+  }, [activeTab]);
 
-  // Mock recent emergencies
-  const recentEmergencies = [
-    {
-      id: 'E-2024-001',
-      type: 'Medical Emergency',
-      location: 'Downtown Medical Center',
-      status: 'Resolved',
-      driver: 'Dr. Sarah Johnson',
-      responseTime: '2.5 min',
-      timestamp: '2024-01-15 14:30'
-    },
-    {
-      id: 'E-2024-002',
-      type: 'Traffic Accident',
-      location: 'Highway 101',
-      status: 'In Progress',
-      driver: 'Dr. Michael Chen',
-      responseTime: '3.1 min',
-      timestamp: '2024-01-15 15:45'
-    },
-    {
-      id: 'E-2024-003',
-      type: 'Cardiac Emergency',
-      location: 'City Hospital',
-      status: 'Resolved',
-      driver: 'Dr. Emily Rodriguez',
-      responseTime: '2.8 min',
-      timestamp: '2024-01-15 16:20'
+  // Fetch recent emergencies from API when overview tab is active
+  useEffect(() => {
+    if (activeTab === 'overview') {
+      setEmergenciesLoading(true);
+      setEmergenciesError('');
+      const jwt = localStorage.getItem('jwt');
+      fetch('http://localhost:8080/booking/ambulance', {
+        headers: {
+          'Authorization': `Bearer ${jwt}`
+        }
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch emergencies');
+          return res.json();
+        })
+        .then((data) => {
+          setRecentEmergencies(data);
+        })
+        .catch(() => {
+          setEmergenciesError('Could not load recent emergencies.');
+        })
+        .finally(() => setEmergenciesLoading(false));
     }
-  ];
-
-  // Mock ambulance rankings
-  const ambulanceRankings = [
-    {
-      rank: 1,
-      driver: 'Dr. Michael Chen',
-      vehicle: 'AMB-002',
-      emergenciesHandled: 52,
-      avgResponseTime: '2.8 min',
-      rating: 4.9,
-      efficiency: '98%'
-    },
-    {
-      rank: 2,
-      driver: 'Dr. Sarah Johnson',
-      vehicle: 'AMB-001',
-      emergenciesHandled: 45,
-      avgResponseTime: '3.1 min',
-      rating: 4.8,
-      efficiency: '96%'
-    },
-    {
-      rank: 3,
-      driver: 'Dr. Emily Rodriguez',
-      vehicle: 'AMB-003',
-      emergenciesHandled: 38,
-      avgResponseTime: '3.3 min',
-      rating: 4.7,
-      efficiency: '94%'
-    }
-  ];
+  }, [activeTab]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -336,7 +280,7 @@ export default function AmbulanceDashboard() {
                   <div className="text-3xl mr-4 text-primary">🚑</div>
                   <div>
                     <p className="text-sm text-gray-600">Total Ambulances</p>
-                    <p className="text-2xl font-bold text-gray-900">{ambulanceData.totalAmbulances}</p>
+                    <p className="text-2xl font-bold text-gray-900">{ambulances.length}</p>
                   </div>
                 </div>
               </div>
@@ -345,7 +289,7 @@ export default function AmbulanceDashboard() {
                   <div className="text-3xl mr-4 text-secondary">👨‍⚕️</div>
                   <div>
                     <p className="text-sm text-gray-600">Active Drivers</p>
-                    <p className="text-2xl font-bold text-green-600">{ambulanceData.activeDrivers}</p>
+                    <p className="text-2xl font-bold text-green-600">N/A</p>
                   </div>
                 </div>
               </div>
@@ -354,7 +298,7 @@ export default function AmbulanceDashboard() {
                   <div className="text-3xl mr-4 text-accent">🚨</div>
                   <div>
                     <p className="text-sm text-gray-600">Emergencies</p>
-                    <p className="text-2xl font-bold text-blue-600">{ambulanceData.totalEmergencies}</p>
+                    <p className="text-2xl font-bold text-blue-600">N/A</p>
                   </div>
                 </div>
               </div>
@@ -363,7 +307,7 @@ export default function AmbulanceDashboard() {
                   <div className="text-3xl mr-4 text-primary">⏱️</div>
                   <div>
                     <p className="text-sm text-gray-600">Avg Response</p>
-                    <p className="text-2xl font-bold text-purple-600">{ambulanceData.averageResponseTime}</p>
+                    <p className="text-2xl font-bold text-purple-600">N/A</p>
                   </div>
                 </div>
               </div>
@@ -372,22 +316,44 @@ export default function AmbulanceDashboard() {
             {/* Recent Emergencies */}
             <div className="bg-white/90 rounded-lg shadow-emergency p-6 animate-fade-in">
               <SectionHeader icon="🚨" title="Recent Emergencies" />
-              <div className="space-y-4">
-                {recentEmergencies.map((emergency, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{emergency.type}</p>
-                      <p className="text-xs text-gray-500">{emergency.location} • {emergency.driver}</p>
-                      <p className="text-xs text-gray-500">Response: {emergency.responseTime}</p>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      emergency.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {emergency.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              {emergenciesLoading ? (
+                <div className="text-center py-8 text-blue-600 font-semibold">Loading emergencies...</div>
+              ) : emergenciesError ? (
+                <div className="text-center py-8 text-red-600 font-semibold">{emergenciesError}</div>
+              ) : recentEmergencies.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">No recent emergencies found.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Victim Phone</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Lat</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Lng</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {recentEmergencies.map((em) => (
+                        <tr key={em.booking_id}>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.booking_id}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.issue_type}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${em.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{em.status}</span>
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap">{new Date(em.created_at).toLocaleString()}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.victim_phone_number}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.pickup_latitude}</td>
+                          <td className="px-4 py-2 whitespace-nowrap">{em.pickup_longitude}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -395,40 +361,48 @@ export default function AmbulanceDashboard() {
         {activeTab === 'drivers' && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Ambulance Drivers</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {ambulanceDrivers.map((driver) => (
-                    <tr key={driver.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{driver.name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.license}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.vehicle}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          driver.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {driver.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">⭐ {driver.rating}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.experience}</td>
+            {ambulancesLoading ? (
+              <div className="text-center py-8 text-blue-600 font-semibold">Loading ambulances...</div>
+            ) : ambulancesError ? (
+              <div className="text-center py-8 text-red-600 font-semibold">{ambulancesError}</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reg Number</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver Phone</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Longitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {ambulances.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="text-center py-8 text-gray-500">No ambulances found.</td>
+                      </tr>
+                    ) : ambulances.map((amb) => (
+                      <tr key={amb.id} className="hover:bg-blue-50 transition">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{amb.regNumber}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{amb.driverName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{amb.driverPhone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                            ${amb.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}
+                          `}>{amb.status}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{Number(amb.latitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{Number(amb.longitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(amb.lastUpdated).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -517,24 +491,8 @@ export default function AmbulanceDashboard() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Emergencies</h2>
             <div className="space-y-4">
-              {recentEmergencies.map((emergency, index) => (
-                <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 transition">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{emergency.type}</h3>
-                      <p className="text-sm text-gray-600">ID: {emergency.id}</p>
-                      <p className="text-sm text-gray-600">{emergency.location} • {emergency.driver}</p>
-                      <p className="text-sm text-gray-600">Response Time: {emergency.responseTime}</p>
-                      <p className="text-sm text-gray-600">{emergency.timestamp}</p>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      emergency.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {emergency.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
+              {/* recentEmergencies is no longer used, so this section will be empty or show a placeholder */}
+              <div className="text-center py-8 text-gray-500">No recent emergencies found.</div>
             </div>
           </div>
         )}
@@ -589,43 +547,54 @@ export default function AmbulanceDashboard() {
 
         {activeTab === 'rankings' && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Driver Rankings</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Emergencies</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Response</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Efficiency</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {ambulanceRankings.map((driver) => (
-                    <tr key={driver.rank}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-lg font-bold text-gray-900">#{driver.rank}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{driver.driver}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.vehicle}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.emergenciesHandled}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{driver.avgResponseTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">⭐ {driver.rating}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                          {driver.efficiency}
-                        </span>
-                      </td>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Ambulance Rankings</h2>
+            {ambulancesLoading ? (
+              <div className="text-center py-8 text-blue-600 font-semibold">Loading rankings...</div>
+            ) : ambulancesError ? (
+              <div className="text-center py-8 text-red-600 font-semibold">{ambulancesError}</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">#</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Reg Number</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Driver Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Driver Phone</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Latitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Longitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">Last Updated</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {ambulances.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="text-center py-8 text-gray-500">No ambulances found.</td>
+                      </tr>
+                    ) : ambulances.map((amb, idx) => (
+                      <tr key={amb.id} className="hover:bg-blue-50 transition">
+                        <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">{idx + 1}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.regNumber}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.driverName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200">{amb.driverPhone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                            ${amb.status === 'AVAILABLE' ? 'bg-green-200 text-green-900 border border-green-400' : 
+                              amb.status === 'ON_CALL' ? 'bg-yellow-200 text-yellow-900 border border-yellow-400' : 
+                              amb.status === 'MAINTENANCE' ? 'bg-purple-200 text-purple-900 border border-purple-400' : 
+                              'bg-gray-200 text-gray-900 border border-gray-400'}
+                          `}>{amb.status}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{Number(amb.latitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{Number(amb.longitude).toFixed(4)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b border-gray-200">{new Date(amb.lastUpdated).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -655,15 +624,15 @@ export default function AmbulanceDashboard() {
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Total Ambulances:</span>
-                        <span className="font-medium">{ambulanceData.totalAmbulances}</span>
+                        <span className="font-medium">{ambulances.length}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Active Drivers:</span>
-                        <span className="font-medium">{ambulanceData.activeDrivers}</span>
+                        <span className="font-medium">N/A</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Average Response Time:</span>
-                        <span className="font-medium">{ambulanceData.averageResponseTime}</span>
+                        <span className="font-medium">N/A</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Service Coverage:</span>

@@ -99,6 +99,20 @@ export default function Landing() {
     }
   ];
 
+  // Add a React logo SVG as a component at the top
+  const ReactLogo = () => (
+    <svg width="64" height="64" viewBox="0 0 841.9 595.3" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <circle cx="420.9" cy="296.5" r="45.7" fill="#61DAFB"/>
+        <g stroke="#61DAFB" strokeWidth="30" fill="none">
+          <ellipse rx="218.7" ry="545.9" transform="rotate(60 420.9 296.5)"/>
+          <ellipse rx="218.7" ry="545.9" transform="rotate(120 420.9 296.5)"/>
+          <ellipse rx="218.7" ry="545.9" transform="rotate(180 420.9 296.5)"/>
+        </g>
+      </g>
+    </svg>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
       {/* Hero Section */}
@@ -392,6 +406,13 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* Add React logo and text at the top */}
+      <div className="flex flex-col items-center justify-center mt-8 mb-8">
+        <ReactLogo />
+        <span className="text-4xl font-bold text-blue-600 mt-2">REACT</span>
+        <span className="text-lg text-gray-700 mt-1 tracking-wide">(Rapid Emergency Action & Coordination Tool)</span>
+      </div>
     </div>
   );
 } 

@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenUtils } from '../../services/api';
 
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
+
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJleWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
 
 const UserHistory = () => {
@@ -228,6 +238,7 @@ const AmbulanceList = () => {
   const [ambulances, setAmbulances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const mapRef = React.useRef(null);
 
   useEffect(() => {
     const fetchAmbulances = async () => {
@@ -253,9 +264,54 @@ const AmbulanceList = () => {
     fetchAmbulances();
   }, []);
 
+  // Map rendering
+  useEffect(() => {
+    if (!window.mapboxgl || !ambulances.length) return;
+    window.mapboxgl.accessToken = MAPBOX_TOKEN;
+    if (mapRef.current) {
+      mapRef.current.innerHTML = '';
+    }
+    const map = new window.mapboxgl.Map({
+      container: 'ambulance-list-map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [ambulances[0]?.longitude || 73.8167, ambulances[0]?.latitude || 18.5304],
+      zoom: 11
+    });
+    ambulances.forEach(a => {
+      if (a.longitude && a.latitude) {
+        const marker = new window.mapboxgl.Marker({ color: a.status === 'AVAILABLE' ? 'green' : a.status === 'EN_ROUTE' ? 'orange' : 'red' })
+          .setLngLat([a.longitude, a.latitude])
+          .setPopup(new window.mapboxgl.Popup().setHTML(`<div><b>Reg Number:</b> ${a.regNumber}<br/><b>Status:</b> ${a.status}</div>`))
+          .addTo(map);
+      }
+    });
+    return () => map.remove();
+  }, [ambulances]);
+
+  // Load Mapbox GL JS script if not present
+  useEffect(() => {
+    if (window.mapboxgl) return;
+    const script = document.createElement('script');
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+    script.async = true;
+    script.onload = () => {};
+    document.body.appendChild(script);
+    const link = document.createElement('link');
+    link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    return () => {
+      document.body.removeChild(script);
+      document.head.removeChild(link);
+    };
+  }, []);
+
   return (
     <section className="mb-8">
       <h2 className="text-xl font-semibold mb-4">All Ambulances</h2>
+      <div className="mb-6">
+        <div id="ambulance-list-map" ref={mapRef} className="w-full h-96 rounded-lg shadow border" />
+      </div>
       {loading ? (
         <div className="text-gray-500">Loading ambulances...</div>
       ) : error ? (
@@ -302,6 +358,7 @@ const FireBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const mapRef = React.useRef(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -327,9 +384,54 @@ const FireBookings = () => {
     fetchBookings();
   }, []);
 
+  // Map rendering
+  useEffect(() => {
+    if (!window.mapboxgl || !bookings.length) return;
+    window.mapboxgl.accessToken = MAPBOX_TOKEN;
+    if (mapRef.current) {
+      mapRef.current.innerHTML = '';
+    }
+    const map = new window.mapboxgl.Map({
+      container: 'fire-bookings-map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [bookings[0]?.pickup_longitude || 73.8167, bookings[0]?.pickup_latitude || 18.5304],
+      zoom: 11
+    });
+    bookings.forEach(b => {
+      if (b.pickup_longitude && b.pickup_latitude) {
+        const marker = new window.mapboxgl.Marker({ color: b.status === 'COMPLETED' ? 'green' : b.status === 'PENDING' ? 'orange' : 'red' })
+          .setLngLat([b.pickup_longitude, b.pickup_latitude])
+          .setPopup(new window.mapboxgl.Popup().setHTML(`<div><b>Issue:</b> ${b.issue_type}<br/><b>Status:</b> ${b.status}</div>`))
+          .addTo(map);
+      }
+    });
+    return () => map.remove();
+  }, [bookings]);
+
+  // Load Mapbox GL JS script if not present
+  useEffect(() => {
+    if (window.mapboxgl) return;
+    const script = document.createElement('script');
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+    script.async = true;
+    script.onload = () => {};
+    document.body.appendChild(script);
+    const link = document.createElement('link');
+    link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    return () => {
+      document.body.removeChild(script);
+      document.head.removeChild(link);
+    };
+  }, []);
+
   return (
     <section className="mb-8">
       <h2 className="text-xl font-semibold mb-4">Fire Bookings</h2>
+      <div className="mb-6">
+        <div id="fire-bookings-map" ref={mapRef} className="w-full h-96 rounded-lg shadow border" />
+      </div>
       {loading ? (
         <div className="text-gray-500">Loading fire bookings...</div>
       ) : error ? (
@@ -386,6 +488,7 @@ const TABS = [
   { key: 'allBookings', label: 'All Bookings' },
   { key: 'ambulances', label: 'Ambulances' },
   { key: 'fireBookings', label: 'Fire Bookings' },
+  { key: 'profile', label: 'Profile' },
 ];
 
 const AdminDashboard = () => {
@@ -423,6 +526,9 @@ const AdminDashboard = () => {
     tokenUtils.removeToken();
     navigate('/login');
   };
+
+  const jwt = localStorage.getItem('jwt');
+  const userInfo = decodeJWT(jwt);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -506,6 +612,27 @@ const AdminDashboard = () => {
       {activeTab === 'allBookings' && <AllBookings />}
       {activeTab === 'ambulances' && <AmbulanceList />}
       {activeTab === 'fireBookings' && <FireBookings />}
+      {activeTab === 'profile' && (
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Admin Profile</h2>
+            <div className="space-y-4">
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-gray-600">User ID:</span>
+                <span className="font-medium">{userInfo.userId || 'N/A'}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-gray-600">Email:</span>
+                <span className="font-medium">{userInfo.sub || 'N/A'}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-gray-600">Role:</span>
+                <span className="font-medium">{userInfo.role || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

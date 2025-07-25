@@ -1,5 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
 
 export default function FireDashboard() {
   const navigate = useNavigate();
@@ -35,6 +45,47 @@ export default function FireDashboard() {
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
   const [reportTruckId, setReportTruckId] = useState('');
+  const [fireBookings, setFireBookings] = useState([]);
+  const [fireBookingsLoading, setFireBookingsLoading] = useState(false);
+  const [fireBookingsError, setFireBookingsError] = useState('');
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState('');
+
+  useEffect(() => {
+    setStatsLoading(true);
+    setStatsError('');
+    fetch('http://localhost:8080/api/dashboard/stats', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('jwt') || ''}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch dashboard stats');
+        return res.json();
+      })
+      .then(data => setDashboardStats(data))
+      .catch(() => setStatsError('Could not load dashboard stats.'))
+      .finally(() => setStatsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'emergencies') {
+      setFireBookingsLoading(true);
+      setFireBookingsError('');
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      fetch('http://localhost:8080/booking/fire', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch fire bookings');
+          return res.json();
+        })
+        .then(data => setFireBookings(data))
+        .catch(() => setFireBookingsError('Could not load fire bookings.'))
+        .finally(() => setFireBookingsLoading(false));
+    }
+  }, [activeTab]);
 
   const handleStationChange = (e) => {
     const { name, value } = e.target;
@@ -344,6 +395,9 @@ export default function FireDashboard() {
     </div>
   );
 
+  const jwt = localStorage.getItem('jwt');
+  const userInfo = decodeJWT(jwt);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Header */}
@@ -416,30 +470,38 @@ export default function FireDashboard() {
           <div className="space-y-8">
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard 
-                title="Total Stations" 
-                value={stats.totalStations} 
-                subtitle="Active fire stations"
-                gradient="bg-gradient-to-br from-orange-500 to-orange-600"
-              />
-              <StatCard 
-                title="Active Trucks" 
-                value={stats.activeTrucks} 
-                subtitle="Available fire trucks"
-                gradient="bg-gradient-to-br from-red-500 to-red-600"
-              />
-              <StatCard 
-                title="Emergency Calls" 
-                value={stats.emergencyCalls} 
-                subtitle="Today's calls"
-                gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
-              />
-              <StatCard 
-                title="Avg Response Time" 
-                value={stats.responseTime} 
-                subtitle="Emergency response"
-                gradient="bg-gradient-to-br from-green-500 to-green-600"
-              />
+              {statsLoading ? (
+                <div className="col-span-4 text-center py-8 text-orange-600 font-semibold">Loading statistics...</div>
+              ) : statsError ? (
+                <div className="col-span-4 text-center py-8 text-red-600 font-semibold">{statsError}</div>
+              ) : dashboardStats ? (
+                <>
+                  <StatCard
+                    title="Total Stations"
+                    value={dashboardStats.total_fire_stations}
+                    subtitle="Active fire stations"
+                    gradient="bg-gradient-to-br from-orange-500 to-orange-600"
+                  />
+                  <StatCard
+                    title="Total Fire Trucks"
+                    value={dashboardStats.total_fire_trucks}
+                    subtitle="Available fire trucks"
+                    gradient="bg-gradient-to-br from-red-500 to-red-600"
+                  />
+                  <StatCard
+                    title="Fire Service Bookings"
+                    value={dashboardStats.fire_service_bookings}
+                    subtitle="Today's calls"
+                    gradient="bg-gradient-to-br from-yellow-500 to-yellow-600"
+                  />
+                  <StatCard
+                    title="Avg Completion Time"
+                    value={dashboardStats.average_completion_time_minutes + ' min'}
+                    subtitle="Emergency response"
+                    gradient="bg-gradient-to-br from-green-500 to-green-600"
+                  />
+                </>
+              ) : null}
             </div>
 
             {/* Quick Actions */}
@@ -530,29 +592,37 @@ export default function FireDashboard() {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Emergencies</h3>
               <div className="space-y-3">
-                {recentEmergencies.map((emergency, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${
-                        emergency.status === 'Resolved' ? 'bg-green-500' :
-                        emergency.status === 'In Progress' ? 'bg-yellow-500' : 'bg-red-500'
-                      }`}></div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{emergency.id}</p>
-                        <p className="text-xs text-gray-500">{emergency.type} • {emergency.location}</p>
+                {fireBookingsLoading ? (
+                  <div className="text-blue-600">Loading fire bookings...</div>
+                ) : fireBookingsError ? (
+                  <div className="text-red-600">{fireBookingsError}</div>
+                ) : fireBookings.length === 0 ? (
+                  <div className="text-gray-500">No recent emergencies found.</div>
+                ) : (
+                  fireBookings.slice(0, 5).map((b) => (
+                    <div key={b.booking_id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-3 h-3 rounded-full ${
+                          b.status === 'COMPLETED' ? 'bg-green-500' :
+                          b.status === 'PENDING' ? 'bg-yellow-500' : 'bg-red-500'
+                        }`}></div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{b.issue_type}</p>
+                          <p className="text-xs text-gray-500">Booking ID: {b.booking_id}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          b.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                          b.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {b.status}
+                        </span>
+                        <p className="text-xs text-gray-400 mt-1">{new Date(b.created_at).toLocaleString()}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        emergency.status === 'Resolved' ? 'bg-green-100 text-green-800' :
-                        emergency.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {emergency.status}
-                      </span>
-                      <p className="text-xs text-gray-400 mt-1">{emergency.time}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -909,8 +979,59 @@ export default function FireDashboard() {
 
         {activeTab === 'emergencies' && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Emergency Monitoring</h2>
-            <p className="text-gray-600">Emergency monitoring features coming soon...</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Fire Emergency Requests</h2>
+            {fireBookingsLoading ? (
+              <div className="text-blue-600">Loading fire bookings...</div>
+            ) : fireBookingsError ? (
+              <div className="text-red-600">{fireBookingsError}</div>
+            ) : fireBookings.length === 0 ? (
+              <div className="text-gray-500">No fire bookings found.</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white rounded shadow">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2 border-b">Booking ID</th>
+                      <th className="px-4 py-2 border-b">Issue Type</th>
+                      <th className="px-4 py-2 border-b">Status</th>
+                      <th className="px-4 py-2 border-b">Created At</th>
+                      <th className="px-4 py-2 border-b">Victim Phone</th>
+                      <th className="px-4 py-2 border-b">Requested By</th>
+                      <th className="px-4 py-2 border-b">For Self</th>
+                      <th className="px-4 py-2 border-b">Ambulance?</th>
+                      <th className="px-4 py-2 border-b">Police?</th>
+                      <th className="px-4 py-2 border-b">Fire Brigade?</th>
+                      <th className="px-4 py-2 border-b">Ambulance Count</th>
+                      <th className="px-4 py-2 border-b">Police Count</th>
+                      <th className="px-4 py-2 border-b">Fire Truck Count</th>
+                      <th className="px-4 py-2 border-b">Pickup Lat</th>
+                      <th className="px-4 py-2 border-b">Pickup Lng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fireBookings.map(b => (
+                      <tr key={b.booking_id}>
+                        <td className="px-4 py-2 border-b text-center">{b.booking_id}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.issue_type}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.status}</td>
+                        <td className="px-4 py-2 border-b text-center">{new Date(b.created_at).toLocaleString()}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.victim_phone_number}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.requested_by_user_id}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.is_for_self ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.needs_ambulance ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.needs_police ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.needs_fire_brigade ? 'Yes' : 'No'}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.requested_ambulance_count}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.requested_police_count}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.requested_fire_truck_count}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.pickup_latitude}</td>
+                        <td className="px-4 py-2 border-b text-center">{b.pickup_longitude}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -1083,38 +1204,18 @@ export default function FireDashboard() {
                 {/* Profile Information */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                        {profileData.name.split(' ').map(n => n[0]).join('')}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{profileData.name}</h4>
-                        <p className="text-sm text-gray-600">Badge: {profileData.badge}</p>
-                      </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-gray-600">User ID:</span>
+                      <span className="font-medium">{userInfo.userId || 'N/A'}</span>
                     </div>
-                    
-                    <div className="space-y-3">
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Rank:</span>
-                        <span className="font-medium">{profileData.rank}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Department:</span>
-                        <span className="font-medium">{profileData.department}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Experience:</span>
-                        <span className="font-medium">{profileData.experience}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Email:</span>
-                        <span className="font-medium">{profileData.email}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-gray-600">Phone:</span>
-                        <span className="font-medium">{profileData.phone}</span>
-                      </div>
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-gray-600">Email:</span>
+                      <span className="font-medium">{userInfo.sub || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-gray-600">Role:</span>
+                      <span className="font-medium">{userInfo.role || 'N/A'}</span>
                     </div>
                   </div>
                 </div>
