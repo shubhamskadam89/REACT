@@ -1,230 +1,367 @@
-10:32:23.668 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com1
-10:32:23.668 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com1
-10:32:23.983 [http-nio-8080-exec-2] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for admin@gmail.com1
-10:32:30.260 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:32:30.261 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:32:30.458 [http-nio-8080-exec-4] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for admin@gmail.com
-10:32:50.661 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:32:50.662 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:32:50.832 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
-10:33:10.680 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:33:10.682 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:33:10.862 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
-10:40:09.465 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:40:09.466 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:40:09.633 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
-10:42:35.883 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:42:35.885 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:42:36.234 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
-10:43:26.904 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
-10:43:26.905 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
-10:43:27.090 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
-10:44:02.234 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
-10:44:02.234 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
-10:44:02.440 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
-10:46:52.862 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
-10:46:52.863 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
-10:46:53.031 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
-10:49:09.161 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-10:49:09.161 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-10:49:09.385 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-10:49:55.830 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-10:49:55.831 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-10:49:56.003 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-10:51:59.426 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.com
-10:51:59.428 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.com
-10:51:59.534 [http-nio-8080-exec-5] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for police@police.com
-10:52:04.723 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.com
-10:52:04.724 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.com
-10:52:04.823 [http-nio-8080-exec-6] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for police@police.com
-10:52:18.358 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
-10:52:18.358 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
-10:52:18.545 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
-10:56:16.878 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
-10:56:16.878 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
-10:56:17.041 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
-10:57:27.385 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
-10:57:27.386 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
-10:57:27.578 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
-10:57:40.224 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
-10:57:40.224 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
-10:57:40.399 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
-12:35:50.588 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@gmail.com
-12:35:50.589 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@gmail.com
-12:35:50.866 [http-nio-8080-exec-2] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambulance1@gmail.com
-12:36:15.363 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-12:36:15.364 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-12:36:15.577 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-12:42:38.962 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-12:42:38.963 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-12:42:39.161 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-13:08:15.993 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-13:08:15.994 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-13:08:16.804 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-13:29:12.981 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance1@example.com
-13:29:12.981 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance1@example.com
-13:29:13.364 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance1@example.com
-15:59:39.363 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
-15:59:39.363 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
-15:59:39.582 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
-19:03:15.524 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail sDminBoss@examplecom for Role: USER
-19:03:15.525 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: sDminBoss@examplecom
-19:03:15.994 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully: sDminBoss@examplecom (Role: USER)
-19:03:27.379 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail sDminBoss@examplecom for Role: USER
-19:03:27.379 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering new user: sDminBoss@examplecom
-19:03:27.478 [http-nio-8080-exec-3] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 23464334
-19:04:38.313 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail sDminBoss@examplecom for Role: USER
-19:04:38.313 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Registering new user: sDminBoss@examplecom
-19:04:38.436 [http-nio-8080-exec-1] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 23464334
-19:04:46.306 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:04:46.306 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering new user: 
-19:04:46.394 [http-nio-8080-exec-3] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 23464334
-19:05:01.456 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:05:01.456 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering new user: 
-19:05:01.919 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - User registered successfully:  (Role: USER)
-19:12:06.679 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:12:06.679 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Registering new user: 
-19:12:06.893 [http-nio-8080-exec-1] ERROR c.R.backend.auth.service.AuthService - Duplicate email exists: 
-19:12:26.551 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:12:26.552 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering new user: 
-19:12:27.020 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - User registered successfully:  (Role: USER)
-19:15:25.472 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:15:25.473 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: 
-19:15:26.051 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully:  (Role: USER)
-19:23:25.177 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:23:25.178 [http-nio-8080-exec-2] ERROR c.R.backend.auth.service.AuthService - Blank email id provided 
-19:23:34.746 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:23:34.746 [http-nio-8080-exec-3] ERROR c.R.backend.auth.service.AuthService - Blank email id provided 
-19:25:26.292 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:25:26.293 [http-nio-8080-exec-6] ERROR c.R.backend.auth.service.AuthService - Blank email id provided 
-19:25:27.239 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:25:27.240 [http-nio-8080-exec-7] ERROR c.R.backend.auth.service.AuthService - Blank email id provided 
-19:25:49.250 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail  for Role: USER
-19:25:49.250 [http-nio-8080-exec-2] ERROR c.R.backend.auth.service.AuthService - Blank email id provided 
-19:26:01.534 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail a@gmail.com for Role: USER
-19:26:01.534 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering new user: a@gmail.com
-19:26:01.696 [http-nio-8080-exec-4] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 234643444638
-19:27:13.482 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail a@gmail.com for Role: USER
-19:27:13.482 [http-nio-8080-exec-2] ERROR c.R.backend.auth.service.AuthService - Blank full name provided 
-19:27:23.329 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agmail.com for Role: USER
-19:27:23.329 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering new user: agmail.com
-19:27:23.479 [http-nio-8080-exec-4] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 234643444638
-19:28:45.767 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agmail.com for Role: USER
-19:28:45.767 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering new user: agmail.com
-19:28:46.324 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - User registered successfully: agmail.com (Role: USER)
-19:28:55.944 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agmailcom for Role: USER
-19:28:55.944 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering new user: agmailcom
-19:28:56.400 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - User registered successfully: agmailcom (Role: USER)
-19:31:53.021 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agseilcom for Role: USER
-19:31:53.274 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: agseilcom
-19:31:53.566 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully: agseilcom (Role: USER)
-19:32:09.425 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agseilcom for Role: USER
-19:32:09.597 [http-nio-8080-exec-3] ERROR c.R.backend.auth.service.AuthService - Duplicate email exists: agseilcom
-19:32:13.734 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail agseicdwclcom for Role: USER
-19:32:14.215 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering new user: agseicdwclcom
-19:32:14.476 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - User registered successfully: agseicdwclcom (Role: USER)
-19:42:26.245 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ajssnw@gmail.com for Role: USER
-19:42:26.473 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: ajssnw@gmail.com
-19:42:26.737 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully: ajssnw@gmail.com (Role: USER)
-19:42:51.189 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ajssnw@gmail.com for Role: USER
-19:42:51.301 [http-nio-8080-exec-5] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 123456789012
-19:42:59.474 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ajssnw@gmail.com for Role: USER
-19:42:59.610 [http-nio-8080-exec-7] ERROR c.R.backend.auth.service.AuthService - Duplicate email exists: ajssnw@gmail.com
-19:57:11.705 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail shanti.vermma@gov.com for Role: FIRE_DRIVER
-19:57:11.705 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: shanti.vermma@gov.com
-19:57:12.436 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Assigning driver Shani Verma to fire station: Shivajinagar Fire Station
-19:57:12.738 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Fire truck driver registered: shanti.vermma@gov.com, assigned truck: MH12AA0001
-19:59:38.181 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail shati.vermma@gov.com for Role: FIRE_DRIVER
-19:59:38.183 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: shati.vermma@gov.com
-19:59:38.291 [http-nio-8080-exec-7] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 236534562345
-19:59:44.581 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail shati.vermma@gov.com for Role: FIRE_DRIVER
-19:59:44.581 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: shati.vermma@gov.com
-19:59:45.034 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Assigning driver Shanti Verma to fire station: Shivajinagar Fire Station
-19:59:45.352 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Fire truck driver registered: shati.vermma@gov.com, assigned truck: MH12AA0001
-20:03:29.844 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ronak.kale@fire.com for Role: FIRE_DRIVER
-20:03:29.844 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: ronak.kale@fire.com
-20:03:30.113 [http-nio-8080-exec-1] ERROR c.R.backend.auth.service.AuthService - Fire Driver with this license exist MH-FIRE-001
-20:03:35.733 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ronak.kale@fire.com for Role: FIRE_DRIVER
-20:03:35.733 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: ronak.kale@fire.com
-20:03:36.081 [http-nio-8080-exec-4] ERROR c.R.backend.auth.service.AuthService - Vehicle with number platen MH12AA0001 already exist
-20:03:40.870 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ronak.kale@fire.com for Role: FIRE_DRIVER
-20:03:40.871 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering fire truck driver: ronak.kale@fire.com
-20:03:41.915 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Assigning driver Ronak Kale to fire station: Shivajinagar Fire Station
-20:03:42.208 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Fire truck driver registered: ronak.kale@fire.com, assigned truck: MH12AA0002
-20:14:27.139 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulance3@example.com for Role: AMBULANCE_DRIVER
-20:14:27.140 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulance3@example.com
-20:14:27.362 [http-nio-8080-exec-4] ERROR c.R.backend.auth.service.AuthService - Duplicate email exists: ambulance3@example.com
-20:15:03.150 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail vishnu.jadhav@example.com for Role: AMBULANCE_DRIVER
-20:15:03.151 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: vishnu.jadhav@example.com
-20:15:03.700 [http-nio-8080-exec-8] ERROR c.R.backend.auth.service.AuthService - Ambulance Driver with this license exist MH-AMBU-003
-20:15:17.541 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail vishnu.jadhav@example.com for Role: AMBULANCE_DRIVER
-20:15:17.542 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: vishnu.jadhav@example.com
-20:15:17.875 [http-nio-8080-exec-9] ERROR c.R.backend.auth.service.AuthService - Ambulance with number plate MH12AB9874 already exist
-20:15:28.788 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail vishnu.jadhav@example.com for Role: AMBULANCE_DRIVER
-20:15:28.789 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: vishnu.jadhav@example.com
-20:15:30.157 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Ambulance driver registered: vishnu.jadhav@example.com, vehicle: MH12AB1122
-20:15:59.876 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail abc@gmail.com
-20:15:59.877 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for abc@gmail.com
-20:15:59.993 [http-nio-8080-exec-7] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for abc@gmail.com
-20:25:38.899 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail abc@gmail.com
-20:25:38.900 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for abc@gmail.com
-20:25:39.014 [http-nio-8080-exec-1] WARN  c.R.backend.auth.service.AuthService - No user with this email abc@gmail.com exist
-20:26:27.252 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ronak.kale@fire.com
-20:26:27.253 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for ronak.kale@fire.com
-20:26:27.557 [http-nio-8080-exec-6] WARN  c.R.backend.auth.service.AuthService - Invalid password entered for  email ronak.kale@fire.com
-20:26:50.630 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ronak.kale@fire.com
-20:26:50.631 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for ronak.kale@fire.com
-20:26:51.028 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for ronak.kale@fire.com
-20:29:55.679 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey@police.gov for Role: POLICE_OFFICER
-20:29:55.679 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey@police.gov
-20:29:56.338 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Assigning officer Chulbul Pandey to station Hadapsar Police Outpost
-20:29:56.574 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Police officer registered: chulbul.pandey@police.gov
-20:30:05.830 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey1@police.gov for Role: POLICE_OFFICER
-20:30:05.830 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey1@police.gov
-20:30:06.255 [http-nio-8080-exec-8] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 137234562345
-20:30:12.012 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey1@police.gov for Role: POLICE_OFFICER
-20:30:12.013 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey1@police.gov
-20:30:12.214 [http-nio-8080-exec-10] ERROR c.R.backend.auth.service.AuthService - Duplicate phone number: 1112223334
-20:30:25.300 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey1@police.gov for Role: POLICE_OFFICER
-20:30:25.300 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey1@police.gov
-20:30:25.416 [http-nio-8080-exec-5] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 137234562345
-20:31:00.421 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey1@police.gov for Role: POLICE_OFFICER
-20:31:00.421 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey1@police.gov
-20:31:00.649 [http-nio-8080-exec-10] ERROR c.R.backend.auth.service.AuthService - Duplicate phone number: 1112223334
-20:31:39.194 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail chulbul.pandey1@police.gov for Role: POLICE_OFFICER
-20:31:39.194 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering police officer: chulbul.pandey1@police.gov
-20:31:39.316 [http-nio-8080-exec-5] ERROR c.R.backend.auth.service.AuthService - Duplicate government ID: 137234562345
-20:32:22.045 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail rahul.dinanath@police.gov for Role: POLICE_OFFICER
-20:32:22.046 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering police officer: rahul.dinanath@police.gov
-20:32:22.506 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Assigning officer Rahul Dinanath to station Hadapsar Police Outpost
-20:32:22.745 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Police officer registered: rahul.dinanath@police.gov
-20:46:36.906 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail mehul.chowksi@police.gov for Role: POLICE_OFFICER
-20:46:36.907 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering police officer: mehul.chowksi@police.gov
-20:46:37.736 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Assigning officer Mehul Chowksi to station Hadapsar Police Outpost
-20:46:37.977 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Police officer registered: mehul.chowksi@police.gov
-21:01:25.286 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail mehul.chowksi@police.gov
-21:01:25.286 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for mehul.chowksi@police.gov
-21:01:25.640 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for mehul.chowksi@police.gov
-21:04:44.886 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail vishnu.jadhav@example.com
-21:04:44.887 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for vishnu.jadhav@example.com
-21:04:45.173 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for vishnu.jadhav@example.com
-21:16:16.024 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail vishnu.jadhav@example.com
-21:16:16.025 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for vishnu.jadhav@example.com
-21:16:16.458 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for vishnu.jadhav@example.com
-21:40:05.678 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail amit.shah@ambulance.com for Role: HOSPITAL_ADMIN
-21:40:06.023 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Registering new user: amit.shah@ambulance.com
-21:41:17.523 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail amit.shah@ambulance.com for Role: HOSPITAL_ADMIN
-21:41:17.989 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Registering new user: amit.shah@ambulance.com
-21:41:18.309 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - User registered successfully: amit.shah@ambulance.com (Role: HOSPITAL_ADMIN)
-21:53:46.030 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shah@ambulance.com
-21:53:46.030 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shah@ambulance.com
-21:53:46.308 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for amit.shah@ambulance.com
-21:54:09.767 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shah@ambulance.com
-21:54:09.768 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shah@ambulance.com
-21:54:10.066 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for amit.shah@ambulance.com
-23:23:13.336 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shah@example.com
-23:23:13.336 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shah@example.com
-23:23:13.469 [http-nio-8080-exec-2] WARN  c.R.backend.auth.service.AuthService - No user with this email amit.shah@example.com exist
-23:23:24.488 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shah@ambulance.com
-23:23:24.489 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shah@ambulance.com
-23:23:24.844 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for amit.shah@ambulance.com
+00:01:12.347 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+00:01:12.348 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+00:01:12.706 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+00:35:28.929 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+00:35:28.929 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+00:35:29.268 [http-nio-8080-exec-1] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for Ambulance@gmail.com
+00:35:33.528 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+00:35:33.528 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+00:35:33.752 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+00:48:20.610 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+00:48:20.610 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+00:48:20.803 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+01:12:20.886 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+01:12:20.889 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+01:12:21.145 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+01:14:08.484 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+01:14:08.488 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+01:14:08.722 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+01:18:46.572 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+01:18:46.572 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+01:18:46.890 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+01:22:47.077 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+01:22:47.079 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+01:22:47.313 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+01:38:22.670 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+01:38:22.673 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+01:38:22.906 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+01:40:20.388 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.sharmafire@example.com
+01:40:20.388 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.sharmafire@example.com
+01:40:20.448 [http-nio-8080-exec-9] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for manohar.sharmafire@example.com
+01:40:27.571 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+01:40:27.571 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+01:40:28.000 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+01:40:57.894 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+01:40:57.896 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+01:40:58.157 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+11:01:27.235 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:01:27.236 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:01:27.443 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+11:05:04.426 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:05:04.427 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:05:04.553 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+11:05:29.795 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:05:29.795 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:05:29.905 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+11:10:18.361 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:10:18.362 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:10:18.481 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+11:22:36.204 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:22:36.205 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:22:36.334 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+11:46:40.928 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+11:46:40.928 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+11:46:41.050 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+12:14:09.248 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+12:14:09.249 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+12:14:09.397 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+12:23:26.018 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+12:23:26.019 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+12:23:26.158 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+12:24:28.814 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+12:24:28.814 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+12:24:28.964 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+12:28:50.274 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+12:28:50.275 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+12:28:50.409 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+12:33:18.139 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+12:33:18.141 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+12:33:18.271 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+12:38:13.849 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.sharma@example.com
+12:38:13.849 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.sharma@example.com
+12:38:13.931 [http-nio-8080-exec-6] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for manohar.sharma@example.com
+12:38:25.182 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail fireAdmin@gmail.com
+12:38:25.182 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for fireAdmin@gmail.com
+12:38:25.309 [http-nio-8080-exec-8] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for fireAdmin@gmail.com
+12:38:28.219 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail fireAdmin@gmail.com
+12:38:28.219 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for fireAdmin@gmail.com
+12:38:28.343 [http-nio-8080-exec-1] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for fireAdmin@gmail.com
+12:38:30.520 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail fireAdmin@gmail.com
+12:38:30.520 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for fireAdmin@gmail.com
+12:38:30.655 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for fireAdmin@gmail.com
+12:43:40.905 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+12:43:40.906 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+12:43:41.430 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+12:44:15.693 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+12:44:15.695 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+12:44:17.171 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+12:56:03.162 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail shridharhande13@gmail.com
+12:56:03.163 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for shridharhande13@gmail.com
+12:56:03.238 [http-nio-8080-exec-10] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for shridharhande13@gmail.com
+12:56:18.701 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+12:56:18.703 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+12:56:18.943 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+12:56:38.779 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail fireAdmin@gmail.com
+12:56:38.779 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for fireAdmin@gmail.com
+12:56:39.019 [http-nio-8080-exec-3] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for fireAdmin@gmail.com
+12:56:41.702 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail fireAdmin@gmail.com
+12:56:41.702 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for fireAdmin@gmail.com
+12:56:42.004 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for fireAdmin@gmail.com
+12:56:53.696 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+12:56:53.698 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+12:56:53.883 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+13:03:25.227 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+13:03:25.227 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+13:03:25.425 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+13:13:09.335 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+13:13:09.336 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+13:13:09.623 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+13:13:59.098 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+13:13:59.098 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+13:13:59.309 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+13:19:37.408 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+13:19:37.408 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+13:19:37.581 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+13:19:44.741 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+13:19:44.741 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+13:19:44.888 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+13:19:54.461 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+13:19:54.464 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+13:19:54.665 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+14:22:48.160 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail abcde@example.com
+14:22:48.162 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for abcde@example.com
+14:22:48.253 [http-nio-8080-exec-2] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for abcde@example.com
+14:23:14.144 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail rajveer.singhr@police.gov
+14:23:14.144 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for rajveer.singhr@police.gov
+14:23:14.206 [http-nio-8080-exec-9] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for rajveer.singhr@police.gov
+14:25:10.025 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail USER@USER.gov for Role: USER 
+14:25:10.025 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering new user: USER@USER.gov
+14:25:58.018 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail USER@gmail.com for Role: USER 
+14:25:58.018 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering new user: USER@gmail.com
+14:25:58.771 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - User registered successfully: USER@gmail.com (Role: USER)
+14:26:19.494 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail USER@gmail.com
+14:26:19.495 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for USER@gmail.com
+14:26:19.629 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for USER@gmail.com
+15:33:32.608 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+15:33:32.687 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+15:33:32.874 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+15:33:48.953 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+15:33:48.953 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+15:33:49.178 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+15:34:15.919 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulace3@gmail.com
+15:34:15.920 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulace3@gmail.com
+15:34:15.975 [http-nio-8080-exec-10] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambulace3@gmail.com
+15:34:22.558 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulace3@example.com
+15:34:22.558 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulace3@example.com
+15:34:22.604 [http-nio-8080-exec-1] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambulace3@example.com
+15:34:29.408 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+15:34:29.408 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+15:34:29.529 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+15:35:21.646 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+15:35:21.646 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+15:35:21.960 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+15:38:44.078 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance@example.com
+15:38:44.086 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance@example.com
+15:38:44.161 [http-nio-8080-exec-2] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambulance@example.com
+15:38:56.989 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance@example.com
+15:38:56.990 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance@example.com
+15:38:57.051 [http-nio-8080-exec-7] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambulance@example.com
+15:39:00.559 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+15:39:00.559 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+15:39:00.733 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+15:40:40.077 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+15:40:40.078 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+15:40:40.280 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+15:41:20.066 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+15:41:20.068 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+15:41:20.240 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+15:45:04.644 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.sharma@example.com
+15:45:04.645 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.sharma@example.com
+15:45:04.696 [http-nio-8080-exec-6] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for manohar.sharma@example.com
+15:55:28.429 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+15:55:28.431 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+15:55:28.589 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+16:00:22.783 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+16:00:22.784 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+16:00:22.925 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+16:00:28.165 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+16:00:28.165 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+16:00:28.355 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+16:01:53.270 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+16:01:53.270 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+16:01:53.462 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+16:07:22.906 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+16:07:22.907 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+16:07:23.088 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+16:20:40.344 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+16:20:40.344 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+16:20:40.491 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+16:31:38.541 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+16:31:38.542 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+16:31:38.759 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+16:34:13.251 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+16:34:13.251 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+16:34:13.387 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+16:34:55.540 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+16:34:55.541 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+16:34:55.669 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+16:35:31.823 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+16:35:31.824 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+16:35:31.980 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+16:36:47.257 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+16:36:47.258 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+16:36:47.396 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+16:41:00.718 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+16:41:00.718 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+16:41:00.878 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+16:47:54.772 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+16:47:54.774 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+16:47:54.984 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+16:52:44.567 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+16:52:44.568 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+16:52:44.772 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+16:54:12.545 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail driver@driver.gov for Role: AMBULANCE_DRIVER 
+16:54:12.546 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: driver@driver.gov
+16:54:19.154 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail driver@driver.gov for Role: AMBULANCE_DRIVER 
+16:54:19.154 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: driver@driver.gov
+16:54:19.280 [http-nio-8080-exec-7] ERROR c.R.backend.auth.service.AuthService - Duplicate phone number: 096653899
+16:54:28.428 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail driver@driver.gov for Role: AMBULANCE_DRIVER 
+16:54:28.428 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: driver@driver.gov
+16:54:28.538 [http-nio-8080-exec-4] ERROR c.R.backend.auth.service.AuthService - Duplicate phone number: 096653899
+16:54:34.892 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail driver@driver.gov for Role: AMBULANCE_DRIVER 
+16:54:34.893 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: driver@driver.gov
+16:54:35.035 [http-nio-8080-exec-6] ERROR c.R.backend.auth.service.AuthService - Duplicate phone number: 096653899
+16:55:05.645 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:55:05.646 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:55:08.898 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:55:08.898 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:55:51.538 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:55:51.538 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:55:55.181 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:55:55.181 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:55:59.750 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:55:59.751 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:57:01.970 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail dri22ver@driver.gov for Role: AMBULANCE_DRIVER 
+16:57:01.972 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: dri22ver@driver.gov
+16:59:38.261 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+16:59:38.262 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:02.530 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+17:00:02.530 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:04.626 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+17:00:04.626 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:17.439 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+17:00:17.439 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:18.365 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+17:00:18.365 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:19.345 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulace@gmail.com for Role: AMBULANCE_DRIVER 
+17:00:19.345 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulace@gmail.com
+17:00:56.093 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulance32@example.com for Role: AMBULANCE_DRIVER 
+17:00:56.093 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulance32@example.com
+17:01:10.325 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulance32@example.com for Role: AMBULANCE_DRIVER 
+17:01:10.325 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulance32@example.com
+17:01:11.872 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail ambulance32@example.com for Role: AMBULANCE_DRIVER 
+17:01:11.872 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: ambulance32@example.com
+17:04:30.737 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail driver@driver.gov for Role: AMBULANCE_DRIVER 
+17:04:30.739 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Registering ambulance driver: driver@driver.gov
+17:04:31.882 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Ambulance driver registered: driver@driver.gov, vehicle: 1233333
+17:10:02.335 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+17:10:02.335 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+17:10:02.533 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+17:10:47.818 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:10:47.819 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:10:47.969 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:13:36.494 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@admin.com
+17:13:36.495 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@admin.com
+17:13:36.563 [http-nio-8080-exec-10] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for admin@admin.com
+17:13:39.940 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@admin.com
+17:13:39.940 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@admin.com
+17:13:39.999 [http-nio-8080-exec-3] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for admin@admin.com
+17:14:03.752 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+17:14:03.754 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+17:14:03.886 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+17:14:32.951 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.co
+17:14:32.951 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.co
+17:14:33.002 [http-nio-8080-exec-5] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for manohar.shattrma@example.co
+17:14:35.894 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:14:35.894 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:14:36.008 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:14:55.436 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:14:55.436 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:14:55.558 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:15:50.320 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.com
+17:15:50.320 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.com
+17:15:50.375 [http-nio-8080-exec-6] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for police@police.com
+17:15:57.729 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+17:15:57.729 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+17:15:57.849 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+17:23:23.677 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail admin@gmail.com
+17:23:23.678 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for admin@gmail.com
+17:23:24.138 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for admin@gmail.com
+17:27:19.195 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:27:19.196 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:27:19.353 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:29:36.173 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail USER@gmail.com
+17:29:36.174 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for USER@gmail.com
+17:29:36.301 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for USER@gmail.com
+17:29:58.644 [http-nio-8080-exec-7] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:29:58.645 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:29:58.782 [http-nio-8080-exec-7] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:35:19.457 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail USER@gmail.com
+17:35:19.457 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for USER@gmail.com
+17:35:19.564 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for USER@gmail.com
+17:51:16.071 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambhulance3@example.com
+17:51:16.072 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambhulance3@example.com
+17:51:16.150 [http-nio-8080-exec-9] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for ambhulance3@example.com
+17:51:45.193 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+17:51:45.193 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+17:51:45.314 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+17:52:44.576 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+17:52:44.576 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+17:52:44.697 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+17:54:30.713 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+17:54:30.713 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+17:54:30.827 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+17:59:07.306 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail USER@gmail.com
+17:59:07.306 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for USER@gmail.com
+17:59:07.456 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for USER@gmail.com
+18:02:55.003 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+18:02:55.004 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+18:02:55.154 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+18:05:54.963 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ambulance3@example.com
+18:05:54.963 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for ambulance3@example.com
+18:05:55.108 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for ambulance3@example.com
+18:07:01.611 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail driver@driver.gov
+18:07:01.611 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for driver@driver.gov
+18:07:01.740 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for driver@driver.gov
+18:19:02.019 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+18:19:02.019 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+18:19:02.136 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+21:40:24.193 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+21:40:24.193 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+21:40:24.550 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+22:03:52.590 [http-nio-8080-exec-8] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+22:03:52.590 [http-nio-8080-exec-8] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+22:03:52.763 [http-nio-8080-exec-8] WARN  c.R.backend.auth.service.AuthService - Invalid login attempt for manohar.shattrma@example.com
+22:03:55.370 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+22:03:55.370 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+22:03:55.573 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+22:27:14.595 [http-nio-8080-exec-10] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail USER@gmail.com
+22:27:14.595 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login attempt for USER@gmail.com
+22:27:14.964 [http-nio-8080-exec-10] INFO  c.R.backend.auth.service.AuthService - Login successful for USER@gmail.com
+22:30:08.589 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+22:30:08.591 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+22:30:08.941 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+22:36:23.024 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+22:36:23.026 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+22:36:23.351 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+22:40:16.621 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+22:40:16.623 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+22:40:16.971 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+22:42:25.523 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+22:42:25.524 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+22:42:25.692 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+22:42:50.464 [http-nio-8080-exec-6] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+22:42:50.464 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+22:42:50.642 [http-nio-8080-exec-6] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
+22:58:54.963 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+22:58:54.964 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+22:58:55.244 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+23:13:50.680 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail Ambulance@gmail.com
+23:13:50.680 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login attempt for Ambulance@gmail.com
+23:13:51.014 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Login successful for Ambulance@gmail.com
+23:15:04.187 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail police@police.gov
+23:15:04.192 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for police@police.gov
+23:15:04.372 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for police@police.gov
+23:15:33.922 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail manohar.shattrma@example.com
+23:15:33.922 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for manohar.shattrma@example.com
+23:15:34.319 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for manohar.shattrma@example.com
