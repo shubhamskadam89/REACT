@@ -8,12 +8,23 @@ import { UserIcon, HomeIcon, ClockIcon, MapIcon as MapOutlineIcon } from '@heroi
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJreWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
 
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
+
 function getProfileFromJWT() {
   try {
     const jwt = localStorage.getItem('jwt') || localStorage.getItem('token');
     if (!jwt) return null;
-    const payload = JSON.parse(atob(jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    const payload = decodeJWT(jwt);
     return {
+      id: payload.id || payload.userId || payload.sub,
       name: payload.name || payload.sub || 'Unknown',
       phone: payload.phone || payload.phoneNumber || '',
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(payload.name || payload.sub || 'User')}&background=2563eb&color=fff&size=128`,
@@ -24,12 +35,11 @@ function getProfileFromJWT() {
 }
 
 const mockProfile = {
+  id: null,
   name: 'John Doe',
   phone: '+91 9876543210',
   avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff&size=128',
 };
-
-const profile = getProfileFromJWT() || mockProfile;
 const mockHistory = [
   { id: 1, date: '2025-07-23', status: 'Completed', from: '18.53, 73.81', to: '18.54, 73.82', issue: 'Cardiac Arrest' },
   { id: 2, date: '2025-07-22', status: 'Completed', from: '18.51, 73.80', to: '18.52, 73.83', issue: 'Road Accident' },
@@ -77,8 +87,17 @@ export default function AmbulanceDriverPage() {
   const sliderRef = useRef();
   const [routeInfo, setRouteInfo] = useState(null);
   const [activePage, setActivePage] = useState('dashboard');
+  const [profile, setProfile] = useState(getProfileFromJWT() || mockProfile);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState('');
 
   const [completionSlideIn, setCompletionSlideIn] = useState(false);
+  
+  // Live location update states
+  const [locationUpdateLoading, setLocationUpdateLoading] = useState(false);
+  const [locationUpdateMessage, setLocationUpdateMessage] = useState('');
+  const [autoLocationUpdate, setAutoLocationUpdate] = useState(false);
+  const [locationUpdateInterval, setLocationUpdateInterval] = useState(null);
   const [shiftStartTime] = useState(new Date('2025-01-07T06:00:00'));
   const [currentTime, setCurrentTime] = useState(new Date());
   const [vehicleStatus] = useState({
@@ -119,6 +138,60 @@ export default function AmbulanceDriverPage() {
 
   const handleCursorEnter = () => setCursorVariant('hover');
   const handleCursorLeave = () => setCursorVariant('default');
+
+  const fetchProfile = async () => {
+    console.log('Current profile state:', profile);
+    console.log('JWT token:', localStorage.getItem('jwt') || localStorage.getItem('token'));
+    
+    if (!profile.id) {
+      console.log('No profile ID available from JWT');
+      return;
+    }
+
+    setProfileLoading(true);
+    setProfileError('');
+    
+    try {
+      const response = await fetch(`http://localhost:8080/ambulance/profile/${profile.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt') || localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const profileData = await response.json();
+      console.log('Fetched profile data:', profileData);
+      
+      setProfile({
+        id: profileData.id || profile.id,
+        name: profileData.name || profile.name,
+        phone: profileData.mobile || profile.phone,
+        email: profileData.email,
+        licenseNumber: profileData.licenseNumber,
+        govId: profileData.govId,
+        ambulanceRegNumber: profileData.ambulanceRegNumber,
+        role: profileData.role,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name || profile.name)}&background=2563eb&color=fff&size=128`,
+      });
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setProfileError('Failed to fetch profile data. Please try again.');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch profile when profile page is accessed
+    if (activePage === 'profile') {
+      fetchProfile();
+    }
+  }, [activePage]);
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -167,10 +240,16 @@ export default function AmbulanceDriverPage() {
     }
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
-        setUserLocation({
+        const newLocation = {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude
-        });
+        };
+        setUserLocation(newLocation);
+        
+        // Auto-update location if enabled
+        if (autoLocationUpdate) {
+          handleLocationUpdate(newLocation.latitude, newLocation.longitude);
+        }
       },
       (err) => {
           console.error('Geolocation error:', err);
@@ -181,7 +260,7 @@ export default function AmbulanceDriverPage() {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [autoLocationUpdate]);
 
   const handleComplete = async () => {
     setSliderAnimating(false);
@@ -222,6 +301,82 @@ export default function AmbulanceDriverPage() {
     }
   };
 
+  // Update location with live coordinates
+  const handleLocationUpdate = async (latitude, longitude) => {
+    setLocationUpdateLoading(true);
+    setLocationUpdateMessage('');
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setLocationUpdateMessage('Authentication token not found. Please login again.');
+        return;
+      }
+
+      // Get driver ID from JWT token
+      const userInfo = decodeJWT(token);
+      const driverId = userInfo.userId || userInfo.id;
+
+      if (!driverId) {
+        setLocationUpdateMessage('Driver ID not found in token.');
+        return;
+      }
+
+      const res = await fetch('http://localhost:8080/ambulance/location/update', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ambulanceId: driverId, // Using driver ID as ambulance ID
+          latitude: latitude,
+          longitude: longitude
+        })
+      });
+
+      if (res.ok) {
+        setLocationUpdateMessage('Location updated successfully!');
+        toast.success('Location updated successfully!');
+      } else {
+        const errorData = await res.json();
+        setLocationUpdateMessage(errorData.message || 'Failed to update location');
+        toast.error(errorData.message || 'Failed to update location');
+      }
+    } catch (err) {
+      setLocationUpdateMessage('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLocationUpdateLoading(false);
+    }
+  };
+
+  // Toggle automatic location updates
+  const toggleAutoLocationUpdate = () => {
+    if (autoLocationUpdate) {
+      // Stop automatic updates
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+        setLocationUpdateInterval(null);
+      }
+      setAutoLocationUpdate(false);
+      toast.info('Automatic location updates stopped');
+    } else {
+      // Start automatic updates
+      if (userLocation) {
+        const interval = setInterval(() => {
+          if (userLocation) {
+            handleLocationUpdate(userLocation.latitude, userLocation.longitude);
+          }
+        }, 30000); // Update every 30 seconds
+        setLocationUpdateInterval(interval);
+        setAutoLocationUpdate(true);
+        toast.success('Automatic location updates started (every 30 seconds)');
+      } else {
+        toast.error('Location not available. Please enable location services.');
+      }
+    }
+  };
+
   useEffect(() => {
     if (slideValue === 100 && !completed && !loading) {
       setSliderAnimating(true);
@@ -231,6 +386,15 @@ export default function AmbulanceDriverPage() {
       return () => clearTimeout(timer);
     }
   }, [slideValue, completed, loading]);
+
+  // Cleanup location update interval on unmount
+  useEffect(() => {
+    return () => {
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+      }
+    };
+  }, [locationUpdateInterval]);
 
   useEffect(() => {
     if (!userLocation || !appointment || !MAPBOX_TOKEN) return;
@@ -526,6 +690,72 @@ export default function AmbulanceDriverPage() {
                 </div>
               </motion.div>
 
+              {/* Location Update Controls */}
+              <motion.div 
+                className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg border border-white/20 p-6 mb-6" 
+                variants={itemVariants}
+                onMouseEnter={handleCursorEnter}
+                onMouseLeave={handleCursorLeave}
+              >
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <MdLocationOn className="text-xl text-blue-400" />
+                  Location Management
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                    <h4 className="text-white font-semibold mb-2">Current Location</h4>
+                    {userLocation ? (
+                      <div className="text-sm text-white/80">
+                        <p>Latitude: {userLocation.latitude.toFixed(6)}</p>
+                        <p>Longitude: {userLocation.longitude.toFixed(6)}</p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-red-400">Location not available</p>
+                    )}
+                  </div>
+                  
+                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                    <h4 className="text-white font-semibold mb-2">Location Updates</h4>
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => userLocation && handleLocationUpdate(userLocation.latitude, userLocation.longitude)}
+                        disabled={locationUpdateLoading || !userLocation}
+                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                      >
+                        {locationUpdateLoading ? 'Updating...' : 'Update Location Now'}
+                      </button>
+                      
+                      <button
+                        onClick={toggleAutoLocationUpdate}
+                        disabled={!userLocation}
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                          autoLocationUpdate 
+                            ? 'bg-red-600 hover:bg-red-700 text-white' 
+                            : 'bg-green-600 hover:bg-green-700 text-white'
+                        }`}
+                      >
+                        {autoLocationUpdate ? 'Stop Auto Updates' : 'Start Auto Updates'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {locationUpdateMessage && (
+                  <motion.div
+                    className={`mt-4 p-3 rounded-lg text-sm border ${
+                      locationUpdateMessage.includes('success')
+                        ? 'bg-green-500/20 text-green-300 border-green-500/30'
+                        : 'bg-red-500/20 text-red-300 border-red-500/30'
+                    }`}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    {locationUpdateMessage}
+                  </motion.div>
+                )}
+              </motion.div>
+
               {/* Weather and Performance Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6" variants={itemVariants}>
@@ -773,20 +1003,96 @@ export default function AmbulanceDriverPage() {
             </motion.div>
           )}
           {activePage === 'profile' && (
-            <motion.div className="bg-white rounded-xl shadow p-6 max-w-md mx-auto" variants={containerVariants} initial="hidden" animate="visible">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Profile</h2>
-              <div className="flex flex-col items-center gap-4">
-                <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-500 shadow-md" />
-                <div className="font-bold text-lg text-gray-900">{profile.name}</div>
-                <div className="text-gray-600 flex items-center gap-1"><FaPhoneAlt className="inline mr-1 text-blue-500" />{profile.phone}</div>
-                <motion.button
-                  className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Edit Profile
-                </motion.button>
-              </div>
+            <motion.div className="bg-white/10 backdrop-blur-md rounded-xl shadow p-6 max-w-md mx-auto border border-white/20" variants={containerVariants} initial="hidden" animate="visible">
+              <h2 className="text-xl font-bold mb-4 text-white">Profile</h2>
+              
+              {profileLoading && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                  <span className="ml-2 text-white">Loading profile...</span>
+                </div>
+              )}
+              
+              {profileError && (
+                <div className="bg-red-900/50 border border-red-700 text-red-400 p-3 rounded-md mb-4">
+                  {profileError}
+                </div>
+              )}
+              
+              {!profileLoading && !profileError && (
+                <div className="flex flex-col items-center gap-4">
+                  <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-400 shadow-md" />
+                  <div className="font-bold text-lg text-white">{profile.name}</div>
+                  
+                  <div className="w-full space-y-3">
+                    {profile.id && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span>ID: {profile.id}</span>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center gap-2 text-white/80">
+                      <FaPhoneAlt className="text-blue-400" />
+                      <span>{profile.phone}</span>
+                    </div>
+                    
+                    {profile.email && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span>{profile.email}</span>
+                      </div>
+                    )}
+                    
+                    {profile.licenseNumber && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>License: {profile.licenseNumber}</span>
+                      </div>
+                    )}
+                    
+                    {profile.govId && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                        </svg>
+                        <span>Gov ID: {profile.govId}</span>
+                      </div>
+                    )}
+                    
+                    {profile.ambulanceRegNumber && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <FaAmbulance className="text-blue-400" />
+                        <span>Ambulance: {profile.ambulanceRegNumber}</span>
+                      </div>
+                    )}
+                    
+                    {profile.role && (
+                      <div className="flex items-center gap-2 text-white/80">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span>Role: {profile.role}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <motion.button
+                    className="mt-4 bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={fetchProfile}
+                  >
+                    Refresh Profile
+                  </motion.button>
+                </div>
+              )}
             </motion.div>
           )}
         </main>

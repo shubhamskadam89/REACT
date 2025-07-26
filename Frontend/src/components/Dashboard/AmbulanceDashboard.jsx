@@ -75,12 +75,12 @@ const navIconVariants = {
 function SectionHeader({ icon, title }) {
   return (
     <motion.h2
-      className="flex items-center gap-3 text-2xl md:text-3xl font-bold mb-6 text-gray-800 border-b-2 border-indigo-200 pb-2"
+      className="flex items-center gap-3 text-2xl md:text-3xl font-bold mb-6 text-white border-b-2 border-indigo-400 pb-2"
       variants={headerVariants}
       initial="hidden"
       animate="visible"
     >
-      <span className="text-indigo-600 text-3xl">{icon}</span>
+      <span className="text-indigo-400 text-3xl">{icon}</span>
       {title}
     </motion.h2>
   );
@@ -142,6 +142,21 @@ export default function AmbulanceDashboard() {
   const [ambulancesError, setAmbulancesError] = useState('');
   const [recentEmergencies, setRecentEmergencies] = useState([]);
   const [emergenciesLoading, setEmergenciesLoading] = useState(false);
+  
+  // Driver profile states
+  const [driverProfile, setDriverProfile] = useState(null);
+  const [driverProfileLoading, setDriverProfileLoading] = useState(false);
+  const [driverProfileError, setDriverProfileError] = useState('');
+  const [selectedDriverId, setSelectedDriverId] = useState('');
+  
+  // Location update states
+  const [locationUpdateForm, setLocationUpdateForm] = useState({
+    ambulanceId: '',
+    latitude: '',
+    longitude: ''
+  });
+  const [locationUpdateLoading, setLocationUpdateLoading] = useState(false);
+  const [locationUpdateMessage, setLocationUpdateMessage] = useState('');
   const [emergenciesError, setEmergenciesError] = useState('');
   const [dashboardStats, setDashboardStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
@@ -595,9 +610,69 @@ export default function AmbulanceDashboard() {
     }
   };
 
+  // Fetch driver profile by ID
+  const handleFetchDriverProfile = async (driverId) => {
+    setDriverProfileLoading(true);
+    setDriverProfileError('');
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setDriverProfileError('Authentication token not found. Please login again.');
+        return;
+      }
+      const res = await fetch(`http://localhost:8080/ambulance/profile/${driverId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDriverProfile(data);
+      } else {
+        const errorData = await res.json();
+        setDriverProfileError(errorData.message || 'Failed to fetch driver profile');
+      }
+    } catch (err) {
+      setDriverProfileError('Network error. Please try again.');
+    } finally {
+      setDriverProfileLoading(false);
+    }
+  };
+
+  // Update ambulance location (for admin)
+  const handleLocationUpdate = async (e) => {
+    e.preventDefault();
+    setLocationUpdateLoading(true);
+    setLocationUpdateMessage('');
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setLocationUpdateMessage('Authentication token not found. Please login again.');
+        return;
+      }
+      const res = await fetch('http://localhost:8080/ambulance/location/update-location', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(locationUpdateForm)
+      });
+      if (res.ok) {
+        setLocationUpdateMessage('Location updated successfully!');
+        setLocationUpdateForm({ ambulanceId: '', latitude: '', longitude: '' });
+      } else {
+        const errorData = await res.json();
+        setLocationUpdateMessage(errorData.message || 'Failed to update location');
+      }
+    } catch (err) {
+      setLocationUpdateMessage('Network error. Please try again.');
+    } finally {
+      setLocationUpdateLoading(false);
+    }
+  };
+
   const QuickActionCard = ({ title, description, icon, onClick, gradient }) => (
     <motion.div
-      className={`bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group relative overflow-hidden`}
+      className={`bg-gray-800 p-4 rounded-xl shadow-md cursor-pointer border border-gray-600 group relative overflow-hidden`}
       onClick={onClick}
       variants={cardVariants}
       initial="hidden"
@@ -605,13 +680,13 @@ export default function AmbulanceDashboard() {
       whileHover="hover"
       whileTap={{ scale: 0.98 }}
     >
-      <div className={`text-4xl mb-4 ${gradient} bg-clip-text text-transparent`}>
+      <div className={`text-3xl mb-3 ${gradient} bg-clip-text text-transparent`}>
         {icon}
       </div>
-      <h3 className="font-semibold text-lg text-gray-800 mb-1">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
+      <h3 className="font-semibold text-base text-white mb-1">{title}</h3>
+      <p className="text-xs text-gray-300">{description}</p>
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
@@ -715,6 +790,8 @@ export default function AmbulanceDashboard() {
             {[
               { id: 'overview', name: 'Overview', icon: <Bars3BottomLeftIcon className="h-5 w-5" /> },
               { id: 'drivers', name: 'Drivers', icon: <UserGroupIcon className="h-5 w-5" /> },
+              { id: 'driver-profile', name: 'Driver Profile', icon: <IdentificationIcon className="h-5 w-5" /> },
+              { id: 'location-update', name: 'Location Update', icon: <MapPinIcon className="h-5 w-5" /> },
               { id: 'vehicles', name: 'Vehicles', icon: <TruckIcon className="h-5 w-5" /> },
               { id: 'emergencies', name: 'Emergencies', icon: <ExclamationCircleIcon className="h-5 w-5" /> },
               { id: 'rankings', name: 'Rankings', icon: <TrophyIcon className="h-5 w-5" /> },
@@ -755,7 +832,7 @@ export default function AmbulanceDashboard() {
         {activeTab === 'overview' && (
           <motion.div className="space-y-10" variants={itemVariants}>
             {/* Quick Actions */}
-            <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+            <div className="bg-black p-8 rounded-lg shadow-xl border border-gray-700">
               <SectionHeader icon={<ClipboardDocumentCheckIcon />} title="Quick Actions" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <QuickActionCard
@@ -804,7 +881,7 @@ export default function AmbulanceDashboard() {
             </div>
 
             {/* Statistics */}
-            <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+            <div className="bg-black p-8 rounded-lg shadow-xl border border-gray-700">
               <SectionHeader icon={<CurrencyDollarIcon />} title="Dashboard Statistics" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statsLoading ? (
@@ -958,6 +1035,176 @@ export default function AmbulanceDashboard() {
                 </motion.tbody>
               </motion.table>
             </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'driver-profile' && (
+          <motion.div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
+            <SectionHeader icon={<IdentificationIcon />} title="Driver Profile Details" />
+            
+            <motion.div className="mb-6 flex flex-col md:flex-row md:items-center gap-4" variants={itemVariants}>
+              <div className="flex-1">
+                <label htmlFor="driverIdInput" className="block text-sm font-medium text-gray-700 mb-2">Driver ID</label>
+                <input
+                  id="driverIdInput"
+                  type="number"
+                  value={selectedDriverId}
+                  onChange={(e) => setSelectedDriverId(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                  placeholder="Enter driver ID (e.g., 6)"
+                  min="1"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => handleFetchDriverProfile(selectedDriverId)}
+                disabled={driverProfileLoading || !selectedDriverId}
+                className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+              >
+                {driverProfileLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Fetching...
+                  </>
+                ) : (
+                  <>
+                    <MagnifyingGlassIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                    Get Driver Profile
+                  </>
+                )}
+              </button>
+            </motion.div>
+
+            {driverProfileError && (
+              <motion.div className="p-3 rounded-md bg-red-50 text-red-700 text-sm border border-red-200 mb-4" variants={itemVariants}>
+                {driverProfileError}
+              </motion.div>
+            )}
+
+            {driverProfile && (
+              <motion.div className="bg-gray-50 rounded-lg p-6 border border-gray-200" variants={itemVariants}>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Driver Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Name</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.name}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Email</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.email}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Mobile</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.mobile}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">License Number</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.licenseNumber}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Government ID</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.govId}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Ambulance Registration</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.ambulanceRegNumber}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">Role</label>
+                    <p className="text-lg font-semibold text-gray-900">{driverProfile.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+
+        {activeTab === 'location-update' && (
+          <motion.div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
+            <SectionHeader icon={<MapPinIcon />} title="Update Ambulance Location" />
+            
+            <form onSubmit={handleLocationUpdate} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label htmlFor="ambulanceIdUpdate" className="block text-sm font-medium text-gray-700 mb-2">Ambulance ID</label>
+                  <input
+                    id="ambulanceIdUpdate"
+                    type="number"
+                    value={locationUpdateForm.ambulanceId}
+                    onChange={(e) => setLocationUpdateForm({...locationUpdateForm, ambulanceId: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                    placeholder="Enter ambulance ID"
+                    min="1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="latitudeUpdate" className="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
+                  <input
+                    id="latitudeUpdate"
+                    type="number"
+                    step="any"
+                    value={locationUpdateForm.latitude}
+                    onChange={(e) => setLocationUpdateForm({...locationUpdateForm, latitude: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                    placeholder="e.g., 18.610400"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="longitudeUpdate" className="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
+                  <input
+                    id="longitudeUpdate"
+                    type="number"
+                    step="any"
+                    value={locationUpdateForm.longitude}
+                    onChange={(e) => setLocationUpdateForm({...locationUpdateForm, longitude: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                    placeholder="e.g., 74.846700"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={locationUpdateLoading}
+                className="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+              >
+                {locationUpdateLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <MapPinIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                    Update Location
+                  </>
+                )}
+              </button>
+
+              {locationUpdateMessage && (
+                <motion.div
+                  className={`p-3 rounded-md text-sm border ${
+                    locationUpdateMessage.includes('success')
+                      ? 'bg-green-50 text-green-700 border-green-200'
+                      : 'bg-red-50 text-red-700 border-red-200'
+                  }`}
+                  role="alert"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {locationUpdateMessage}
+                </motion.div>
+              )}
+            </form>
           </motion.div>
         )}
 

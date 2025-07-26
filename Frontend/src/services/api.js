@@ -21,16 +21,18 @@ const apiCall = async (endpoint, options = {}) => {
   };
 
   try {
+    console.log(`Making API call to: ${url} with method: ${options.method || 'GET'}`);
     const response = await fetch(url, config);
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.error(`API Error for ${url}:`, errorData);
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
     }
     
     return await response.json();
   } catch (error) {
-    console.error('API call failed:', error);
+    console.error(`API call failed for ${url}:`, error);
     throw error;
   }
 };

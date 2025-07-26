@@ -23,6 +23,16 @@ function getProfileFromJWT() {
   }
 }
 
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
+  }
+}
+
 const mockProfile = {
   name: 'Jane Smith',
   phone: '+91 9876543211',
@@ -100,6 +110,12 @@ export default function FireTruckDriverPage() {
     rating: 4.9,
     totalDistance: '89 km'
   });
+
+  // Location update functionality
+  const [locationUpdateLoading, setLocationUpdateLoading] = useState(false);
+  const [locationUpdateMessage, setLocationUpdateMessage] = useState('');
+  const [autoLocationUpdate, setAutoLocationUpdate] = useState(false);
+  const [locationUpdateInterval, setLocationUpdateInterval] = useState(null);
 
   // Custom animated cursor
   const cursorX = useMotionValue(-100);
@@ -191,6 +207,91 @@ export default function FireTruckDriverPage() {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
+
+  // Update location with live coordinates
+  const handleLocationUpdate = async (latitude, longitude) => {
+    setLocationUpdateLoading(true);
+    setLocationUpdateMessage('');
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setLocationUpdateMessage('Authentication token not found. Please login again.');
+        return;
+      }
+
+      // Get driver ID from JWT token
+      const userInfo = decodeJWT(token);
+      const driverId = userInfo.userId || userInfo.id;
+
+      if (!driverId) {
+        setLocationUpdateMessage('Driver ID not found in token.');
+        return;
+      }
+
+      const res = await fetch('http://localhost:8080/fire/truck-driver/v1/update-location', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          truckId: driverId, // Using driver ID as truck ID
+          latitude: latitude,
+          longitude: longitude
+        })
+      });
+
+      if (res.ok) {
+        setLocationUpdateMessage('Location updated successfully!');
+        toast.success('Location updated successfully!');
+      } else {
+        const errorData = await res.json();
+        setLocationUpdateMessage(errorData.message || 'Failed to update location');
+        toast.error(errorData.message || 'Failed to update location');
+      }
+    } catch (err) {
+      setLocationUpdateMessage('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLocationUpdateLoading(false);
+    }
+  };
+
+  // Toggle automatic location updates
+  const toggleAutoLocationUpdate = () => {
+    if (autoLocationUpdate) {
+      // Stop automatic updates
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+        setLocationUpdateInterval(null);
+      }
+      setAutoLocationUpdate(false);
+      toast.info('Automatic location updates stopped');
+    } else {
+      // Start automatic updates
+      if (userLocation) {
+        const interval = setInterval(() => {
+          if (userLocation) {
+            handleLocationUpdate(userLocation.latitude, userLocation.longitude);
+          }
+        }, 30000); // Update every 30 seconds
+        setLocationUpdateInterval(interval);
+        setAutoLocationUpdate(true);
+        toast.success('Automatic location updates started (every 30 seconds)');
+      } else {
+        toast.error('Location not available. Please enable location services.');
+      }
+    }
+  };
+
+  // Cleanup location update interval on unmount
+  useEffect(() => {
+    return () => {
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+      }
+    };
+  }, [locationUpdateInterval]);
 
   const handleComplete = async () => {
     setSliderAnimating(false);
@@ -568,6 +669,65 @@ export default function FireTruckDriverPage() {
                   </div>
                 </motion.div>
               </div>
+
+              {/* Location Management */}
+              <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6" variants={itemVariants}>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <MdLocationOn className="text-xl text-red-600" />
+                  Location Management
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-1">Current Location:</div>
+                      <div className="font-mono text-base text-gray-700">
+                        {userLocation ? `${userLocation.latitude.toFixed(4)}, ${userLocation.longitude.toFixed(4)}` : 'Getting location...'}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => userLocation && handleLocationUpdate(userLocation.latitude, userLocation.longitude)}
+                        disabled={locationUpdateLoading || !userLocation}
+                        className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 transition-all duration-200 shadow"
+                        onMouseEnter={handleCursorEnter}
+                        onMouseLeave={handleCursorLeave}
+                      >
+                        {locationUpdateLoading ? 'Updating...' : 'Update Location'}
+                      </button>
+                      <button
+                        onClick={toggleAutoLocationUpdate}
+                        disabled={!userLocation}
+                        className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow ${
+                          autoLocationUpdate 
+                            ? 'bg-green-600 text-white hover:bg-green-700' 
+                            : 'bg-gray-600 text-white hover:bg-gray-700'
+                        } ${!userLocation ? 'opacity-50' : ''}`}
+                        onMouseEnter={handleCursorEnter}
+                        onMouseLeave={handleCursorLeave}
+                      >
+                        {autoLocationUpdate ? 'Stop Auto' : 'Start Auto'}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-1">Auto Update Status:</div>
+                      <div className={`font-semibold ${autoLocationUpdate ? 'text-green-600' : 'text-gray-600'}`}>
+                        {autoLocationUpdate ? 'Active (every 30 seconds)' : 'Inactive'}
+                      </div>
+                    </div>
+                    {locationUpdateMessage && (
+                      <div className={`p-3 rounded-md text-sm ${
+                        locationUpdateMessage.includes('success') 
+                          ? 'bg-green-100 text-green-700 border border-green-200' 
+                          : 'bg-red-100 text-red-700 border border-red-200'
+                      }`}>
+                        {locationUpdateMessage}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
 
               {error && <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 w-full text-center">{error}</div>}
               {loading && <div className="mb-4 text-blue-600 text-center">Loading...</div>}
