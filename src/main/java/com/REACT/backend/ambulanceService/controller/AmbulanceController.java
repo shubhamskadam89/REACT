@@ -6,17 +6,21 @@ import com.REACT.backend.ambulanceService.dto.AmbulanceLocationUpdateDto;
 import com.REACT.backend.ambulanceService.service.AmbulanceService;
 import com.REACT.backend.ambulanceService.service.impl.AmbulanceLocationServiceImplementation;
 import com.REACT.backend.ambulanceService.service.impl.AmbulanceServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RestController
+@Validated
+
 @RequestMapping("/ambulance/location")
 @RequiredArgsConstructor
 
@@ -34,9 +38,9 @@ public class AmbulanceController {
      * @return Response String
      */
 
-    @PostMapping("/update")
+    @PostMapping("/update-location")
     @PreAuthorize("hasAuthority('AMBULANCE_ADMIN')")
-    public ResponseEntity<String> updateAmbulanceLocation(@RequestBody AmbulanceLocationUpdateDto dto) {
+    public ResponseEntity<String> updateAmbulanceLocation(@Valid @RequestBody AmbulanceLocationUpdateDto dto) {
         log.info("Location update request fetched for ambulance {}",dto.getAmbulanceId());
         ambulanceLocationServiceImplementation.updateLocation(dto);
         return ResponseEntity.ok("Location updated and broadcasted");

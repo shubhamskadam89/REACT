@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/ambulance-driver/v1")
 public class AmbulanceDriverController {
 
@@ -42,7 +44,6 @@ public class AmbulanceDriverController {
      * to get location of current booking
      * @return lo
      */
-
 
     @GetMapping("/get/current-request/location")
     @PreAuthorize("hasAuthority('AMBULANCE_DRIVER')")
