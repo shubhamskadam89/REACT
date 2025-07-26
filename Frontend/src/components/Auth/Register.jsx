@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginImage from '../../assets/login.png'; // Assuming this path is correct
+import LoginImage from '../../assets/login.png';
+import AmbulanceGif from '../../assets/background.gif';
 
 const roles = [
   { value: 'USER', label: 'User (Requester)' },
@@ -28,7 +29,7 @@ export default function Register() {
     securityAnswer: '',
   });
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
 
   // New state for individual input errors
   const [formErrors, setFormErrors] = useState({
@@ -47,10 +48,10 @@ export default function Register() {
 
   // Regex patterns
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phoneRegex = /^[6-9]\d{9}$/; // Indian 10-digit phone number (starts with 6-9)
-  const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/; // Aadhar Card (12 digits, optional spaces)
-  const licenseRegex = /^[A-Z]{2}[0-9]{2}\s?[0-9]{11}$/i; // Indian Driving License (e.g., KA01 20200012345)
-  const vehicleRegRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/i; // Indian Vehicle Registration (e.g., KA01AB1234)
+  const phoneRegex = /^[6-9]\d{9}$/;
+  const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/;
+  const licenseRegex = /^[A-Z]{2}[0-9]{2}\s?[0-9]{11}$/i;
+  const vehicleRegRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/i;
 
   const validateField = (name, value) => {
     let error = '';
@@ -187,9 +188,9 @@ export default function Register() {
         break;
       case 'ADMIN':
         endpoint = 'http://localhost:8080/auth/register/admin';
-        body = { ...form }; // Admins typically don't have station IDs or licenses
+        body = { ...form };
         break;
-      default: // USER
+      default:
         body = { ...form };
         break;
     }
@@ -200,7 +201,6 @@ export default function Register() {
     if (form.role !== 'FIRE_DRIVER') { delete cleanedBody.licenseNumber; delete cleanedBody.vehicleRegNumber; delete cleanedBody.fireStationId; }
     if (form.role !== 'POLICE_OFFICER') { delete cleanedBody.policeStationId; }
     if (form.role === 'USER' || form.role === 'ADMIN') { delete cleanedBody.licenseNumber; delete cleanedBody.vehicleRegNumber; delete cleanedBody.hospitalID; delete cleanedBody.fireStationId; delete cleanedBody.policeStationId; }
-
 
     try {
       const res = await fetch(endpoint, {
@@ -216,12 +216,11 @@ export default function Register() {
           role: 'USER', licenseNumber: '', vehicleRegNumber: '', hospitalID: '',
           fireStationId: '', policeStationId: '', securityQuestion: 'PET_NAME', securityAnswer: '',
         });
-        setFormErrors({}); // Clear all errors on success
-        // Auto-navigate only for Admin, others will login manually
+        setFormErrors({});
         if (form.role === 'ADMIN') {
-          setTimeout(() => navigate('/admin-dashboard'), 1500); // Small delay for message to show
+          setTimeout(() => navigate('/admin-dashboard'), 1500);
         } else {
-            setTimeout(() => navigate('/'), 1500); // Redirect to login for other roles
+            setTimeout(() => navigate('/'), 1500);
         }
       } else {
         const data = await res.json();
@@ -235,7 +234,7 @@ export default function Register() {
   };
 
   const securityQuestions = [
-    { value: 'PET_NAME', label: "What is your pet’s name?" },
+    { value: 'PET_NAME', label: "What is your pet's name?" },
     { value: 'BIRTH_CITY', label: 'In which city were you born?' },
     { value: 'FAVORITE_TEACHER', label: 'Who was your favorite teacher?' },
     { value: 'MOTHER_MAIDEN_NAME', label: "What is your mother's maiden name?" },
@@ -244,49 +243,88 @@ export default function Register() {
   const inputClass = (name) => `w-full px-4 py-2 border ${formErrors[name] ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500`;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 text-gray-900">
-      <div className="flex w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white overflow-hidden">
+      <style jsx>{`
+        .glow-effect {
+          box-shadow: 
+            0 0 20px rgba(59, 130, 246, 0.3),
+            0 0 40px rgba(59, 130, 246, 0.2),
+            0 0 60px rgba(59, 130, 246, 0.1),
+            0 0 80px rgba(59, 130, 246, 0.05);
+          animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+          from {
+            box-shadow: 
+              0 0 20px rgba(59, 130, 246, 0.3),
+              0 0 40px rgba(59, 130, 246, 0.2),
+              0 0 60px rgba(59, 130, 246, 0.1),
+              0 0 80px rgba(59, 130, 246, 0.05);
+          }
+          to {
+            box-shadow: 
+              0 0 30px rgba(59, 130, 246, 0.4),
+              0 0 60px rgba(59, 130, 246, 0.3),
+              0 0 90px rgba(59, 130, 246, 0.2),
+              0 0 120px rgba(59, 130, 246, 0.1);
+          }
+        }
+      `}</style>
+      
+      {/* Full background GIF */}
+      <img
+        src={AmbulanceGif}
+        alt="Ambulance background"
+        className="fixed inset-0 w-full h-full object-cover object-center z-0 select-none pointer-events-none"
+        style={{ filter: 'brightness(0.3) blur(2px)', opacity: 0.4 }}
+        draggable="false"
+      />
+      
+      {/* Main container for the form */}
+      <div className="flex w-full max-w-4xl bg-white/10 rounded-xl shadow-2xl overflow-hidden relative z-10 border border-white/20 glow-effect">
         {/* Left Image (hidden on small screens) */}
-        <div className="hidden md:flex flex-col justify-center items-center bg-gray-100 p-8 w-1/2"> {/* Minimalist gray background */}
+        <div className="hidden md:flex flex-col justify-center items-center bg-white/10 p-8 w-1/2">
           <img src={LoginImage} alt="Register Visual" className="w-64 h-64 object-contain rounded-xl shadow-md" />
         </div>
+        
         {/* Right Form */}
         <div className="flex-1 flex flex-col justify-center p-8">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm border border-gray-200 mx-auto"> {/* Minimalist white card */}
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Register</h2> {/* Darker text */}
+          <div className="bg-white/10 p-6 rounded-lg shadow-xl w-full max-w-sm border border-gray-100 mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-6 text-white">Register</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Full Name<br />
+                <label className="block mb-1 font-medium text-white">Full Name<br />
                   <input name="fullName" value={form.fullName} onChange={handleChange} onBlur={handleBlur} required maxLength="100" className={inputClass('fullName')} />
                   {formErrors.fullName && <p className="mt-1 text-sm text-red-600">{formErrors.fullName}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Email<br />
+                <label className="block mb-1 font-medium text-white">Email<br />
                   <input name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur} required className={inputClass('email')} />
                   {formErrors.email && <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Phone Number<br />
+                <label className="block mb-1 font-medium text-white">Phone Number<br />
                   <input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('phoneNumber')} />
                   {formErrors.phoneNumber && <p className="mt-1 text-sm text-red-600">{formErrors.phoneNumber}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Government ID (Aadhar)<br />
+                <label className="block mb-1 font-medium text-white">Government ID (Aadhar)<br />
                   <input name="governmentId" value={form.governmentId} onChange={handleChange} onBlur={handleBlur} required maxLength="14" className={inputClass('governmentId')} />
                   {formErrors.governmentId && <p className="mt-1 text-sm text-red-600">{formErrors.governmentId}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Password<br />
+                <label className="block mb-1 font-medium text-white">Password<br />
                   <input name="password" type="password" value={form.password} onChange={handleChange} onBlur={handleBlur} required minLength="6" className={inputClass('password')} />
                   {formErrors.password && <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Security Question<br />
+                <label className="block mb-1 font-medium text-white">Security Question<br />
                   <select name="securityQuestion" value={form.securityQuestion} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityQuestion')}>
                     {securityQuestions.map((q) => (
                       <option key={q.value} value={q.value}>{q.label}</option>
@@ -295,13 +333,13 @@ export default function Register() {
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Security Answer<br />
+                <label className="block mb-1 font-medium text-white">Security Answer<br />
                   <input name="securityAnswer" value={form.securityAnswer} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityAnswer')} />
                   {formErrors.securityAnswer && <p className="mt-1 text-sm text-red-600">{formErrors.securityAnswer}</p>}
                 </label>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-700">Register as:<br />
+                <label className="block mb-1 font-medium text-white">Register as:<br />
                   <select name="role" value={form.role} onChange={handleChange} className={inputClass('role')}>
                     {roles.map((role) => (
                       <option key={role.value} value={role.value}>{role.label}</option>
@@ -309,68 +347,72 @@ export default function Register() {
                   </select>
                 </label>
               </div>
+              
               {/* Ambulance Driver fields */}
               {form.role === 'AMBULANCE_DRIVER' && (
                 <>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">License Number<br />
+                    <label className="block mb-1 font-medium text-white">License Number<br />
                       <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} />
                       {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
                     </label>
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Vehicle Registration Number<br />
+                    <label className="block mb-1 font-medium text-white">Vehicle Registration Number<br />
                       <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} />
                       {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
                     </label>
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Hospital ID<br />
+                    <label className="block mb-1 font-medium text-white">Hospital ID<br />
                       <input name="hospitalID" type="number" value={form.hospitalID} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('hospitalID')} />
                       {formErrors.hospitalID && <p className="mt-1 text-sm text-red-600">{formErrors.hospitalID}</p>}
                     </label>
                   </div>
                 </>
               )}
+              
               {/* Fire Driver fields */}
               {form.role === 'FIRE_DRIVER' && (
                 <>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">License Number<br />
+                    <label className="block mb-1 font-medium text-white">License Number<br />
                       <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} />
                       {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
                     </label>
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Vehicle Registration Number<br />
+                    <label className="block mb-1 font-medium text-white">Vehicle Registration Number<br />
                       <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} />
                       {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
                     </label>
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Fire Station ID<br />
+                    <label className="block mb-1 font-medium text-white">Fire Station ID<br />
                       <input name="fireStationId" type="number" value={form.fireStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('fireStationId')} />
                       {formErrors.fireStationId && <p className="mt-1 text-sm text-red-600">{formErrors.fireStationId}</p>}
                     </label>
                   </div>
                 </>
               )}
+              
               {/* Police Officer fields */}
               {form.role === 'POLICE_OFFICER' && (
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Police Station ID<br />
+                  <label className="block mb-1 font-medium text-white">Police Station ID<br />
                     <input name="policeStationId" type="number" value={form.policeStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('policeStationId')} />
                     {formErrors.policeStationId && <p className="mt-1 text-sm text-red-600">{formErrors.policeStationId}</p>}
                   </label>
                 </div>
               )}
+              
               <button type="submit" disabled={loading} className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors shadow-md">
                 {loading ? 'Registering...' : 'Register'}
               </button>
             </form>
             {message && <p className={`mt-4 text-center text-sm transition-opacity duration-300 ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
             <div className="mt-4 text-center">
-              <span className="text-gray-600">Already have an account? </span>
+              <span className="text-white">Already have an account? </span>
               <a href="/" className="text-blue-600 hover:underline">Login</a>
             </div>
           </div>

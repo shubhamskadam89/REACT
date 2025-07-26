@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FaAmbulance, FaPhoneAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { MdAccessTime, MdCloud, MdAssignment, MdLocalHospital, MdLocationOn } from 'react-icons/md';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// === CRITICAL CHANGE HERE ===
-// Ensure HistoryIcon is NOT present, and ClockIcon IS present.
-import { UserIcon, HomeIcon, ClockIcon, MapIcon as MapOutlineIcon } from '@heroicons/react/24/outline'; // Corrected import
-
+import { UserIcon, HomeIcon, ClockIcon, MapIcon as MapOutlineIcon } from '@heroicons/react/24/outline';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJreWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
 
@@ -60,7 +57,7 @@ const itemVariants = {
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
-  hover: { scale: 1.02, boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.08)" },
+  hover: { scale: 1.02, boxShadow: "0px 8px 16px rgba(255, 255, 255, 0.1)" },
 };
 
 const completionOverlayVariants = {
@@ -98,9 +95,30 @@ export default function AmbulanceDriverPage() {
   const [performanceMetrics] = useState({
     callsCompleted: 12,
     averageResponseTime: '8.5 min',
-    patientsSaved: 45,
-    rating: 4.8
+    rating: 4.8,
+    totalDistance: '156 km'
   });
+
+  // Custom animated cursor
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const [cursorVariant, setCursorVariant] = useState('default');
+
+  const cursorXSpring = useSpring(cursorX, { damping: 25, stiffness: 700 });
+  const cursorYSpring = useSpring(cursorY, { damping: 25, stiffness: 700 });
+
+  useEffect(() => {
+    const moveCursor = (e) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+    return () => window.removeEventListener('mousemove', moveCursor);
+  }, [cursorX, cursorY]);
+
+  const handleCursorEnter = () => setCursorVariant('hover');
+  const handleCursorLeave = () => setCursorVariant('default');
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -326,77 +344,130 @@ export default function AmbulanceDriverPage() {
 
   const StatCard = ({ title, value, icon, className = '', iconClassName = '' }) => (
     <motion.div
-      className={`bg-white rounded-lg p-4 shadow-sm border border-gray-200 flex items-center justify-between ${className}`}
+      className={`bg-white/10 backdrop-blur-md rounded-lg p-4 shadow-lg border border-white/20 flex items-center justify-between ${className}`}
       variants={cardVariants}
       initial="hidden"
       animate="visible"
       whileHover="hover"
+      onMouseEnter={handleCursorEnter}
+      onMouseLeave={handleCursorLeave}
     >
       <div>
-        <p className="text-sm text-gray-600 font-medium">{title}</p>
-        <p className="text-xl font-bold text-gray-800">{value}</p>
+        <p className="text-sm text-white/80 font-medium">{title}</p>
+        <p className="text-xl font-bold text-white">{value}</p>
       </div>
       <div className={`text-3xl ${iconClassName}`}>{icon}</div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 font-sans text-gray-900">
+    <div className="min-h-screen flex flex-col bg-black font-inter text-white relative overflow-hidden">
+      {/* Google Fonts Import */}
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+          .font-inter {
+            font-family: 'Inter', sans-serif;
+          }
+        `}
+      </style>
+      {/* Custom Animated Cursor */}
+      <motion.div
+        className="fixed z-[9999] pointer-events-none"
+        style={{
+          left: 0,
+          top: 0,
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          scale: cursorVariant === 'hover' ? 1.5 : 1,
+          opacity: cursorVariant === 'hover' ? 0.8 : 0.6,
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="w-4 h-4 bg-white rounded-full shadow-lg border border-white/30"></div>
+      </motion.div>
+
+      {/* React Logo */}
+      <div className="fixed top-4 left-4 z-50">
+        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+          <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.276 0-.56.06-.83.18C3.627 2.678 4.718 5.578 6.004 8.762c-1.721 3.36-3.168 6.51-3.168 8.018 0 1.297 1.134 2.53 3.206 2.53 1.72 0 3.63-.98 5.54-2.73 1.91 1.75 3.82 2.73 5.54 2.73 2.072 0 3.206-1.233 3.206-2.53 0-1.508-1.447-4.658-3.168-8.018 1.286-3.184 2.377-6.084 2.886-7.268-.27-.12-.554-.18-.83-.18z"/>
+          </svg>
+        </div>
+      </div>
+
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
       {/* Top Bar */}
-      <header className="flex items-center justify-between bg-white text-gray-800 px-6 py-3 shadow-md border-b border-gray-200">
+      <header className="flex items-center justify-between bg-white/10 backdrop-blur-md text-white px-6 py-3 shadow-lg border-b border-white/20">
         <div className="flex items-center gap-3">
-          <img src={profile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-blue-500" />
+          <img src={profile.avatar} alt="avatar" className="w-12 h-12 rounded-full border-2 border-blue-400 shadow-lg" />
           <div>
-            <div className="font-bold text-lg">{profile.name}</div>
-            <div className="text-sm text-gray-600 flex items-center gap-1"><FaPhoneAlt className="inline mr-1 text-blue-500" />{profile.phone}</div>
+            <div className="font-bold text-lg text-white">{profile.name}</div>
+            <div className="text-sm text-white/80 flex items-center gap-1"><FaPhoneAlt className="inline mr-1 text-blue-400" />{profile.phone}</div>
           </div>
         </div>
-        <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white font-semibold transition-colors duration-200">Logout</button>
+        <button 
+          onClick={handleLogout} 
+          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+          onMouseEnter={handleCursorEnter}
+          onMouseLeave={handleCursorLeave}
+        >
+          Logout
+        </button>
       </header>
 
       <div className="flex flex-1 w-full max-w-7xl mx-auto">
         {/* Sidebar/Menu - Enhanced Styling */}
-        <nav className="w-56 min-w-[180px] bg-white border-r border-gray-200 flex flex-col py-6 px-4 gap-2 shadow-lg">
+        <nav className="w-56 min-w-[180px] bg-white/10 backdrop-blur-md border-r border-white/20 flex flex-col py-6 px-4 gap-2 shadow-lg">
           <motion.button
             onClick={() => setActivePage('dashboard')}
-            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'dashboard' ? 'bg-blue-500 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'}`}
+            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-white/20 text-white'}`}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
+            onMouseEnter={handleCursorEnter}
+            onMouseLeave={handleCursorLeave}
           >
             <HomeIcon className="h-5 w-5" /> Dashboard
           </motion.button>
           <motion.button
             onClick={() => setActivePage('history')}
-            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'history' ? 'bg-blue-500 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'}`}
+            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'history' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-white/20 text-white'}`}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
+            onMouseEnter={handleCursorEnter}
+            onMouseLeave={handleCursorLeave}
           >
-            <ClockIcon className="h-5 w-5" /> Booking History {/* Corrected to ClockIcon */}
+            <ClockIcon className="h-5 w-5" /> Booking History
           </motion.button>
           <motion.button
             onClick={() => setActivePage('profile')}
-            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'profile' ? 'bg-blue-500 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'}`}
+            className={`text-left px-4 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${activePage === 'profile' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-white/20 text-white'}`}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
+            onMouseEnter={handleCursorEnter}
+            onMouseLeave={handleCursorLeave}
           >
             <UserIcon className="h-5 w-5" /> Profile
           </motion.button>
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 bg-gray-50">
+        <main className="flex-1 p-6 bg-black">
           {activePage === 'dashboard' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible">
               <div className="flex items-center justify-between w-full mb-6">
                 <div className="flex items-center gap-3">
-                  <FaAmbulance className="text-3xl text-blue-600" />
-                  <h1 className="text-2xl font-bold text-gray-800">Ambulance Driver Dashboard</h1>
+                  <FaAmbulance className="text-3xl text-blue-400" />
+                  <h1 className="text-2xl font-bold text-white">Ambulance Driver Dashboard</h1>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">Current Time</div>
-                  <div className="text-lg font-bold text-gray-800">{currentTime.toLocaleTimeString()}</div>
+                  <div className="text-sm text-white/80">Current Time</div>
+                  <div className="text-lg font-bold text-white">{currentTime.toLocaleTimeString()}</div>
                 </div>
               </div>
 
@@ -426,9 +497,14 @@ export default function AmbulanceDriverPage() {
               </div>
 
               {/* Vehicle Status Card */}
-              <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6" variants={itemVariants}>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <FaAmbulance className="text-xl text-blue-600" />
+              <motion.div 
+                className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg border border-white/20 p-6 mb-6" 
+                variants={itemVariants}
+                onMouseEnter={handleCursorEnter}
+                onMouseLeave={handleCursorLeave}
+              >
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <FaAmbulance className="text-xl text-blue-400" />
                   Vehicle Status - {vehicleStatus.ambulanceId}
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">

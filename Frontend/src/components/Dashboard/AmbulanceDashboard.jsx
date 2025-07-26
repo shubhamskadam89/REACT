@@ -64,6 +64,14 @@ const headerVariants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
+// Variants for Navbar Icons
+const navIconVariants = {
+  rest: { scale: 1 },
+  hover: { scale: 1.1, rotate: 10, transition: { duration: 0.2 } },
+  active: { scale: 1.15, rotate: -5, transition: { duration: 0.2 } },
+};
+
+
 function SectionHeader({ icon, title }) {
   return (
     <motion.h2
@@ -239,7 +247,9 @@ export default function AmbulanceDashboard() {
           return res.json();
         })
         .then((data) => {
-          setRecentEmergencies(data);
+          const pendingEmergencies = data.filter(emergency => emergency.status === 'PENDING');
+          const completedEmergencies = data.filter(emergency => emergency.status === 'COMPLETED');
+          setRecentEmergencies([...pendingEmergencies, ...completedEmergencies]);
         })
         .catch((err) => {
           setEmergenciesError(err.message || 'Could not load recent emergencies.');
@@ -646,27 +656,38 @@ export default function AmbulanceDashboard() {
   const userInfo = decodeJWT(jwt);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+    <div className="min-h-screen bg-gray-100 font-inter text-gray-800">
+      {/* Google Fonts Preconnect and Import (Add this to your public/index.html or a global CSS file) */}
+      {/* For demonstration, added directly here. In a real project, use <link> in HTML or @import in global CSS. */}
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+          .font-inter {
+            font-family: 'Inter', sans-serif;
+          }
+        `}
+      </style>
+
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <ReactLogo />
               <div>
                 <h1 className="text-3xl font-bold text-indigo-700">Ambulance Admin Dashboard</h1>
-                <p className="text-gray-500 mt-1">Emergency Medical Services Management</p>
+                <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600">Ambulance Administrator</p>
-                <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
+                <p className="text-sm text-gray-700 font-medium">Ambulance Administrator</p>
+                <p className="text-xs text-gray-500 mt-0.5">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => navigate('/')}
-                  className="text-gray-600 hover:text-indigo-700 text-sm font-medium transition-colors"
+                  className="text-gray-600 hover:text-indigo-700 text-sm font-medium transition-colors p-2 rounded-md hover:bg-gray-100"
                 >
                   Home
                 </button>
@@ -675,11 +696,11 @@ export default function AmbulanceDashboard() {
                     localStorage.removeItem('jwt');
                     navigate('/login');
                   }}
-                  className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors"
+                  className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors p-2 rounded-md hover:bg-red-50"
                 >
                   Logout
                 </button>
-                <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold shadow">
+                <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
                   <TruckIcon className="h-6 w-6" />
                 </div>
               </div>
@@ -700,18 +721,26 @@ export default function AmbulanceDashboard() {
               { id: 'profile', name: 'Profile', icon: <UserCircleIcon className="h-5 w-5" /> },
               { id: 'register', name: 'Register', icon: <PlusCircleIcon className="h-5 w-5" /> }
             ].map((tab) => (
-              <button
+              <motion.button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
-                  activeTab === tab.id
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center group
+                  ${activeTab === tab.id
                     ? 'border-indigo-600 text-indigo-700'
                     : 'border-transparent text-gray-600 hover:text-indigo-600 hover:border-indigo-300'
-                }`}
+                  }`}
+                initial="rest"
+                whileHover="hover"
+                animate={activeTab === tab.id ? "active" : "rest"}
               >
-                <span className="mr-2 inline-block align-middle">{tab.icon}</span>
+                <motion.span
+                  className="mr-2 inline-block align-middle"
+                  variants={navIconVariants}
+                >
+                  {tab.icon}
+                </motion.span>
                 {tab.name}
-              </button>
+              </motion.button>
             ))}
           </nav>
         </div>
@@ -817,23 +846,23 @@ export default function AmbulanceDashboard() {
             <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
               <SectionHeader icon={<ExclamationCircleIcon />} title="Recent Emergencies" />
               {emergenciesLoading ? (
-                <motion.div className="text-center py-8 text-indigo-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading emergencies...</motion.div>
+                <motion.div className="text-center py-8 text-indigo-600 font-semibold" variants={itemVariants}>Loading emergencies...</motion.div>
               ) : emergenciesError ? (
-                <motion.div className="text-center py-8 text-red-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{emergenciesError}</motion.div>
+                <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>{emergenciesError}</motion.div>
               ) : recentEmergencies.length === 0 ? (
-                <motion.div className="text-center py-8 text-gray-500" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>No recent emergencies found.</motion.div>
+                <motion.div className="text-center py-8 text-gray-500" variants={itemVariants}>No recent emergencies found.</motion.div>
               ) : (
                 <div className="overflow-x-auto">
                   <motion.table className="min-w-full divide-y divide-gray-200" initial="hidden" animate="visible" variants={containerVariants}>
-                    <motion.thead className="bg-gray-50" variants={itemVariants}>
+                    <motion.thead className="bg-gray-100" variants={itemVariants}>
                       <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Issue</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Created At</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Victim Phone</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Pickup Lat</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Pickup Lng</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Issue</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created At</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Victim Phone</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lat</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lng</th>
                       </tr>
                     </motion.thead>
                     <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -889,16 +918,16 @@ export default function AmbulanceDashboard() {
             </motion.div>
             <div className="overflow-x-auto">
               <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                <motion.thead className="bg-gray-50" variants={itemVariants}>
+                <motion.thead className="bg-gray-100" variants={itemVariants}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Driver</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">License</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Vehicle</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Driver</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">License</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Vehicle</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Phone</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Latitude</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Longitude</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
                   </tr>
                 </motion.thead>
                 <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -1041,14 +1070,14 @@ export default function AmbulanceDashboard() {
                 {hospitalAmbulances.length > 0 && (
                   <motion.div className="mt-4 overflow-x-auto" variants={itemVariants}>
                     <table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
-                      <motion.thead className="bg-gray-50" variants={itemVariants}>
+                      <motion.thead className="bg-gray-100" variants={itemVariants}>
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Reg Number</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Driver Name</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Reg Number</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Driver Name</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Latitude</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Longitude</th>
                         </tr>
                       </motion.thead>
                       <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -1119,8 +1148,6 @@ export default function AmbulanceDashboard() {
                         required
                         className={`w-full px-4 py-3 border ${locationFormErrors.latitude ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
                         placeholder="e.g., 28.7041"
-                        min="-90"
-                        max="90"
                       />
                       {locationFormErrors.latitude && <p className="mt-1 text-sm text-red-600">{locationFormErrors.latitude}</p>}
                     </motion.div>
@@ -1137,8 +1164,6 @@ export default function AmbulanceDashboard() {
                         required
                         className={`w-full px-4 py-3 border ${locationFormErrors.longitude ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
                         placeholder="e.g., 77.1025"
-                        min="-180"
-                        max="180"
                       />
                       {locationFormErrors.longitude && <p className="mt-1 text-sm text-red-600">{locationFormErrors.longitude}</p>}
                     </motion.div>
@@ -1215,7 +1240,7 @@ export default function AmbulanceDashboard() {
                       className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white"
                     >
                       <option value="">All</option>
-                      <option value="EN_ROUTE">En Route</option>
+                      <option value="PENDING">Pending</option>
                       <option value="COMPLETED">Completed</option>
                       <option value="CANCELLED">Cancelled</option>
                     </select>
@@ -1250,15 +1275,15 @@ export default function AmbulanceDashboard() {
                     )}
                     <div className="overflow-x-auto">
                       <table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
-                        <motion.thead className="bg-gray-50" variants={itemVariants}>
+                        <motion.thead className="bg-gray-100" variants={itemVariants}>
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">User ID</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Requester Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Requested At</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Location</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Action</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">User ID</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requester Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested At</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Location</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Action</th>
                           </tr>
                         </motion.thead>
                         <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -1270,10 +1295,10 @@ export default function AmbulanceDashboard() {
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{new Date(item.requestedAt).toLocaleString()}</td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{item.latitude?.toFixed(6)}, {item.longitude?.toFixed(6)}</td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : item.status === 'EN_ROUTE' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>{item.status}</span>
+                                <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${item.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : item.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>{item.status}</span>
                               </td>
                              <td className="px-6 py-4 whitespace-nowrap">
-                               {item.status === 'EN_ROUTE' && (
+                               {item.status === 'PENDING' && (
                                  <button
                                    type="button"
                                    onClick={() => handleCompleteBooking(item.id)}
@@ -1318,15 +1343,15 @@ export default function AmbulanceDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                  <motion.thead className="bg-gray-50" variants={itemVariants}>
+                  <motion.thead className="bg-gray-100" variants={itemVariants}>
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Issue</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Created At</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Victim Phone</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Pickup Lat</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Pickup Lng</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Issue</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created At</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Victim Phone</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lat</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lng</th>
                     </tr>
                   </motion.thead>
                   <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -1360,16 +1385,16 @@ export default function AmbulanceDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                  <motion.thead className="bg-gray-50" variants={itemVariants}>
+                  <motion.thead className="bg-gray-100" variants={itemVariants}>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Reg Number</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Driver Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Driver Phone</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">#</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Reg Number</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Driver Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Driver Phone</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Latitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Longitude</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
                     </tr>
                   </motion.thead>
                   <motion.tbody className="bg-white divide-y divide-gray-200">
@@ -1408,7 +1433,7 @@ export default function AmbulanceDashboard() {
             <div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <SectionHeader icon={<UserCircleIcon />} title="Ambulance Service Profile" />
-                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors">Edit Profile</button>
+                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors p-2 rounded-md hover:bg-gray-100">Edit Profile</button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1427,15 +1452,15 @@ export default function AmbulanceDashboard() {
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-600">User ID:</span>
+                        <span className="text-gray-700">User ID:</span>
                         <span className="font-medium text-gray-800">{userInfo.userId || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-600">Email:</span>
+                        <span className="text-gray-700">Email:</span>
                         <span className="font-medium text-gray-800">{userInfo.sub || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-600">Role:</span>
+                        <span className="text-gray-700">Role:</span>
                         <span className="font-medium text-gray-800">{userInfo.role || 'N/A'}</span>
                       </div>
                     </div>

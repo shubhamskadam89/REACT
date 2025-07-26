@@ -173,7 +173,11 @@ export default function FireDashboard() {
           }
           return res.json();
         })
-        .then(data => setFireBookings(data))
+        .then(data => {
+          const pendingBookings = data.filter(booking => booking.status === 'PENDING');
+          const completedBookings = data.filter(booking => booking.status === 'COMPLETED');
+          setFireBookings([...pendingBookings, ...completedBookings]);
+        })
         .catch(err => setFireBookingsError(err.message || 'Could not load fire bookings.'))
         .finally(() => setFireBookingsLoading(false));
     }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { authAPI, tokenUtils } from '../../services/api'; // Assuming these paths are correct
 import LoginImage from '../../assets/login.png';
 import { BellAlertIcon } from '@heroicons/react/24/outline'; // Using BellAlertIcon for emergency
-import AmbulanceGif from '../../assets/Ambulance.gif';
+import AmbulanceGif from '../../assets/background.gif';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,32 +73,73 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-gray-900"> {/* Minimalist gray background */}
-      <div className="flex w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white overflow-hidden">
+      <style jsx>{`
+        .glow-effect {
+          box-shadow: 
+            0 0 20px rgba(59, 130, 246, 0.3),
+            0 0 40px rgba(59, 130, 246, 0.2),
+            0 0 60px rgba(59, 130, 246, 0.1),
+            0 0 80px rgba(59, 130, 246, 0.05);
+          animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+          from {
+            box-shadow: 
+              0 0 20px rgba(59, 130, 246, 0.3),
+              0 0 40px rgba(59, 130, 246, 0.2),
+              0 0 60px rgba(59, 130, 246, 0.1),
+              0 0 80px rgba(59, 130, 246, 0.05);
+          }
+          to {
+            box-shadow: 
+              0 0 30px rgba(59, 130, 246, 0.4),
+              0 0 60px rgba(59, 130, 246, 0.3),
+              0 0 90px rgba(59, 130, 246, 0.2),
+              0 0 120px rgba(59, 130, 246, 0.1);
+          }
+        }
+      `}</style>
+      {/* Full background GIF */}
+      <img
+        src={AmbulanceGif}
+        alt="Ambulance background"
+        className="fixed inset-0 w-full h-full object-cover object-center z-0 select-none pointer-events-none"
+        style={{ filter: 'brightness(0.3) blur(2px)', opacity: 1.2 }}
+        draggable="false"
+      />
+      {/* Removed the bg-white/40 overlay for increased GIF visibility */}
+      {/* <div className="fixed inset-0 bg-white/40 z-0" /> */}
+      
+      {/* Changed bg-white/90 to bg-white/10 and removed backdrop-blur-lg */}
+      <div className="flex w-full max-w-4xl bg-white/10 rounded-xl shadow-2xl overflow-hidden relative z-10 border border-white/20 glow-effect">
         {/* Left Image (hidden on small screens) */}
-        <div className="hidden md:flex flex-col justify-center items-center bg-gray-100 p-8 w-1/2"> {/* Minimalist gray background */}
+        {/* Changed bg-white/20 to bg-white/10 for transparency */}
+        <div className="hidden md:flex flex-col justify-center items-center bg-white/10 p-8 w-1/2"> {/* Transparent glassy background */}
           <img src={LoginImage} alt="Login Visual" className="w-80 h-80 object-cover rounded-xl shadow-md" />
         </div>
         {/* Right Form */}
-        <div className="flex-1 flex flex-col justify-center p-8">
-          <div className="max-w-md w-full space-y-8 mx-auto bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100"> {/* Minimalist white card */}
+        {/* Removed backdrop-blur-md from this div as well for full transparency */}
+        <div className="flex-1 flex flex-col justify-center p-8"> 
+          {/* Changed bg-white/90 to bg-white/10 and removed backdrop-blur-md */}
+          <div className="max-w-md w-full space-y-8 mx-auto py-8 px-6 shadow-xl rounded-xl border border-gray-100 bg-white/10"> {/* Fully transparent card */}
             {/* Header */}
             <div className="text-center">
-            <img src={AmbulanceGif} alt="Ambulance" className="mx-auto mb-4 w-24 h-24 object-contain" />
               <div className="mx-auto h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center shadow-md"> {/* Blue accent */}
                 <BellAlertIcon className="text-white text-2xl" /> {/* Bell icon for emergency theme */}
               </div>
-              <h2 className="mt-6 text-3xl font-bold text-gray-800">
+              <h2 className="mt-6 text-3xl font-bold text-white">
                 Welcome Back
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-white">
                 Access your emergency services dashboard
               </p>
             </div>
             {/* Fire Driver Choice UI */}
             {fireDriverChoice === 'pending' && (
               <div className="py-8 px-6 flex flex-col items-center"> {/* No shadow/border here as parent already has it */}
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Choose Your Fire Role</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">Choose Your Fire Role</h3>
                 <div className="flex gap-4 mb-4">
                   <button
                     onClick={() => handleFireDriverChoice('admin')}
@@ -113,7 +154,7 @@ function Login() {
                     Fire Truck Driver
                   </button>
                 </div>
-                <p className="text-gray-500 text-sm">Select your role to continue.</p>
+                <p className="text-white text-sm">Select your role to continue.</p>
               </div>
             )}
             {/* Login Form */}
@@ -121,7 +162,7 @@ function Login() {
             <div className="py-8 px-6"> {/* No shadow/border here as parent already has it */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Email Address
                   </label>
                   <input
@@ -135,7 +176,7 @@ function Login() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Password
                   </label>
                   <input
@@ -156,7 +197,7 @@ function Login() {
                       type="checkbox"
                       className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
                     />
-                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                    <label htmlFor="remember-me" className="ml-2 block text-white">
                       Remember me
                     </label>
                   </div>
@@ -195,7 +236,7 @@ function Login() {
                     <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-white text-white">Or continue with</span>
                   </div>
                 </div>
 
@@ -219,7 +260,7 @@ function Login() {
               </div>
 
               <div className="mt-6 text-center">
-                <span className="text-gray-600">Don't have an account? </span>
+                <span className="text-white">Don't have an account? </span>
                 <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign up
                 </Link>
@@ -229,7 +270,7 @@ function Login() {
 
             {/* Emergency Contact Info */}
             <div className="text-center mt-8"> {/* Added margin top for spacing */}
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-white">
                 Emergency? Call <span className="font-semibold text-red-600">911</span> immediately
               </p>
               <div className="mt-4">

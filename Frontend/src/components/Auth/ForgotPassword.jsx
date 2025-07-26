@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
 import { CheckCircleIcon, XCircleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'; // For message icons
+import AmbulanceGif from '../../assets/background.gif'; // Import the GIF
 
 export default function ForgotPassword() {
   const navigate = useNavigate(); // Initialize navigate hook
@@ -135,13 +136,49 @@ export default function ForgotPassword() {
   const inputClass = (name) => `w-full px-4 py-2 border ${formErrors[name] ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500`;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 text-gray-900"> {/* Minimalist gray background */}
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm border border-gray-200"> {/* Minimalist white card */}
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Forgot Password</h2> {/* Darker text */}
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white overflow-hidden">
+      <style jsx>{`
+        .glow-effect {
+          box-shadow: 
+            0 0 20px rgba(59, 130, 246, 0.3),
+            0 0 40px rgba(59, 130, 246, 0.2),
+            0 0 60px rgba(59, 130, 246, 0.1),
+            0 0 80px rgba(59, 130, 246, 0.05);
+          animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+          from {
+            box-shadow: 
+              0 0 20px rgba(59, 130, 246, 0.3),
+              0 0 40px rgba(59, 130, 246, 0.2),
+              0 0 60px rgba(59, 130, 246, 0.1),
+              0 0 80px rgba(59, 130, 246, 0.05);
+          }
+          to {
+            box-shadow: 
+              0 0 30px rgba(59, 130, 246, 0.4),
+              0 0 60px rgba(59, 130, 246, 0.3),
+              0 0 90px rgba(59, 130, 246, 0.2),
+              0 0 120px rgba(59, 130, 246, 0.1);
+          }
+        }
+      `}</style>
+      {/* Full background GIF */}
+      <img
+        src={AmbulanceGif}
+        alt="Ambulance background"
+        className="fixed inset-0 w-full h-full object-cover object-center z-0 select-none pointer-events-none"
+        style={{ filter: 'brightness(0.3) blur(2px)', opacity: 1.2 }}
+        draggable="false"
+      />
+      {/* Main container for the form, now with transparency and glow */}
+      <div className="bg-white/10 p-8 rounded-lg shadow-xl w-full max-w-sm border border-white/20 relative z-10 glow-effect">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white">Forgot Password</h2>
         {step === 1 && (
           <form onSubmit={handleRequest} className="space-y-4">
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Email<br />
+              <label className="block mb-1 font-medium text-white">Email<br />
                 <input
                   name="email"
                   type="email"
@@ -162,7 +199,7 @@ export default function ForgotPassword() {
         {step === 2 && (
           <form onSubmit={handleVerify} className="space-y-4">
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Security Question<br />
+              <label className="block mb-1 font-medium text-white">Security Question<br />
                 <input
                   value={questionText[securityQuestion] || 'Security Question'}
                   disabled
@@ -171,7 +208,7 @@ export default function ForgotPassword() {
               </label>
             </div>
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Security Answer<br />
+              <label className="block mb-1 font-medium text-white">Security Answer<br />
                 <input
                   name="securityAnswer"
                   value={securityAnswer}
@@ -184,7 +221,7 @@ export default function ForgotPassword() {
               </label>
             </div>
             <div>
-              <label className="block mb-1 font-medium text-gray-700">New Password<br />
+              <label className="block mb-1 font-medium text-white">New Password<br />
                 <input
                   name="newPassword"
                   type="password"
