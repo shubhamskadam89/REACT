@@ -1,35 +1,92 @@
 package com.REACT.backend.fireService.controller;
 
+import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
+import com.REACT.backend.fireService.dto.FireStationResponseDto;
+import com.REACT.backend.fireService.dto.FireTruckDriverProfileDto;
 import com.REACT.backend.fireService.dto.FireTruckDto;
+import com.REACT.backend.fireService.dto.FireTruckLocationUpdateDto;
 import com.REACT.backend.fireService.service.FireAdminService;
+import com.REACT.backend.fireService.service.impl.FireServiceImpl;
+import com.REACT.backend.fireService.service.impl.FireStationServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
+
 @RequestMapping("/fire/admin")
+@Slf4j
 public class FireAdminController {
 
     private final FireAdminService fireAdminService;
 
+    private final FireStationServiceImpl fireStationServiceImpl;
+
+    private final FireServiceImpl fireService;
+
     // Get all trucks of a fire station
     @GetMapping("/station/{stationId}/trucks")
-    public ResponseEntity<List<FireTruckDto>> getTrucksByStation(@PathVariable Long stationId) {
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<List<FireTruckDto>> getTrucksByStation(@Valid @PathVariable Long stationId) {
+        log.info("Trucks by station requested by {}",stationId);
         return ResponseEntity.ok(fireAdminService.getTrucksByStation(stationId));
     }
 
     //  Get booking history of a fire station
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
     @GetMapping("/station/{stationId}/history")
-    public ResponseEntity<?> getStationHistory(@PathVariable Long stationId) {
+    public ResponseEntity<?> getStationHistory(@Valid @PathVariable Long stationId) {
+        log.info("Station History for station {}",stationId);
         return ResponseEntity.ok(fireAdminService.getBookingHistoryByStation(stationId));
     }
 
     // Get booking history of a fire truck
     @GetMapping("/truck/{truckId}/history")
-    public ResponseEntity<?> getTruckHistory(@PathVariable Long truckId) {
+    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<?> getTruckHistory(@Valid @PathVariable Long truckId) {
+        log.info("Truck history for truck {} requested ",truckId);
         return ResponseEntity.ok(fireAdminService.getBookingHistoryByTruck(truckId));
+    }
+
+
+    //update location
+
+    @PostMapping("/update-location")
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<String> updateLocation(@Valid @RequestBody FireTruckLocationUpdateDto  dto ){
+        log.info("Update location request fetched for fire truck {}",dto.getTruckId());
+        return ResponseEntity.ok(fireAdminService.updateLocation(dto));
+    }
+
+
+    //get profile
+    /**
+     * Get pofile of an ambulance driver by ambulance-id
+     * @param truckId
+     * @return truckDriver profile dto;
+     */
+
+    @GetMapping("/profile/{truckId}")
+    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<FireTruckDriverProfileDto> getProfile(@Valid @PathVariable Long truckId){
+        log.info("Get profile request fetched for truckId={}",truckId);
+        return ResponseEntity.ok(fireService.getProfile(truckId));
+    }
+
+
+    @GetMapping("/getAll/fireStation")
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<List<FireStationResponseDto>> getAllStation(){
+        log.info("Requesting all stations from DB");
+        return ResponseEntity.ok(fireStationServiceImpl.getAllFireStations());
+
     }
 }

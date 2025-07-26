@@ -4,6 +4,7 @@ import com.REACT.backend.ambulanceService.dto.AmbulanceDto;
 
 import com.REACT.backend.fireService.dto.FireTruckDto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingResponseDto {
 
     private String ambulanceStatus;

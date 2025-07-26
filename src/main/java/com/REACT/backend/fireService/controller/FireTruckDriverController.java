@@ -8,16 +8,20 @@ import com.REACT.backend.fireService.dto.FireTruckLocationUpdateDto;
 import com.REACT.backend.fireService.service.FireService;
 import com.REACT.backend.fireService.service.impl.FireServiceImpl;
 import com.REACT.backend.fireService.service.impl.FireTruckLocationUpdateServiceImplementation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@Validated
+
 @RequestMapping("/fire/truck-driver/v1")
 @RequiredArgsConstructor
 public class FireTruckDriverController {
@@ -33,7 +37,8 @@ public class FireTruckDriverController {
     private final FireServiceImpl fireService;
 
     @PostMapping("/update-location")
-    public ResponseEntity<String> updateLocation(@RequestBody FireTruckLocationUpdateDto dto) {
+    @PreAuthorize("hasAuthority('FIRE_DRIVER')")
+    public ResponseEntity<String> updateLocation(@Valid @RequestBody FireTruckLocationUpdateDto dto) {
         fireTruckLocationUpdateServiceImplementation.updateLocation(dto);
         log.info("Location update request fetched for fire truck {}",dto.getTruckId());
         messagingTemplate.convertAndSend("/topic/location", dto);
@@ -41,7 +46,7 @@ public class FireTruckDriverController {
     }
 
     @GetMapping("/current-request")
-    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('ROLE_FIRE_STATION_ADMIN')")
+    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('FIRE_STATION_ADMIN')")
     public ResponseEntity<LocationDto> getBookingLocation(){
         log.info("Location fetched request for ");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();
@@ -50,12 +55,14 @@ public class FireTruckDriverController {
     }
 
     @PatchMapping("/complete-booking")
-    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('ROLE_FIRE_STATION_ADMIN')")
+    @PreAuthorize("hasAuthority('FIRE_DRIVER') or hasAuthority('FIRE_STATION_ADMIN')")
     public ResponseEntity<CompleteAssignmentResponseDto> completeBooking(){
         log.info("Status update COMPLETE request fetched:");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();
         return ResponseEntity.ok(fireService.completeBooking(driver));
     }
+
+
 
 
 

@@ -1,6 +1,6 @@
 package com.REACT.backend.userService.service.impl;
 
-
+import com.REACT.backend.common.exception.ResourceNotFoundException;
 import com.REACT.backend.userService.dto.UpdateUserProfileDto;
 import com.REACT.backend.userService.dto.UserProfileDto;
 import com.REACT.backend.userService.service.UserService;
@@ -21,25 +21,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getProfileOfCurrentUser() {
-        AppUser user = loggedUserUtil.getCurrentUser();
-        log.info("User found with email={} and userId={}",user.getUserEmail(),user.getUserId());
-        if (user.getRole() != Role.USER) {
-            log.error("User don't have Role of user, userRole={}",user.getRole());
-            throw new SecurityException("Only users with role USER can access this endpoint");
+        try {
+            AppUser user = loggedUserUtil.getCurrentUser();
+
+            if (user == null) {
+                log.error("Logged-in user not found");
+                throw new ResourceNotFoundException("Logged-in user not found");
+            }
+
+            log.info("User found with email={} and userId={}", user.getUserEmail(), user.getUserId());
+
+            if (user.getRole() != Role.USER) {
+                log.error("Unauthorized role access attempt. Required=USER, Actual={}", user.getRole());
+                throw new SecurityException("Only users with role USER can access this endpoint");
+            }
+
+            return UserProfileDto.from(user);
+        } catch (SecurityException ex) {
+            log.warn("Security exception in getProfileOfCurrentUser: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Unexpected error in getProfileOfCurrentUser: {}", ex.getMessage(), ex);
+            throw new RuntimeException("Failed to fetch user profile");
         }
-        return UserProfileDto.from(user);
     }
 
     @Override
     public UserProfileDto updateUserProfile(UpdateUserProfileDto updateRequest) {
-        AppUser user = loggedUserUtil.getCurrentUser();
-        log.info("Old name {} \n Old PhoneNumber {}",user.getUserFullName(),user.getPhoneNumber());
-        user.setUserFullName(updateRequest.getUserFullName());
-        user.setPhoneNumber(updateRequest.getPhoneNumber());
-        log.info("New name {} \n new PhoneNumber {}",user.getUserFullName(),user.getPhoneNumber());
+        try {
+            AppUser user = loggedUserUtil.getCurrentUser();
 
-        AppUser saved = appUserRepository.save(user);
-        return UserProfileDto.from(saved);
+            if (user == null) {
+                log.error("Logged-in user not found");
+                throw new ResourceNotFoundException("User not found");
+            }
+
+            log.info("Updating profile for userId={}, oldName={}, oldPhone={}",
+                    user.getUserId(), user.getUserFullName(), user.getPhoneNumber());
+
+            user.setUserFullName(updateRequest.getUserFullName());
+            user.setPhoneNumber(updateRequest.getPhoneNumber());
+
+            AppUser saved = appUserRepository.save(user);
+
+            log.info("Updated profile: newName={}, newPhone={}",
+                    saved.getUserFullName(), saved.getPhoneNumber());
+
+            return UserProfileDto.from(saved);
+        } catch (Exception ex) {
+            log.error("Error updating user profile: {}", ex.getMessage(), ex);
+            throw new RuntimeException("Failed to update user profile");
+        }
     }
-
 }

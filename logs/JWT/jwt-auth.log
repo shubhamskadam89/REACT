@@ -6398,3 +6398,10 @@ Caused by: org.postgresql.util.PSQLException: This connection has been closed.
 19:22:53.315 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: Ambulance@gmail.com
 19:22:53.315 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: Ambulance@gmail.com
 19:22:53.322 [http-nio-8080-exec-8] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+20:24:42.669 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+20:25:42.222 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+20:25:42.222 [http-nio-8080-exec-2] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+20:25:42.222 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+20:25:42.222 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+20:25:42.794 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+20:25:42.818 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user amit.shaham@bulance.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1NDE3NDIsImV4cCI6MTc1Mzg0MTc0Mn0.O0YXxgx5cooan7l7J5qSFCdS-nYyaMf5OrLAzlxbWow

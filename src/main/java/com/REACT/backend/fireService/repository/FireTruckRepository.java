@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long> {
 
@@ -34,4 +36,9 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
     
     @Query("SELECT COUNT(DISTINCT f.fireStationEntity.id) FROM FireTruckEntity f")
     long countDistinctByFireStationId();
+
+
+    boolean existsByVehicleRegNumber(String numberPlate);
+
+    Optional<FireTruckEntity> findByFireTruckId(Long fireTruckId);
 }

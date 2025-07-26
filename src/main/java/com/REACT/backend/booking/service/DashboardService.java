@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,57 +33,46 @@ public class DashboardService {
 
     public DashboardStatsDto getDashboardStatistics() {
         log.info("Starting dashboard statistics calculation");
-        
+
         try {
-            // Booking statistics
-            log.debug("Calculating booking statistics");
-            long totalBookings = emergencyRequestRepository.count();
-            long ambulanceBookings = emergencyRequestRepository.countByNeedAmbulance(true);
-            long fireServiceBookings = emergencyRequestRepository.countByNeedFireBrigade(true);
-            long policeServiceBookings = emergencyRequestRepository.countByNeedPolice(true);
-            log.debug("Booking counts - Total: {}, Ambulance: {}, Fire: {}, Police: {}", 
-                    totalBookings, ambulanceBookings, fireServiceBookings, policeServiceBookings);
+            // Total bookings
+            long totalBookings = safeRepoCall(() -> emergencyRequestRepository.count(), "Total bookings");
+            long ambulanceBookings = safeRepoCall(() -> emergencyRequestRepository.countByNeedAmbulance(true), "Ambulance bookings");
+            long fireServiceBookings = safeRepoCall(() -> emergencyRequestRepository.countByNeedFireBrigade(true), "Fire service bookings");
+            long policeServiceBookings = safeRepoCall(() -> emergencyRequestRepository.countByNeedPolice(true), "Police service bookings");
 
-            // Status-based statistics
-            log.debug("Calculating status-based statistics");
-            long pendingBookings = emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.PENDING);
-            long inProgressBookings = emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.IN_PROGRESS);
-            long completedBookings = emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.COMPLETED);
-            long partiallyAssignedBookings = emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.PARTIALLY_ASSIGNED);
-            log.debug("Status counts - Pending: {}, In Progress: {}, Completed: {}, Partially Assigned: {}", 
-                    pendingBookings, inProgressBookings, completedBookings, partiallyAssignedBookings);
+            // Request status
+            long pendingBookings = safeRepoCall(() -> emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.PENDING), "Pending bookings");
+            long inProgressBookings = safeRepoCall(() -> emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.IN_PROGRESS), "In-progress bookings");
+            long completedBookings = safeRepoCall(() -> emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.COMPLETED), "Completed bookings");
+            long partiallyAssignedBookings = safeRepoCall(() -> emergencyRequestRepository.countByEmergencyRequestStatus(EmergencyRequestStatus.PARTIALLY_ASSIGNED), "Partially assigned bookings");
 
-            // Performance metrics
-            log.debug("Calculating performance metrics");
-            double averageCompletionTimeMinutes = emergencyRequestRepository.findAll().stream()
-                    .filter(er -> er.getEmergencyRequestStatus() == EmergencyRequestStatus.COMPLETED)
-                    .mapToLong(er -> Duration.between(er.getCreatedAt(), Instant.now()).toMinutes())
-                    .average().orElse(0);
-            log.debug("Average completion time: {} minutes", averageCompletionTimeMinutes);
+            // Completion Time
+            double averageCompletionTimeMinutes = safeRepoCall(() ->
+                            emergencyRequestRepository.findAll().stream()
+                                    .filter(er -> er.getEmergencyRequestStatus() == EmergencyRequestStatus.COMPLETED)
+                                    .mapToLong(er -> Duration.between(er.getCreatedAt(), Instant.now()).toMinutes())
+                                    .average()
+                                    .orElse(0),
+                    "Average completion time"
+            );
 
-            // Service availability statistics
-            log.debug("Calculating service availability statistics");
-            long totalAmbulances = ambulanceRepository.count();
-            long busyAmbulances = ambulanceRepository.countByStatus(AmbulanceStatus.BUSY);
-            long availableAmbulances = totalAmbulances - busyAmbulances;
-            log.debug("Ambulance availability - Total: {}, Busy: {}, Available: {}", 
-                    totalAmbulances, busyAmbulances, availableAmbulances);
+            // Ambulance status
+            long totalAmbulances = safeRepoCall(() -> ambulanceRepository.count(), "Total ambulances");
+            long busyAmbulances = safeRepoCall(() -> ambulanceRepository.countByStatus(AmbulanceStatus.BUSY), "Busy ambulances");
+            long availableAmbulances = Math.max(0, totalAmbulances - busyAmbulances);
 
-            long totalFireTrucks = fireTruckRepository.count();
-            long busyFireTrucks = fireTruckRepository.countByStatus(FireTruckStatus.BUSY);
-            long availableFireTrucks = totalFireTrucks - busyFireTrucks;
-            log.debug("Fire truck availability - Total: {}, Busy: {}, Available: {}", 
-                    totalFireTrucks, busyFireTrucks, availableFireTrucks);
+            // Fire truck status
+            long totalFireTrucks = safeRepoCall(() -> fireTruckRepository.count(), "Total fire trucks");
+            long busyFireTrucks = safeRepoCall(() -> fireTruckRepository.countByStatus(FireTruckStatus.BUSY), "Busy fire trucks");
+            long availableFireTrucks = Math.max(0, totalFireTrucks - busyFireTrucks);
 
-            // Infrastructure counts
-            log.debug("Calculating infrastructure counts");
-            long totalFireStations = fireTruckRepository.countDistinctByFireStationId();
-            long totalHospitals = hospitalRepository.count();
-            long totalPoliceOfficers = policeStationRepository.countTotalPoliceOfficers();
-            long totalPoliceStations = policeStationRepository.count();
-            long totalUsers = userRepository.count();
-            log.debug("Infrastructure counts - Fire Stations: {}, Hospitals: {}, Police Officers: {}, Police Stations: {}, Users: {}", 
-                    totalFireStations, totalHospitals, totalPoliceOfficers, totalPoliceStations, totalUsers);
+            // Infra stats
+            long totalFireStations = safeRepoCall(() -> fireTruckRepository.countDistinctByFireStationId(), "Fire stations");
+            long totalHospitals = safeRepoCall(() -> hospitalRepository.count(), "Hospitals");
+            long totalPoliceOfficers = safeRepoCall(() -> policeStationRepository.countTotalPoliceOfficers(), "Police officers");
+            long totalPoliceStations = safeRepoCall(() -> policeStationRepository.count(), "Police stations");
+            long totalUsers = safeRepoCall(() -> userRepository.count(), "Users");
 
             DashboardStatsDto stats = DashboardStatsDto.builder()
                     .timestamp(Instant.now())
@@ -109,13 +97,34 @@ public class DashboardService {
                     .totalPoliceStations(totalPoliceStations)
                     .totalUsers(totalUsers)
                     .build();
-                    
+
             log.info("Dashboard statistics calculation completed successfully");
             return stats;
-            
+
         } catch (Exception e) {
-            log.error("Error calculating dashboard statistics", e);
-            throw new RuntimeException("Failed to calculate dashboard statistics", e);
+            log.error("Unexpected error while calculating dashboard statistics", e);
+            throw new RuntimeException("Something went wrong while processing dashboard data", e);
         }
+    }
+
+    private <T> T safeRepoCall(RepoSupplier<T> supplier, String context) {
+        try {
+            return supplier.get();
+        } catch (Exception ex) {
+            log.warn("Error during [{}]: {}", context, ex.getMessage(), ex);
+            return handleDefaultFor(context);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T handleDefaultFor(String context) {
+        // Customize default returns here based on context
+        if (context.contains("Average")) return (T) Double.valueOf(0);
+        return (T) Long.valueOf(0);
+    }
+
+    @FunctionalInterface
+    interface RepoSupplier<T> {
+        T get() throws Exception;
     }
 }

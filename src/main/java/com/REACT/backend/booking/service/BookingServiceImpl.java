@@ -56,6 +56,11 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingResponseDto createBooking(BookingRequestDto requestDto, Long requestedById) {
 
+        if(!requestDto.isNeedPolice() && !requestDto.isNeedAmbulance() && !requestDto.isNeedFireBrigade()
+        ){
+            throw new IllegalArgumentException("None of the service requested");
+        }
+
         log.info("🚨 New booking request received from userId {} for issue '{}'", requestedById, requestDto.getIssueType());
 
 
@@ -355,31 +360,46 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
-    private  BookingResponseDto mapToDetailedDto(EmergencyRequestEntity entity){
+    private BookingResponseDto mapToDetailedDto(EmergencyRequestEntity entity) {
         return BookingResponseDto.builder()
                 .issueType(entity.getIssueType())
                 .victimPhoneNumber(entity.isForSelf() ? null : entity.getVictimPhoneNumber())
-                .ambulanceStatus(DispatchUtils.ambulanceStatus(entity.getAssignedAmbulances().size(), entity.getRequestedAmbulancesCount()))
-                .assignedAmbulances(entity.getAssignedAmbulances()
-                        .stream()
+
+                // Ambulance status and assignment
+                .ambulanceStatus(DispatchUtils.ambulanceStatus(
+                        entity.getAssignedAmbulances().size(),
+                        entity.getRequestedAmbulancesCount()))
+                .assignedAmbulances(entity.getRequestedAmbulancesCount() > 0
+                        ? entity.getAssignedAmbulances().stream()
                         .map(AmbulanceDto::new)
-                        .collect(Collectors.toList())) // or map to DTOs if you prefer
+                        .collect(Collectors.toList())
+                        : null)
+
+                // Police status and assignment
                 .policeStatus(DispatchUtils.policeStatus(
                         entity.getAssignedPoliceMap().values().stream().mapToInt(i -> i).sum(),
                         entity.getRequestedPoliceCount()))
-                .assignedPoliceMap(entity.getAssignedPoliceMap().entrySet().stream()
+                .assignedPoliceMap(entity.getRequestedPoliceCount() > 0
+                        ? entity.getAssignedPoliceMap().entrySet().stream()
                         .collect(Collectors.toMap(
-                                e -> e.getKey().getStationName(), // Convert key
-                                Map.Entry::getValue
-                        )))
+                                e -> e.getKey().getStationName(),
+                                Map.Entry::getValue))
+                        : null)
+
+                // Fire truck status and assignment
                 .fireTruckStatus(DispatchUtils.fireTruckStatus(
-                        entity.getAssignedFireTruckEntities().size(), entity.getRequestedFireTruckCount()))
-                .assignedFireTrucks(entity.getAssignedFireTruckEntities().stream()
+                        entity.getAssignedFireTruckEntities().size(),
+                        entity.getRequestedFireTruckCount()))
+                .assignedFireTrucks(entity.getRequestedFireTruckCount() > 0
+                        ? entity.getAssignedFireTruckEntities().stream()
                         .map(FireTruckDto::new)
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toList())
+                        : null)
+
                 .notes(entity.getNotes())
                 .build();
     }
+
 
     @Autowired
     EmergencyRequestRepository emergencyRequestRepository;
