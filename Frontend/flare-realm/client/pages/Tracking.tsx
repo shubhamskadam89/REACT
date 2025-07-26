@@ -120,32 +120,20 @@ export default function Tracking() {
     }
   }, []);
 
-  const handleCallHospital = () => {
-    alert("Calling Sunrise Hospital...");
-  };
-
-  const handleCallDriver = () => {
-    alert("Calling driver Mahesh Chaupal...");
-  };
-
-  const handlePayment = () => {
-    alert("Redirecting to payment...");
-  };
+  
 
   return (
-    <div className="min-h-screen bg-white font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl relative">
-      {/* Map Section */}
-      <div className={`relative transition-all duration-300 ${isMapCollapsed ? "h-16" : "h-96"}`}>
+    <div className="w-full h-screen bg-white font-cantata">
+      
+      {/* Map Fullscreen */}
+      <div className="fixed inset-0 z-0">
         <LiveMap
           patientCoords={userCoords}
           ambulanceCoords={ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude ? { latitude: ambulances[0].latitude, longitude: ambulances[0].longitude } : undefined}
           fireTruckCoords={fireTrucks.length > 0 && fireTrucks[0].latitude && fireTrucks[0].longitude ? { latitude: fireTrucks[0].latitude, longitude: fireTrucks[0].longitude } : undefined}
         />
-        {/* TODO: Replace this image with Google Maps API integration. */}
-        {/* Collapse button */}
-        
         {/* Ambulance icons on map */}
-        <div className="absolute top-12 right-16">
+        <div className="absolute top-4 right-4 sm:top-12 sm:right-16 z-10">
           <svg width="19" height="13" viewBox="0 0 19 13" fill="none">
             <path
               d="M18.1195 7.55766L17.1258 7.02365C16.4864 6.67922 15.9753 6.20314 15.6495 5.64617C14.2125 3.19121 11.3942 1.66701 8.29366 1.66701C3.72004 1.66701 0 4.98561 0 9.06552C0.00149652 9.95599 0.812777 10.6797 1.8111 10.6797H2.15336C2.36751 11.7492 3.41553 12.563 4.67459 12.563C5.93377 12.563 6.98182 11.7492 7.19583 10.6797H10.5978C10.8119 11.7492 11.8599 12.563 13.119 12.563C14.3782 12.563 15.4262 11.7492 15.6402 10.6797H17.1799C18.1842 10.6797 19 9.95062 19 9.05602V8.94842C19.0002 8.38212 18.6624 7.84944 18.1194 7.55747L18.1195 7.55766Z"
@@ -153,8 +141,7 @@ export default function Tracking() {
             />
           </svg>
         </div>
-
-        <div className="absolute top-24 left-16">
+        <div className="absolute top-16 left-4 sm:top-24 sm:left-16 z-10">
           <svg width="19" height="13" viewBox="0 0 19 13" fill="none">
             <path
               d="M18.1195 7.55767L17.1258 7.02367C16.4864 6.67924 15.9753 6.20316 15.6495 5.64618C14.2125 3.19122 11.3942 1.66702 8.29366 1.66702C3.72004 1.66702 0 4.98562 0 9.06554C0.00149652 9.956 0.812777 10.6797 1.8111 10.6797H2.15336C2.36751 11.7492 3.41553 12.563 4.67459 12.563C5.93377 12.563 6.98182 11.7492 7.19583 10.6797H10.5978C10.8119 11.7492 11.8599 12.563 13.119 12.563C14.3782 12.563 15.4262 11.7492 15.6402 10.6797H17.1799C18.1842 10.6797 19 9.95064 19 9.05604V8.94844C19.0002 8.38213 18.6624 7.84946 18.1194 7.55749L18.1195 7.55767Z"
@@ -164,13 +151,15 @@ export default function Tracking() {
         </div>
       </div>
 
-      {/* Info Gray Panel */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col items-center">
-        <div className="w-full bg-gray-100 rounded-3xl overflow-y-auto max-h-[420px] transition-all duration-500 relative">
+      {/* Info Gray Panel Overlay */}
+      <div className="relative z-10 flex flex-col justify-end w-full h-full pointer-events-none">
+        <div className={`w-full bg-gray-100 rounded-t-3xl overflow-y-auto max-h-[65vh] sm:max-h-[420px] transition-all duration-500 relative shadow-lg mx-auto px-1 sm:px-4 pb-2 pt-1 pointer-events-auto ${isInfoCollapsed ? 'h-8 min-h-0 max-h-8 bg-gray-200' : ''}`}
+          style={isInfoCollapsed ? { minHeight: '0px', maxHeight: '32px', padding: 0 } : { minHeight: '260px' }}>
           {/* Collapse/Expand Button for Info Panels */}
           <button
             onClick={() => setIsInfoCollapsed(v => !v)}
-            className="z-20 mb-1 w-10 h-6 flex items-center justify-center bg-gray-300 rounded-t-full shadow mx-auto mt-2 sticky top-0 left-0 right-0 bg-gray-100"
+            className={`z-20 mb-1 w-10 h-6 flex items-center justify-center bg-gray-300 rounded-t-full shadow mx-auto mt-2 sticky top-0 left-0 right-0 ${isInfoCollapsed ? 'bg-gray-200' : 'bg-gray-100'}`}
+            style={isInfoCollapsed ? { marginBottom: 0, marginTop: 0 } : {}}
           >
             <svg
               className={`w-6 h-6 transition-transform duration-300 ${isInfoCollapsed ? '' : 'rotate-180'}`}
@@ -192,12 +181,12 @@ export default function Tracking() {
               pointerEvents: isInfoCollapsed ? 'none' : 'auto',
             }}
           >
-            <div className="p-4 pb-0">
+            <div className="p-2 sm:p-4 pb-0">
               {/* 1. Location & Hospital */}
-              <div className="bg-yellow-100 rounded-xl p-4 mb-3">
-                <div className="flex items-start gap-4 mb-4 relative">
+              <div className="bg-yellow-100 rounded-xl p-3 sm:p-4 mb-3">
+                <div className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4 mb-4 relative">
                   {/* User Location */}
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center mb-2 sm:mb-0">
                     <div className="w-2 h-2 bg-black rounded-full mt-2"></div>
                     {/* Dashed line */}
                     <div className="w-px h-8 border-l-2 border-dashed border-gray-400 my-1"></div>
@@ -208,7 +197,7 @@ export default function Tracking() {
                     <div className="text-black text-xs font-normal mb-1">
                       Your location:
                     </div>
-                    <div className="text-black text-xs font-normal mb-2">
+                    <div className="text-black text-xs font-normal mb-2 break-words">
                       {userAddress || "-"}
                     </div>
                     {/* Gray line below address */}
@@ -216,11 +205,21 @@ export default function Tracking() {
                     <div className="text-black text-xs font-normal mb-1">
                       Ambulance details:
                     </div>
-                    <div className="text-black text-xs font-normal mb-2">
+                    <div className="text-black text-xs font-normal mb-2 flex items-center gap-2">
                       {ambulances.length > 0 ? (
                         <>
                           <b>Driver:</b> {ambulances[0].driverName || "-"}<br />
                           <b>Reg:</b> {ambulances[0].regNumber || "-"}
+                          {ambulances[0].driverPhone && (
+                            <a
+                              href={`tel:${ambulances[0].driverPhone}`}
+                              className="ml-2 inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition text-xs"
+                              title="Call Ambulance Driver"
+                            >
+                              <PhoneIcon className="w-4 h-4 mr-1" />
+                              Call
+                            </a>
+                          )}
                         </>
                       ) : "No ambulance assigned."}
                     </div>
@@ -229,7 +228,7 @@ export default function Tracking() {
                   </div>
                 </div>
                 {/* Distance and Time */}
-                <div className="bg-emergency-orange text-center py-2 rounded">
+                <div className="bg-orange-200 text-center py-2 rounded">
                   {(() => {
                     let distance = null, estTime = null;
                     if (ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude) {
@@ -250,11 +249,8 @@ export default function Tracking() {
                 </div>
               </div>
 
-              {/* 2. Ambulance Details */}
-              
-
               {/* 3. Police Details */}
-              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
+              <div className="bg-yellow-200 rounded-xl p-3 sm:p-4 mb-3">
                 <div className="flex-1">
                   <h3 className="text-black text-sm font-normal mb-3">
                     Police details:
@@ -277,7 +273,7 @@ export default function Tracking() {
               </div>
 
               {/* 4. Fire Brigade Details */}
-              <div className="bg-yellow-200 rounded-xl p-4 mb-3">
+              <div className="bg-yellow-200 rounded-xl p-3 sm:p-4 mb-3">
                 <div className="flex-1">
                   <h3 className="text-black text-sm font-normal mb-3">
                     Fire Brigade details:
@@ -285,9 +281,19 @@ export default function Tracking() {
                   {fireTrucks.length === 0 ? (
                     <div className="text-black text-xs font-normal mb-4">No fire truck assigned.</div>
                   ) : fireTrucks.map((truck, idx) => (
-                    <div key={truck.id || idx} className="text-black text-xs font-normal mb-2">
+                    <div key={truck.id || idx} className="text-black text-xs font-normal mb-2 flex items-center gap-2">
                       <b>Truck id:</b> {truck.regNumber || truck.id}<br />
                       <b>Status:</b> {truck.status}<br />
+                      {truck.driverPhoneNumber && (
+                        <a
+                          href={`tel:${truck.driverPhoneNumber}`}
+                          className="ml-2 inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition text-xs"
+                          title="Call Fire Truck Driver"
+                        >
+                          <PhoneIcon className="w-4 h-4 mr-1" />
+                          Call
+                        </a>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -312,26 +318,10 @@ export default function Tracking() {
               </div>
             </div>
           </div>
-          {/* Payment Panel (Sticky to bottom of gray panel) */}
-          <div className="p-2 sticky bottom-0 left-0 right-0 bg-gray-100 z-10">
-            <div className="bg-emergency-yellow flex items-center justify-between px-3 py-2 rounded-xl w-full shadow-md">
-              <span className="text-black text-base font-normal">
-                Total Amount: Rs. 1126.18
-              </span>
-              <button
-                onClick={handlePayment}
-                className="bg-emergency-blue px-4 py-1.5 rounded-xl flex items-center gap-2"
-              >
-                <span className="text-white text-sm font-normal">Pay Now</span>
-                <svg width="8" height="12" viewBox="0 0 8 13" fill="none">
-                  <path
-                    d="M1.4546 0.0305786L0 1.3638L5.09119 6.03035L0 10.6974L1.4546 12.0306L8 6.03053L1.4546 0.0305786Z"
-                    fill="white"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          {/* Thin gray ribbon when collapsed */}
+          {isInfoCollapsed && (
+            <div className="absolute left-0 right-0 bottom-0 h-2 bg-gray-300 rounded-b-3xl mx-2" style={{ zIndex: 1 }} />
+          )}
         </div>
       </div>
     </div>

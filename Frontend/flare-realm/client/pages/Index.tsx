@@ -1,35 +1,24 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { FaAmbulance, FaFireExtinguisher, FaUserShield, FaHospitalAlt } from 'react-icons/fa';
+import { FaAmbulance, FaMapMarkerAlt, FaShieldAlt, FaPhone, FaFileAlt } from 'react-icons/fa';
 
-interface Hospital {
-  id: string;
-  name: string;
-  address: string;
-  distance: string;
-}
-
-const hospitals: Hospital[] = [
-  {
-    id: "1",
-    name: "ABC Hospital",
-    address: "Address details",
-    distance: "2.3 kms away",
-  },
-  {
-    id: "2",
-    name: "XYZ Hospital",
-    address: "Address details",
-    distance: "1.2 kms away",
-  },
+const emergencyHistory = [
+  { type: "Medical Emergency", location: "Home", date: "2024-01-15", status: "Resolved" },
+  { type: "Traffic Accident", location: "Highway", date: "2024-01-10", status: "Resolved" },
 ];
 
-const ambulanceTypes = [
-  { label: "Basic Life Support", icon: "🚑" },
-  { label: "Advanced Life Support", icon: "🩺" },
-  { label: "ICU Ambulance", icon: "🏥" },
-  { label: "Mortuary Ambulance", icon: "⚰️" },
+const firstAidTips = [
+  "Stay calm and call for help immediately.",
+  "Check for responsiveness and breathing.",
+  "Apply pressure to bleeding wounds.",
+  "Do not move injured persons unless necessary.",
+  "Follow dispatcher instructions until help arrives.",
+];
+
+const emergencyContacts = [
+  { name: "Sarah Smith", relation: "Spouse", phone: "+1 (555) 987-6543" },
+  { name: "Dr. Michael Johnson", relation: "Family Doctor", phone: "+1 (555) 456-7890" },
 ];
 
 const LocationIcon = ({ className = "w-5 h-6" }: { className?: string }) => (
@@ -74,11 +63,33 @@ const UserIcon = ({ className = "w-8 h-8" }: { className?: string }) => (
   </svg>
 );
 
+interface UserBooking {
+  id: number;
+  issueType: string;
+  emergencyRequestStatus: string;
+  createdAt: string;
+  latitude: number;
+  longitude: number;
+  needAmbulance: boolean;
+  needPolice: boolean;
+  needFireBrigade: boolean;
+}
+
+interface UserStats {
+  totalEmergencies: number;
+  resolvedEmergencies: number;
+  avgResponseTime: number;
+}
+
 export default function Index() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
-  const [selectedAmbulanceType, setSelectedAmbulanceType] = useState<string | null>(null);
   const [city, setCity] = useState("...");
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [userBookings, setUserBookings] = useState<UserBooking[]>([]);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -101,124 +112,289 @@ export default function Index() {
         }
       });
     }
+
+    // Update time every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Fetch user-specific booking data
+  useEffect(() => {
+    const fetchUserBookings = async () => {
+      setStatsLoading(true);
+      setStatsError(null);
+      try {
+        const token = localStorage.getItem('token') || localStorage.getItem('jwt');
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        // Extract userId from JWT token
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const userId = payload.userId;
+        
+        if (!userId) {
+          throw new Error("User ID not found in token");
+        }
+
+        const headers: HeadersInit = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        };
+
+        const res = await fetch(`http://localhost:8080/user/bookings/${userId}`, {
+          headers
+        });
+        
+        if (!res.ok) {
+          throw new Error("Failed to fetch user bookings");
+        }
+        
+        const bookings: UserBooking[] = await res.json();
+        setUserBookings(bookings);
+
+        // Calculate user statistics
+        const totalEmergencies = bookings.length;
+        const resolvedEmergencies = bookings.filter(booking => 
+          booking.emergencyRequestStatus === 'COMPLETED'
+        ).length;
+        
+        // Calculate average response time (mock calculation for now)
+        const avgResponseTime = totalEmergencies > 0 ? 4.2 : 0;
+
+        setUserStats({
+          totalEmergencies,
+          resolvedEmergencies,
+          avgResponseTime
+        });
+
+      } catch (err: any) {
+        setStatsError(err.message || "Failed to load user data");
+        console.error("Error fetching user bookings:", err);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchUserBookings();
   }, []);
 
   const handleSOSClick = () => {
     navigate("/booking");
   };
 
-  const handleAmbulanceTypeClick = (type: string) => {
-    setSelectedAmbulanceType(type);
-  };
-
-  const handleCallHospital = (hospitalName: string) => {
-    alert(`Calling ${hospitalName}...`);
-  };
-
   const handleLogout = () => {
     logout();
   };
 
+  const quickActions = [
+    {
+      title: "Track Response",
+      description: "Monitor emergency vehicle location",
+      icon: <FaMapMarkerAlt className="w-6 h-6" />,
+      onClick: () => navigate("/tracking"),
+      color: "bg-blue-500 hover:bg-blue-600"
+    },
+    {
+      title: "First Aid Tips",
+      description: "Emergency preparedness guide",
+      icon: <FaShieldAlt className="w-6 h-6" />,
+      onClick: () => navigate("/first-aid"),
+      color: "bg-green-500 hover:bg-green-600"
+    },
+    {
+      title: "Call Emergency Contacts",
+      description: "Contact your emergency contacts",
+      icon: <FaPhone className="w-6 h-6" />,
+      onClick: () => navigate("/emergency-contacts"),
+      color: "bg-orange-500 hover:bg-orange-600"
+    }
+  ];
+
+  // Get user name from auth context or localStorage
+  const getUserName = () => {
+    if (user?.email) return user.email.split('@')[0];
+    if (user?.userType && user.userType !== 'CITIZEN') {
+      return user.userType.charAt(0).toUpperCase() + user.userType.slice(1).toLowerCase();
+    }
+    return "User";
+  };
+
+  // Calculate statistics with fallbacks
+  const getTotalEmergencies = () => {
+    if (statsLoading) return "...";
+    if (statsError) return emergencyHistory.length;
+    return userStats?.totalEmergencies || emergencyHistory.length;
+  };
+
+  const getResolvedEmergencies = () => {
+    if (statsLoading) return "...";
+    if (statsError) return emergencyHistory.filter(e => e.status === "Resolved").length;
+    return userStats?.resolvedEmergencies || emergencyHistory.filter(e => e.status === "Resolved").length;
+  };
+
+  const getAvgResponseTime = () => {
+    if (statsLoading) return "...";
+    if (statsError) return "4.2";
+    if (userStats?.avgResponseTime) {
+      return userStats.avgResponseTime.toFixed(1);
+    }
+    return "4.2";
+  };
+
   return (
-    <div className="min-h-screen font-cantata max-w-md mx-auto lg:max-w-lg xl:max-w-xl flex flex-col relative bg-gradient-to-br from-blue-100 to-red-100 overflow-hidden">
-      {/* Emergency SVG/Icons background */}
-      <div className="absolute inset-0 pointer-events-none opacity-10 flex justify-center items-center z-0">
-        <FaAmbulance size={180} className="text-red-400 mx-8" />
-        <FaFireExtinguisher size={140} className="text-orange-400 mx-8" />
-        <FaUserShield size={140} className="text-blue-400 mx-8" />
-      </div>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="w-full h-[64px] bg-white/90 flex items-center justify-between px-6 shadow-lg rounded-b-3xl z-10 border-b-4 border-red-500 relative">
-        <div className="flex items-center gap-3">
-          <FaAmbulance className="text-red-500 animate-pulse" size={32} />
-          <span className="text-2xl font-extrabold text-red-600 tracking-tight drop-shadow">REACT</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <LocationIcon className="w-5 h-6 text-black" />
-            <div className="text-black text-[13px] font-normal leading-tight">
-              Location:<br />{city}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="flex items-center space-x-4">
+                  <FaAmbulance className="text-red-500 text-3xl" />
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">REACT User Dashboard</h1>
+                    <p className="text-sm text-gray-500">Emergency Services Portal</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <button onClick={() => navigate('/profile')} className="focus:outline-none">
-            <UserIcon className="w-8 h-8 text-black hover:scale-110 transition-transform" />
-          </button>
-          <button
-            onClick={handleLogout}
-            className="text-black text-sm hover:underline font-semibold"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-      {/* Emergency Question & SOS */}
-      <div className="w-full text-center py-8 z-10">
-        <h1 className="text-black text-3xl font-extrabold mb-2 tracking-tight drop-shadow">24/7 Emergency Ambulance Care</h1>
-        <div className="text-blue-700 text-lg mb-8 font-medium">Rescues the Patient in case of Emergency by just a click.</div>
-        <div className="text-red-600 text-2xl font-semibold mb-2">Are you in Emergency?</div>
-        <div className="text-red-600 text-base mt-3 mb-6">In an emergency, tap SOS to reach every help you need—ambulance, police, and fire brigade—all at once.</div>
-        <div className="flex justify-center py-4">
-          <button
-            onClick={handleSOSClick}
-            className="relative w-44 h-44 bg-red-600 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-transform duration-500 animate-pulse border-8 border-white z-20"
-          >
-            <span className="text-white text-6xl font-extrabold tracking-wider drop-shadow">SOS</span>
-            <span className="absolute inset-0 rounded-full border-4 border-red-300 opacity-50 animate-ping"></span>
-          </button>
-        </div>
-      </div>
-      {/* Choose Ambulance Type */}
-      <div className="px-4 lg:px-6 py-6 z-10">
-        <h2 className="text-black text-xl font-semibold mb-6 flex items-center gap-2">
-          <FaAmbulance className="text-red-500" /> Choose ambulance type:
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          {ambulanceTypes.map((type, index) => (
-            <button
-              key={type.label}
-              onClick={() => handleAmbulanceTypeClick(type.label)}
-              className={`bg-white/90 rounded-2xl shadow-lg flex flex-col items-center justify-center p-6 border-2 transition-all hover:border-blue-400 hover:shadow-2xl ${selectedAmbulanceType === type.label ? "border-blue-600 ring-2 ring-blue-200" : "border-transparent"}`}
-            >
-              <span className="text-4xl mb-2">{type.icon}</span>
-              <span className="text-black text-base font-bold text-center leading-tight">
-                {type.label}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-      {/* Hospitals Near You */}
-      <div className="px-4 lg:px-6 pb-8 z-10">
-        <div className="rounded-3xl p-8 bg-white/90 shadow-2xl border-t-4 border-blue-400">
-          <h2 className="text-black text-xl font-semibold mb-6 flex items-center gap-2">
-            <FaHospitalAlt className="text-blue-600" /> Hospitals near you:
-          </h2>
-          <div className="space-y-6">
-            {hospitals.map((hospital) => (
-              <div key={hospital.id} className="bg-blue-50 rounded-xl shadow flex items-center gap-4 p-4 hover:shadow-lg transition border border-blue-100">
-                <div className="bg-blue-200 rounded-full p-2">
-                  <FaHospitalAlt className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-lg text-gray-800">{hospital.name}</div>
-                  <div className="text-gray-500 text-sm">{hospital.address}</div>
-                  <div className="text-blue-600 text-xs mt-1">{hospital.distance}</div>
-                </div>
+            <div className="flex items-center space-x-6">
+              <div className="text-sm text-gray-600">
+                <div>Welcome, {getUserName()}</div>
+                <div>Last updated: {currentTime.toLocaleTimeString()}</div>
+              </div>
+              <div className="flex items-center space-x-3">
                 <button
-                  onClick={() => handleCallHospital(hospital.name)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold shadow"
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-700 px-4 py-2 rounded-md text-sm font-medium border border-red-200 hover:bg-red-50 transition-colors"
                 >
-                  Call
+                  Logout
+                </button>
+                <button 
+                  onClick={() => navigate('/profile')}
+                  className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium hover:bg-blue-600 transition-colors"
+                >
+                  {getUserName().charAt(0).toUpperCase()}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* SOS Button - Centered */}
+        <div className="flex flex-col items-center mb-20">
+          <button
+            onClick={handleSOSClick}
+            className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-[0_8px_32px_0_rgba(255,0,0,0.25)] hover:scale-105 transition-transform duration-500 border-8 border-white z-20 mb-6"
+            style={{ boxShadow: "0 0 40px 0 rgba(255,0,0,0.15), 0 8px 32px 0 rgba(0,0,0,0.10)" }}
+          >
+            <span className="text-white text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-wider drop-shadow-lg font-serif">SOS</span>
+            <span className="absolute inset-0 rounded-full border-4 border-red-300 opacity-50 animate-ping"></span>
+          </button>
+          <div className="text-red-700 text-2xl sm:text-3xl font-bold mb-4 font-serif text-center">Are you in Emergency?</div>
+          <div className="text-blue-700 text-lg sm:text-xl font-medium text-center max-w-3xl">
+            Tap SOS to reach every help you need—ambulance, police, and fire brigade—all at once.
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+            {quickActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={action.onClick}
+                className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-left hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                <div className={`w-16 h-16 ${action.color} rounded-xl flex items-center justify-center text-white mb-6`}>
+                  {action.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">{action.title}</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">{action.description}</p>
+              </button>
             ))}
           </div>
         </div>
-      </div>
-      {/* Footer */}
-      <div className="mt-auto py-4 text-center text-xs text-gray-500 z-10">
-        &copy; {new Date().getFullYear()} Emergency Response Portal. All rights reserved.
-      </div>
+
+        {/* Summary Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-base font-medium text-gray-600 mb-2">Total Emergencies</p>
+                <p className="text-4xl font-bold text-gray-900">
+                  {statsLoading ? (
+                    <span className="text-gray-400">...</span>
+                  ) : (
+                    getTotalEmergencies()
+                  )}
+                </p>
+                {statsError && (
+                  <p className="text-xs text-red-500 mt-1">Using fallback data</p>
+                )}
+              </div>
+              <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
+                <FaFileAlt className="w-8 h-8 text-blue-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-base font-medium text-gray-600 mb-2">Resolved</p>
+                <p className="text-4xl font-bold text-gray-900">
+                  {statsLoading ? (
+                    <span className="text-gray-400">...</span>
+                  ) : (
+                    getResolvedEmergencies()
+                  )}
+                </p>
+                {statsError && (
+                  <p className="text-xs text-red-500 mt-1">Using fallback data</p>
+                )}
+              </div>
+              <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-base font-medium text-gray-600 mb-2">Avg Response</p>
+                <p className="text-4xl font-bold text-gray-900">
+                  {statsLoading ? (
+                    <span className="text-gray-400">...</span>
+                  ) : (
+                    <>
+                      {getAvgResponseTime()}
+                      <span className="text-2xl font-bold ml-1">min</span>
+                    </>
+                  )}
+                </p>
+                {statsError && (
+                  <p className="text-xs text-red-500 mt-1">Using fallback data</p>
+                )}
+              </div>
+              <div className="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center">
+                <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

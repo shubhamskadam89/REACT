@@ -15,6 +15,8 @@ import DriverAcceptedRequest from "./pages/DriverAcceptedRequest";
 import AdminDashboard from "./pages/AdminDashboard";
 import BookingForm from "./pages/BookingForm";
 import Profile from "./pages/Profile";
+import FirstAid from "./pages/FirstAid";
+import EmergencyContacts from "./pages/EmergencyContacts";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -59,6 +61,16 @@ const App = () => (
             </ProtectedRoute>
           } />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/first-aid" element={
+            <ProtectedRoute allowedRoles={["USER", "ADMIN"]}>
+              <FirstAid />
+            </ProtectedRoute>
+          } />
+          <Route path="/emergency-contacts" element={
+            <ProtectedRoute allowedRoles={["USER", "ADMIN"]}>
+              <EmergencyContacts />
+            </ProtectedRoute>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
