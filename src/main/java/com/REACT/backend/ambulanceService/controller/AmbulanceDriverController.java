@@ -25,14 +25,24 @@ public class AmbulanceDriverController {
     private final AmbulanceService ambulanceService;
 
 
+    /**
+     * get history of an ambulance
+     * @return Ambulannce Booking History Dto's
+     */
     @GetMapping("/get-history")
-    @PreAuthorize("hasAuthority('AMBULANCE_DRIVER')")
+    @PreAuthorize("hasAuthority('AMBULANCE_DRIVER') or hasAuthority('AMBULANCE_ADMIN')")
     public ResponseEntity<List<AmbulanceBookingHistoryResponseDto>> getHistory(){
         log.info("Request for all history of ambulance fetched");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();
         List<AmbulanceBookingHistoryResponseDto> response = service.getAllHistory(driver);
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * to get location of current booking
+     * @return lo
+     */
+
 
     @GetMapping("/get/current-request/location")
     @PreAuthorize("hasAuthority('AMBULANCE_DRIVER')")
@@ -44,7 +54,7 @@ public class AmbulanceDriverController {
     }
 
     @PatchMapping("/complete-booking")
-    @PreAuthorize(("hasAuthority('AMBULANCE_DRIVER') or hasAuthority('HOSPITAL_ADMIN')"))
+    @PreAuthorize(("hasAuthority('AMBULANCE_DRIVER')"))
     public ResponseEntity<CompleteAssignmentResponseDto> completeBooking(){
         log.info("Status update to COMPLETE request fetched:");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();

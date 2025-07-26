@@ -3,7 +3,6 @@ package com.REACT.backend.ambulanceService.repository;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.users.AppUser;
-import com.REACT.backend.users.model.AmbulanceDriver;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -45,4 +44,12 @@ public interface AmbulanceRepository extends JpaRepository<AmbulanceEntity, Long
     
     @Query("SELECT COUNT(a) FROM AmbulanceEntity a WHERE a.status = :status")
     long countByStatus(@Param("status") AmbulanceStatus status);
+
+
+    boolean existsByAmbulanceRegNumber(String numberplate);
+
+
+
+    Optional<AmbulanceEntity> findById(long id);
+
 }

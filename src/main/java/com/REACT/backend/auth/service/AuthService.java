@@ -2,12 +2,17 @@ package com.REACT.backend.auth.service;
 
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
+import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
 import com.REACT.backend.auth.dto.*;
+import com.REACT.backend.common.exception.BadRequestException;
+import com.REACT.backend.common.exception.ConflictException;
 import com.REACT.backend.common.exception.ResourceNotFoundException;
+import com.REACT.backend.common.exception.UnauthorizedException;
 import com.REACT.backend.common.util.LoggedUserUtil;
 import com.REACT.backend.fireService.model.FireStationEntity;
 import com.REACT.backend.fireService.model.FireTruckStatus;
 import com.REACT.backend.fireService.repository.FireStationRepository;
+import com.REACT.backend.fireService.repository.FireTruckRepository;
 import com.REACT.backend.hospitalService.model.Hospital;
 import com.REACT.backend.hospitalService.repository.HospitalRepository;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
@@ -42,8 +47,10 @@ public class AuthService{
 
     private final FireStationRepository fireStationRepo;
     private final FireTruckDriverRepository fireTruckDriverRepo;
+    private final FireTruckRepository fireTruckRepository;
 
     private final AmbulanceDriverRepository ambulanceDriverRepo;
+    private final AmbulanceRepository ambulanceRepository;
     private final HospitalRepository hospitalRepo;
 
     private final PoliceStationRepository policeStationRepo;
@@ -51,20 +58,25 @@ public class AuthService{
     private final LoggedUserUtil loggedUserUtil;
 
     public AuthResponse register(RegisterRequest request) {
-        log.info("Registering new user: {}", request.getEmail());
+
+        if(request.getEmail().isBlank()){
+            log.error("Blank email id provided {}",request.getEmail());
+            throw new IllegalArgumentException("Email cannot be blank");
+        }
+        if (request.getFullName().isBlank()) {
+            log.error("Blank full name provided {}", request.getFullName());
+            throw new IllegalArgumentException("Full name cannot be blank");
+        }
+
 
         if (request.getSecurityQuestion() == null || request.getSecurityAnswer() == null || request.getSecurityAnswer().isBlank()) {
             throw new IllegalArgumentException("Security question and answer are required");
         }
-        if (userRepo.existsByGovernmentId(request.getGovernmentId())) {
-            log.error("Duplicate government ID: {}", request.getGovernmentId());
-            throw new RuntimeException("User already exists with this Government ID");
-        }
 
-        if (userRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            log.error("Duplicate phone number: {}", request.getPhoneNumber());
-            throw new RuntimeException("Phone number already registered");
-        }
+        checkUserConflict(request.getGovernmentId(),request.getPhoneNumber(),request.getEmail());
+        log.info("Registering new user: {}", request.getEmail());
+
+
 
 
         AppUser newUser = AppUser.builder()
@@ -88,7 +100,9 @@ public class AuthService{
     public AuthResponse registerFireDriver(FireDriverRegisterRequestDto request) {
         log.info("Registering fire truck driver: {}", request.getEmail());
 
-        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
+        checkUserConflict(request.getGovernmentId(),request.getPhoneNumber(),request.getEmail());
+        checkFireDriverConflict(request.getVehicleRegNumber(),request.getLicenseNumber());
+
 
         AppUser newUser = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -105,7 +119,7 @@ public class AuthService{
         FireStationEntity station = fireStationRepo.findById(request.getFireStationId())
                 .orElseThrow(() -> {
                     log.error("No fire station with ID: {}", request.getFireStationId());
-                    return new RuntimeException("Station does not exist with id:" + request.getFireStationId());
+                    return new ResourceNotFoundException("Station does not exist with id:" + request.getFireStationId());
                 });
 
         log.info("Assigning driver {} to fire station: {}", request.getFullName(), station.getStationName());
@@ -137,7 +151,8 @@ public class AuthService{
     public AuthResponse registerAmbulanceDriver(AmbulanceRegisterRequestDto request) {
         log.info("Registering ambulance driver: {}", request.getEmail());
 
-        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
+        checkUserConflict(request.getGovernmentId(),request.getPhoneNumber(),request.getEmail());
+        checkAmbulanceDriverConflict(request.getVehicleRegNumber(),request.getLicenseNumber());
 
         AppUser user = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -154,7 +169,7 @@ public class AuthService{
         Hospital hospital = hospitalRepo.findById(request.getHospitalID())
                 .orElseThrow(() -> {
                     log.error("Invalid hospital ID: {}", request.getHospitalID());
-                    return new RuntimeException("No hospital with this id exist: " + request.getHospitalID());
+                    return new ResourceNotFoundException("No hospital with this id exist: " + request.getHospitalID());
                 });
 
         AmbulanceEntity ambulance = AmbulanceEntity.builder()
@@ -184,7 +199,7 @@ public class AuthService{
     public AuthResponse registerPoliceOfficer(PoliceOfficerRegisterRequestDto request) {
         log.info("Registering police officer: {}", request.getEmail());
 
-        checkUserConflict(request.getGovernmentId(), request.getPhoneNumber());
+        checkUserConflict(request.getGovernmentId(),request.getPhoneNumber(),request.getEmail());
 
         AppUser user = AppUser.builder()
                 .userFullName(request.getFullName())
@@ -201,7 +216,7 @@ public class AuthService{
         PoliceStationEntity station = policeStationRepo.findById(request.getPoliceStationId())
                 .orElseThrow(() -> {
                     log.error("No police station found with ID: {}", request.getPoliceStationId());
-                    return new RuntimeException("No such Police Station exist");
+                    return new ResourceNotFoundException("No such Police Station exist");
                 });
 
         log.info("Assigning officer {} to station {}", request.getFullName(), station.getStationName());
@@ -220,32 +235,72 @@ public class AuthService{
     }
 
     public AuthResponse login(LoginRequest request) {
+
         log.info("Login attempt for {}", request.getEmail());
 
-        AppUser user = userRepo.findByUserEmail(request.getEmail());
-
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getUserPassword())) {
-            log.warn("Invalid login attempt for {}", request.getEmail());
-            throw new RuntimeException("Invalid email or password");
+        if(!userRepo.existsByUserEmail(request.getEmail())){
+            log.warn("No user with this email {} exist",request.getEmail());
+            throw new UnauthorizedException("Please create account first!");
         }
 
+        AppUser user = userRepo.findByUserEmail(request.getEmail());
+        if(user == null){
+            log.warn("Invalid login attempt for with null credentials");
+            throw new UnauthorizedException("Invalid login attempt for with null credentials");
+        }
+        if(!passwordEncoder.matches(request.getPassword(), user.getUserPassword())){
+            log.warn("Invalid password entered for  email {}",request.getEmail());
+            throw new UnauthorizedException("Invalid login attempt with incorrect password");
+        }
         log.info("Login successful for {}", request.getEmail());
         return buildAuthResponse(user);
+
     }
 
     // ------------------ Helpers ------------------------
 
-    private void checkUserConflict(String govId, String phone) {
+    private void checkUserConflict(String govId, String phone, String email) {
         if (userRepo.existsByGovernmentId(govId)) {
             log.error("Duplicate government ID: {}", govId);
-            throw new RuntimeException("User already exists with this Government ID");
+            throw new ConflictException("User already exists with this Government ID");
+        }
+
+        if (userRepo.existsByUserEmail(email)) {
+            log.error("Duplicate email exists: {}", email);
+            throw new ConflictException("Email already registered");
         }
 
         if (userRepo.existsByPhoneNumber(phone)) {
             log.error("Duplicate phone number: {}", phone);
-            throw new RuntimeException("Phone number already registered");
+            throw new ConflictException("Phone number already registered");
         }
     }
+
+    private void checkFireDriverConflict(String numberPlate, String license){
+        if(fireTruckDriverRepo.existsByLicenseNumber(license)){
+            log.error("Fire Driver with this license exist {}",license);
+            throw new ConflictException("Fire Driver with this license exist");
+        }
+
+        if(fireTruckRepository.existsByVehicleRegNumber(numberPlate)){
+            log.error("Fire Truck with number platen {} already exist",numberPlate);
+            throw  new ConflictException("Fire Truck with this number plate exist");
+        }
+    }
+
+
+    public void checkAmbulanceDriverConflict(String numberPlate, String license){
+        if(ambulanceDriverRepo.existsByLicenseNumber(license)){
+            log.error("Ambulance Driver with this license exist {}",license);
+            throw new ConflictException("Ambulance Driver with this license exist");
+        }
+
+        if(ambulanceRepository.existsByAmbulanceRegNumber(numberPlate)){
+            log.error("Ambulance with number plate {} already exist",numberPlate);
+            throw  new ConflictException("Ambulance with this number plate exist");
+        }
+    }
+
 
     private AuthResponse buildAuthResponse(AppUser user) {
         return AuthResponse.builder()

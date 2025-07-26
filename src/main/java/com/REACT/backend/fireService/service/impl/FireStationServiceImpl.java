@@ -28,7 +28,6 @@ public class FireStationServiceImpl implements FireStationService {
 
         FireStationEntity saved = fireStationRepository.save(entity);
 
-        dto.setId(saved.getId());
         return dto;
     }
 

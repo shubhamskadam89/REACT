@@ -8,6 +8,7 @@ import com.REACT.backend.fireService.dto.FireTruckLocationUpdateDto;
 import com.REACT.backend.fireService.service.FireService;
 import com.REACT.backend.fireService.service.impl.FireServiceImpl;
 import com.REACT.backend.fireService.service.impl.FireTruckLocationUpdateServiceImplementation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class FireTruckDriverController {
     private final FireServiceImpl fireService;
 
     @PostMapping("/update-location")
-    public ResponseEntity<String> updateLocation(@RequestBody FireTruckLocationUpdateDto dto) {
+    public ResponseEntity<String> updateLocation(@Valid @RequestBody FireTruckLocationUpdateDto dto) {
         fireTruckLocationUpdateServiceImplementation.updateLocation(dto);
         log.info("Location update request fetched for fire truck {}",dto.getTruckId());
         messagingTemplate.convertAndSend("/topic/location", dto);

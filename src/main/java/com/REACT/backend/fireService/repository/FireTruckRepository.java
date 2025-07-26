@@ -34,4 +34,7 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
     
     @Query("SELECT COUNT(DISTINCT f.fireStationEntity.id) FROM FireTruckEntity f")
     long countDistinctByFireStationId();
+
+
+    boolean existsByVehicleRegNumber(String numberPlate);
 }

@@ -2,6 +2,7 @@ package com.REACT.backend.fireService.controller;
 
 import com.REACT.backend.fireService.dto.FireStationDto;
 import com.REACT.backend.fireService.service.impl.FireStationServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class FireStationController {
     private final FireStationServiceImpl fireStationService;
 
     @PostMapping("/add")
-    public ResponseEntity<FireStationDto> addFireStation(@RequestBody FireStationDto fireStationDto) {
+    public ResponseEntity<FireStationDto> addFireStation(@Valid @RequestBody FireStationDto fireStationDto) {
         FireStationDto savedStation = fireStationService.addFireStation(fireStationDto);
         return ResponseEntity.ok(savedStation);
     }

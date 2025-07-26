@@ -25,7 +25,6 @@ public class AmbulanceDriver {
 
     private String licenseNumber;
 
-    // ✅ Cascade only if you create FireTruck at registration
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ambulance_id", nullable = false)
     private AmbulanceEntity ambulance;

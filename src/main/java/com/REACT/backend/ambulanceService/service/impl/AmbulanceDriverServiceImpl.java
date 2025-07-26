@@ -8,6 +8,7 @@ import com.REACT.backend.ambulanceService.repository.AmbulanceRepository;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
 import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.LocationDto;
+import com.REACT.backend.common.exception.ResourceNotFoundException;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import com.REACT.backend.fireService.model.FireTruckStatus;
@@ -31,9 +32,10 @@ public class AmbulanceDriverServiceImpl {
         log.info("Received request to fetch ambulance booking history");
 
         if (!(obj instanceof AmbulanceDriver driver)) {
-            log.error("Invalid user type: expected AmbulanceDriver but got {}", obj.getClass().getSimpleName());
-            throw new IllegalArgumentException("User is not an AmbulanceDriver");
+            log.error("Invalid user type: expected AmbulanceDriver but got {}", obj == null ? "null" : obj.getClass().getSimpleName());
+            throw new IllegalArgumentException("Invalid access. This operation is allowed only for Ambulance Drivers.");
         }
+
 
         AmbulanceEntity ambulance = driver.getAmbulance();
         if (ambulance == null) {
@@ -70,10 +72,24 @@ public class AmbulanceDriverServiceImpl {
 
     public LocationDto getLocationOfCurrentBooking(Object driverObject) {
         log.info("Location fetch request init");
-        AmbulanceDriver driver = (AmbulanceDriver) driverObject;
+
+        if (!(driverObject instanceof AmbulanceDriver driver)) {
+            log.error("Invalid object passed to getLocationOfCurrentBooking: {}", driverObject == null ? "null" : driverObject.getClass().getSimpleName());
+            throw new IllegalArgumentException("Only Ambulance Drivers can access location data.");
+        }
+
         AppUser appUser = driver.getDriver();
-        log.info("found user who is requesting {}",appUser.getUserEmail());
+        if (appUser == null) {
+            log.error("Driver object has no linked AppUser");
+            throw new ResourceNotFoundException("Ambulance driver not linked to a user account.");
+        }
+
         AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
+        if (ambulance == null) {
+            log.error("No ambulance assigned to AppUser: {}", appUser.getUserId());
+            throw new ResourceNotFoundException("No ambulance assigned to this driver.");
+        }
+
         log.info("Found associated ambulance {} of {} ",ambulance.getAmbulanceRegNumber(),ambulance.getAmbulanceDriverName());
 
         List< EmergencyRequestEntity> activeEntity= emergencyRequestRepo.findByAssignedAmbulance(ambulance);
@@ -82,30 +98,42 @@ public class AmbulanceDriverServiceImpl {
         return activeEntity.stream().filter( req -> AmbulanceStatus.EN_ROUTE.equals(req.getAmbulanceStatusMap().get(ambulance)))
                 .findFirst()
                 .map(req -> new LocationDto(req.getLatitude(), req.getLongitude()))
-                .orElseThrow(()-> new RuntimeException("No active EN_ROUTE request for this ambulance"));
+                .orElseThrow(() -> {
+                    log.warn("No EN_ROUTE booking found for ambulance ID {}", ambulance.getId());
+                    return new ResourceNotFoundException("No active EN_ROUTE request for this ambulance");
+                });
+
 
     }
 
 
     public CompleteAssignmentResponseDto completeBooking(Object obj){
         log.info("Started with COMPLETE status update process");
-        AmbulanceDriver driver = (AmbulanceDriver) obj;
+        if (!(obj instanceof AmbulanceDriver driver)) {
+            log.error("Invalid user type for completeBooking: {}", obj == null ? "null" : obj.getClass().getSimpleName());
+            throw new IllegalArgumentException("Only Ambulance Drivers can complete bookings.");
+        }
+
         AppUser appUser = driver.getDriver();
         AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
         log.info("found ambulance {}",ambulance.getId());
         ambulance.setStatus(AmbulanceStatus.AVAILABLE);
         ambulanceRepository.save(ambulance);
         List<EmergencyRequestEntity> entity = emergencyRequestRepo.findByAssignedAmbulance(ambulance);
-        EmergencyRequestEntity thisEntity= null;
-        for(EmergencyRequestEntity e: entity){
-            AmbulanceStatus status = e.getAmbulanceStatusMap().get(ambulance);
-            if(status==AmbulanceStatus.EN_ROUTE){
-                thisEntity=e;
-                break;
-            }
-        }
-        thisEntity.getAmbulanceStatusMap().put(ambulance,AmbulanceStatus.COMPLETED);
+
+        EmergencyRequestEntity thisEntity = entity.stream()
+                .filter(e -> AmbulanceStatus.EN_ROUTE.equals(e.getAmbulanceStatusMap().get(ambulance)))
+                .findFirst()
+                .orElseThrow(() -> {
+                    log.warn("No EN_ROUTE request found for ambulance ID {}", ambulance.getId());
+                    return new ResourceNotFoundException("No active EN_ROUTE booking found for completion.");
+                });
+
         log.info("Completed the assignment {}",thisEntity.getId());
+        if (thisEntity.getAmbulanceStatusMap() == null) {
+            log.error("Ambulance status map is null for booking ID {}", thisEntity.getId());
+            throw new IllegalStateException("Invalid booking state: no ambulance status map present.");
+        }
         emergencyRequestRepo.save(thisEntity);
         log.info("done updating status");
 

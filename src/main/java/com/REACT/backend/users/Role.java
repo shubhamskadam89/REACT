@@ -7,7 +7,7 @@ public enum Role {
     POLICE_OFFICER,
     ROLE_FIRE_STATION_ADMIN,
     ADMIN,
-    HOSPITAL_ADMIN
+    AMBULANCE_ADMIN
 
 
 }

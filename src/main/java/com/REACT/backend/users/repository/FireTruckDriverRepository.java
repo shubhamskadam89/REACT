@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface FireTruckDriverRepository extends JpaRepository<FireTruckDriver,Long> {
 
     Optional<FireTruckDriver> findByDriver(AppUser user);
+    boolean existsByLicenseNumber(String license);
 
 }
