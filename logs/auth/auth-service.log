@@ -1,0 +1,21 @@
+09:29:05.013 [http-nio-8080-exec-5] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail ronak.kale@fire.com
+09:29:05.014 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login attempt for ronak.kale@fire.com
+09:29:05.275 [http-nio-8080-exec-5] INFO  c.R.backend.auth.service.AuthService - Login successful for ronak.kale@fire.com
+10:37:49.619 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail amit.shaham@bulance.com for Role: AMBULANCE_ADMIN
+10:37:49.833 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: amit.shaham@bulance.com
+10:37:50.190 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully: amit.shaham@bulance.com (Role: AMBULANCE_ADMIN)
+17:07:58.395 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail vishnu.jadhav@example.com
+17:07:58.396 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for vishnu.jadhav@example.com
+17:07:58.742 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for vishnu.jadhav@example.com
+18:37:02.659 [http-nio-8080-exec-2] INFO  c.R.b.auth.Controller.AuthController - register requested fetched for userEmail pranav.mukharji@fire.com for Role: FIRE_STATION_ADMIN
+18:37:03.469 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - Registering new user: pranav.mukharji@fire.com
+18:37:03.696 [http-nio-8080-exec-2] INFO  c.R.backend.auth.service.AuthService - User registered successfully: pranav.mukharji@fire.com (Role: FIRE_STATION_ADMIN)
+18:41:40.905 [http-nio-8080-exec-4] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail pranav.mukharji@fire.com
+18:41:40.905 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login attempt for pranav.mukharji@fire.com
+18:41:41.175 [http-nio-8080-exec-4] INFO  c.R.backend.auth.service.AuthService - Login successful for pranav.mukharji@fire.com
+19:13:56.417 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shaham@ambulance.com
+19:13:56.417 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shaham@ambulance.com
+19:13:56.524 [http-nio-8080-exec-1] WARN  c.R.backend.auth.service.AuthService - No user with this email amit.shaham@ambulance.com exist
+19:14:16.978 [http-nio-8080-exec-3] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail amit.shaham@bulance.com
+19:14:16.980 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login attempt for amit.shaham@bulance.com
+19:14:17.260 [http-nio-8080-exec-3] INFO  c.R.backend.auth.service.AuthService - Login successful for amit.shaham@bulance.com

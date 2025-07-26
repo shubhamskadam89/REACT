@@ -1,0 +1,10 @@
+10:57:41.554 [http-nio-8080-exec-7] INFO  c.R.b.f.c.FireTruckDriverController - Location fetched request for 
+10:57:41.755 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - Location fetch request init
+10:57:41.756 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - found user who is requesting manohar.shattrma@example.com
+10:57:41.833 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - Found associated fire truck MH155AB19234 of Manohar shtvarma 
+10:57:41.981 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetched 1 requests where Fire Truck where involved.
+10:57:42.165 [http-nio-8080-exec-9] INFO  c.R.b.f.c.FireTruckDriverController - Location fetched request for 
+10:57:42.439 [http-nio-8080-exec-9] INFO  c.R.b.f.service.impl.FireServiceImpl - Location fetch request init
+10:57:42.439 [http-nio-8080-exec-9] INFO  c.R.b.f.service.impl.FireServiceImpl - found user who is requesting manohar.shattrma@example.com
+10:57:42.482 [http-nio-8080-exec-9] INFO  c.R.b.f.service.impl.FireServiceImpl - Found associated fire truck MH155AB19234 of Manohar shtvarma 
+10:57:42.582 [http-nio-8080-exec-9] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetched 1 requests where Fire Truck where involved.

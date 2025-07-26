@@ -1,0 +1,24 @@
+10:53:17.457 [http-nio-8080-exec-9] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 1
+10:53:17.457 [http-nio-8080-exec-9] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 1
+10:53:17.550 [http-nio-8080-exec-9] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Shivajinagar Police Station
+10:53:17.816 [http-nio-8080-exec-9] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 3 bookings for police station ID: 1
+10:53:24.112 [http-nio-8080-exec-8] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 2
+10:53:24.113 [http-nio-8080-exec-8] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 2
+10:53:24.218 [http-nio-8080-exec-8] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Hadapsar Police Outpost
+10:53:24.274 [http-nio-8080-exec-8] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 0 bookings for police station ID: 2
+10:53:28.957 [http-nio-8080-exec-2] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 3
+10:53:28.958 [http-nio-8080-exec-2] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 3
+10:53:29.066 [http-nio-8080-exec-2] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Kothrud Police HQ
+10:53:29.116 [http-nio-8080-exec-2] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 0 bookings for police station ID: 3
+10:53:32.443 [http-nio-8080-exec-10] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 4
+10:53:32.443 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 4
+10:53:32.547 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Viman Nagar Police Station
+10:53:32.586 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 0 bookings for police station ID: 4
+10:53:36.947 [http-nio-8080-exec-1] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 5
+10:53:36.947 [http-nio-8080-exec-1] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 5
+10:53:37.042 [http-nio-8080-exec-1] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Pimpri-Chinchwad Police Dept.
+10:53:37.082 [http-nio-8080-exec-1] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 0 bookings for police station ID: 5
+10:53:40.311 [http-nio-8080-exec-3] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 1
+10:53:40.311 [http-nio-8080-exec-3] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 1
+10:53:40.403 [http-nio-8080-exec-3] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Shivajinagar Police Station
+10:53:40.648 [http-nio-8080-exec-3] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 3 bookings for police station ID: 1

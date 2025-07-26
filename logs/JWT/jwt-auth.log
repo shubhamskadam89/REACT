@@ -1,0 +1,1074 @@
+09:09:56.070 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+09:13:53.867 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+09:14:05.907 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhAYW1idWxhbmNlLmNvbSIsInVzZXJJZCI6NDAsInJvbGUiOiJIT1NQSVRBTF9BRE1JTiIsImlhdCI6MTc1MzQ2NjAwNCwiZXhwIjoxNzUzNzY2MDA0fQ.kKJmoYxntaUHtYKfb6cS2EhIxcNRLrIwMKKyRuc9JLk
+09:14:05.907 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhAYW1idWxhbmNlLmNvbSIsInVzZXJJZCI6NDAsInJvbGUiOiJIT1NQSVRBTF9BRE1JTiIsImlhdCI6MTc1MzQ2NjAwNCwiZXhwIjoxNzUzNzY2MDA0fQ.kKJmoYxntaUHtYKfb6cS2EhIxcNRLrIwMKKyRuc9JLk
+09:14:05.907 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhAYW1idWxhbmNlLmNvbSIsInVzZXJJZCI6NDAsInJvbGUiOiJIT1NQSVRBTF9BRE1JTiIsImlhdCI6MTc1MzQ2NjAwNCwiZXhwIjoxNzUzNzY2MDA0fQ.kKJmoYxntaUHtYKfb6cS2EhIxcNRLrIwMKKyRuc9JLk
+09:14:05.907 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhAYW1idWxhbmNlLmNvbSIsInVzZXJJZCI6NDAsInJvbGUiOiJIT1NQSVRBTF9BRE1JTiIsImlhdCI6MTc1MzQ2NjAwNCwiZXhwIjoxNzUzNzY2MDA0fQ.kKJmoYxntaUHtYKfb6cS2EhIxcNRLrIwMKKyRuc9JLk
+09:14:05.924 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:14:05.945 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:14:05.945 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:14:05.945 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shah@ambulance.com
+09:14:05.945 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shah@ambulance.com
+09:14:06.074 [http-nio-8080-exec-1] WARN  c.REACT.backend.Jwt.AuthTokenFilter - User not found in DB for email: amit.shah@ambulance.com
+09:14:06.080 [http-nio-8080-exec-1] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+09:14:25.881 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:14:25.882 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:14:25.882 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:14:25.882 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:14:25.882 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:14:25.884 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:14:25.884 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:14:25.885 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: user1@example.com
+09:14:25.885 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: user1@example.com
+09:14:25.995 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: user1@example.com
+09:14:25.996 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: user1@example.com
+09:16:55.656 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+09:17:04.058 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:04.058 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:04.058 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:04.059 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:04.075 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:17:04.092 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:17:04.092 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:17:04.092 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: user1@example.com
+09:17:04.093 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: user1@example.com
+09:17:04.245 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: user1@example.com
+09:17:04.245 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: user1@example.com
+09:17:15.226 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:15.226 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:15.226 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:15.226 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMyNTI2ODMsImV4cCI6MTc1MzU1MjY4M30.6IPTkahlN1JHMUvXtaZr8-omMd_jVENxB8xJQCvIrHU
+09:17:15.226 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:17:15.227 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:17:15.227 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:17:15.228 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: user1@example.com
+09:17:15.228 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: user1@example.com
+09:17:15.326 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: user1@example.com
+09:17:15.327 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: user1@example.com
+09:28:16.699 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+09:28:32.500 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpLnNzaW5naEBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTI4Mjg5MDQsImV4cCI6MTc1MzEyODkwNH0.g0vycbym-JWngh45n_UJ6iofvvvjLJx57rw6_1yNS3g
+09:28:32.500 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpLnNzaW5naEBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTI4Mjg5MDQsImV4cCI6MTc1MzEyODkwNH0.g0vycbym-JWngh45n_UJ6iofvvvjLJx57rw6_1yNS3g
+09:28:32.500 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpLnNzaW5naEBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTI4Mjg5MDQsImV4cCI6MTc1MzEyODkwNH0.g0vycbym-JWngh45n_UJ6iofvvvjLJx57rw6_1yNS3g
+09:28:32.500 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpLnNzaW5naEBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTI4Mjg5MDQsImV4cCI6MTc1MzEyODkwNH0.g0vycbym-JWngh45n_UJ6iofvvvjLJx57rw6_1yNS3g
+09:28:32.517 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:28:32.535 [http-nio-8080-exec-2] ERROR com.REACT.backend.Jwt.JwtUtils - JWT token is expired: JWT expired 373408535 milliseconds ago at 2025-07-21T20:15:04.000Z. Current time: 2025-07-26T03:58:32.535Z. Allowed clock skew: 0 milliseconds.
+09:28:32.535 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+09:28:32.539 [http-nio-8080-exec-2] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+09:28:45.347 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:28:45.347 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:28:45.347 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:28:45.347 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:28:45.347 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:28:45.349 [http-nio-8080-exec-3] ERROR com.REACT.backend.Jwt.JwtUtils - JWT token is expired: JWT expired 697729349 milliseconds ago at 2025-07-18T02:09:56.000Z. Current time: 2025-07-26T03:58:45.349Z. Allowed clock skew: 0 milliseconds.
+09:28:45.349 [http-nio-8080-exec-3] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+09:29:04.996 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:29:04.996 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:29:04.996 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:29:04.997 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb2RzZS5kcml2ZXJAZXhhbXBsZS5jb20iLCJ1c2VySWQiOjYsInJvbGUiOiJGSVJFX1RSVUNLX0RSSVZFUiIsImlhdCI6MTc1MjUwNDU5NiwiZXhwIjoxNzUyODA0NTk2fQ.aFR3FhpGcZjLUJXw8PiXDODOkF5oMdhHZjMCsIHb-9I
+09:29:04.997 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:29:04.997 [http-nio-8080-exec-5] ERROR com.REACT.backend.Jwt.JwtUtils - JWT token is expired: JWT expired 697748997 milliseconds ago at 2025-07-18T02:09:56.000Z. Current time: 2025-07-26T03:59:04.997Z. Allowed clock skew: 0 milliseconds.
+09:29:04.998 [http-nio-8080-exec-5] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+09:29:05.277 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:29:05.280 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user ronak.kale@fire.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:29:27.638 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:29:27.638 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:29:27.638 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:29:27.638 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:29:27.638 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:29:27.642 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:29:27.643 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:29:27.644 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ronak.kale@fire.com
+09:29:27.644 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ronak.kale@fire.com
+09:29:27.772 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ronak.kale@fire.com
+09:29:27.772 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ronak.kale@fire.com
+09:31:05.732 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+09:31:29.916 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:29.916 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:29.916 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:29.916 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:29.932 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:31:29.950 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:31:29.950 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:31:29.950 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ronak.kale@fire.com
+09:31:29.950 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ronak.kale@fire.com
+09:31:30.077 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ronak.kale@fire.com
+09:31:30.077 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ronak.kale@fire.com
+09:31:42.655 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:42.656 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:42.656 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:42.656 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:31:42.656 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:31:42.658 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:31:42.658 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:31:42.659 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ronak.kale@fire.com
+09:31:42.659 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ronak.kale@fire.com
+09:31:42.775 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ronak.kale@fire.com
+09:31:42.775 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ronak.kale@fire.com
+09:32:01.524 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:01.525 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:01.525 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:01.525 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:01.525 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:32:01.527 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:32:01.527 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:32:01.528 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ronak.kale@fire.com
+09:32:01.528 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ronak.kale@fire.com
+09:32:01.632 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ronak.kale@fire.com
+09:32:01.632 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ronak.kale@fire.com
+09:32:16.953 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:16.954 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:16.954 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:16.954 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb25hay5rYWxlQGZpcmUuY29tIiwidXNlcklkIjozNCwicm9sZSI6IkZJUkVfRFJJVkVSIiwiaWF0IjoxNzUzNTAyMzQ1LCJleHAiOjE3NTM4MDIzNDV9._qzJeRZJapH1RL73OHIuLdFV5pkN1PX12kjRJqLYsUw
+09:32:16.954 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:32:16.956 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+09:32:16.956 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+09:32:16.957 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ronak.kale@fire.com
+09:32:16.957 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ronak.kale@fire.com
+09:32:17.056 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ronak.kale@fire.com
+09:32:17.056 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ronak.kale@fire.com
+10:34:56.108 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:35:43.838 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+10:35:43.838 [http-nio-8080-exec-2] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+10:35:43.838 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+10:35:43.838 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+10:37:24.036 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:37:49.565 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+10:37:49.565 [http-nio-8080-exec-2] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+10:37:49.565 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+10:37:49.565 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+10:37:50.216 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:37:50.226 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user amit.shaham@bulance.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:03.784 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:03.785 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:03.785 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:03.785 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:03.801 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:39:03.819 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:39:03.819 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:39:03.819 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:39:03.819 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:39:03.944 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:39:03.945 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:39:03.953 [http-nio-8080-exec-5] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:39:18.044 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:18.044 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:18.045 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:18.045 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:39:18.045 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:39:18.046 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:39:18.046 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:39:18.047 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:39:18.047 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:39:18.162 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:39:18.163 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:39:18.172 [http-nio-8080-exec-6] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:41:17.166 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:17.166 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:17.166 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:17.166 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:17.167 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:17.168 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:41:17.168 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:17.168 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:41:17.168 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:41:17.282 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:41:17.282 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:41:17.288 [http-nio-8080-exec-9] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:41:23.780 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:23.780 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:23.780 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:23.781 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:23.781 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:23.782 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:41:23.782 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:23.783 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:41:23.783 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:41:23.943 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:41:23.943 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:41:23.951 [http-nio-8080-exec-10] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:41:26.524 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:26.524 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:26.524 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:26.524 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:41:26.524 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:26.526 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:41:26.526 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:41:26.527 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:41:26.527 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:41:26.614 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:41:26.614 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:41:26.622 [http-nio-8080-exec-1] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:43:53.639 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:43:53.639 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:43:53.639 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:43:53.639 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:43:53.640 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:43:53.641 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:43:53.641 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:43:53.642 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:43:53.642 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:43:53.755 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:43:53.755 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:11.408 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:11.409 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:11.409 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:11.409 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:11.409 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:11.411 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:11.411 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:11.411 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:11.412 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:11.535 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:11.535 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:14.387 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:14.387 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:14.387 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:14.387 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:14.388 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:14.389 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:14.389 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:14.390 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:14.390 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:14.496 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:14.496 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:17.151 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:17.151 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:17.151 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:17.151 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:17.151 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:17.152 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:17.152 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:17.153 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:17.153 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:17.255 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:17.255 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:20.469 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:20.470 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:20.470 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:20.470 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:20.470 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:20.471 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:20.471 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:20.472 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:20.472 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:20.614 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:20.614 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:23.728 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:23.728 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:23.728 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:23.728 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:23.728 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:23.729 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:23.730 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:23.730 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:23.731 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:23.843 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:23.843 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:27.486 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:27.487 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:27.487 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:27.487 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:27.487 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:27.488 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:27.488 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:27.489 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:27.489 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:27.582 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:27.582 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:41.308 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:41.309 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:41.309 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:41.309 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:41.310 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:41.311 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:41.311 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:41.312 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:41.312 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:41.418 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:41.419 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:48.402 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:48.403 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:48.403 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:48.403 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:48.403 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:48.404 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:48.404 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:48.405 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:48.405 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:48.527 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:48.527 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:44:52.054 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:52.054 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:52.054 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:52.055 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:44:52.055 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:52.056 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:44:52.056 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:44:52.057 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:44:52.057 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:44:52.194 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:44:52.194 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:45:04.060 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:45:04.061 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:45:04.061 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:45:04.061 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:45:04.061 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:45:04.062 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:45:04.062 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:45:04.063 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:45:04.063 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:45:04.175 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:45:04.175 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:45:04.183 [http-nio-8080-exec-4] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:45:52.954 [http-nio-8080-exec-5] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:45:56.871 [http-nio-8080-exec-6] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+10:46:12.038 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:12.038 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:12.038 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:12.038 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:12.038 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:12.039 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:12.040 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:12.040 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:12.040 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:12.294 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:12.295 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:19.264 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:19.264 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:19.264 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:19.264 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:19.264 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:19.265 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:19.265 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:19.266 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:19.266 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:19.377 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:19.377 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:23.087 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:23.088 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:23.088 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:23.088 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:23.088 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:23.089 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:23.089 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:23.090 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:23.090 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:23.194 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:23.194 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:25.456 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:25.456 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:25.456 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:25.456 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:25.456 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:25.457 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:25.458 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:25.458 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:25.458 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:25.575 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:25.575 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:27.705 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:27.705 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:27.705 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:27.705 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:27.705 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:27.706 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:27.706 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:27.707 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:27.707 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:27.803 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:27.803 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:30.324 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:30.325 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:30.325 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:30.325 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:30.325 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:30.326 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:30.326 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:30.327 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:30.327 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:30.415 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:30.415 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:46:33.270 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:33.270 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:33.270 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:33.270 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:46:33.271 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:33.271 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:46:33.272 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:46:33.272 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:46:33.272 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:46:33.414 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:46:33.415 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:47:52.730 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:48:00.572 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:00.572 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:00.572 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:00.573 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:00.589 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:00.607 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:48:00.607 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:00.607 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:48:00.607 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:48:00.760 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:48:00.761 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:48:03.637 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:03.637 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:03.637 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:03.637 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:03.637 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:03.639 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:48:03.639 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:03.640 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:48:03.640 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:48:03.814 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:48:03.814 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:48:04.493 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:04.493 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:04.493 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:04.493 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:04.493 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:04.495 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:48:04.495 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:04.496 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:48:04.496 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:48:04.614 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:48:04.615 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:48:44.887 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:44.887 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:44.887 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:44.887 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:48:44.888 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:44.889 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:48:44.889 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:48:44.890 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:48:44.891 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:48:44.990 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:48:44.991 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:50:21.020 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:50:25.657 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:50:25.657 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:50:25.657 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:50:25.657 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:50:25.674 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:50:25.692 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:50:25.692 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:50:25.692 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:50:25.692 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:50:25.926 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:50:25.927 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:51:04.628 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:51:09.712 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:51:09.712 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:51:09.712 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:51:09.712 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:51:09.727 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:51:09.745 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:51:09.745 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:51:09.746 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:51:09.746 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:51:09.878 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:51:09.879 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:18.305 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:53:22.664 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:22.664 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:22.664 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:22.664 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:22.680 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:22.701 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:22.701 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:22.701 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:22.701 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:22.847 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:22.848 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:27.837 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:27.838 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:27.838 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:27.838 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:27.838 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:27.839 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:27.840 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:27.841 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:27.841 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:27.935 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:27.936 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:31.103 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:31.103 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:31.103 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:31.103 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:31.103 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:31.105 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:31.105 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:31.106 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:31.106 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:31.197 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:31.197 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:34.785 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:34.785 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:34.785 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:34.786 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:34.786 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:34.787 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:34.787 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:34.788 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:34.788 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:34.875 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:34.875 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:38.284 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:38.285 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:38.285 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:38.285 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:38.285 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:38.286 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:38.287 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:38.287 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:38.287 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:38.377 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:38.377 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:42.902 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:42.903 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:42.903 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:42.903 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:42.903 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:42.904 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:42.905 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:42.905 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:42.905 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:43.017 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:43.017 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:53:47.937 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:47.937 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:47.937 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:47.938 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:53:47.938 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:47.939 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:53:47.939 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:53:47.940 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:53:47.940 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:53:48.056 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:53:48.056 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:58:26.842 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+10:58:30.955 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:30.955 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:30.955 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:30.955 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:30.970 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:30.988 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:58:30.989 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:30.989 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:58:30.989 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:58:31.128 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:58:31.128 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:58:35.418 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:35.418 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:35.418 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:35.419 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:35.419 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:35.421 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:58:35.421 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:35.422 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:58:35.422 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:58:35.522 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:58:35.523 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+10:58:38.761 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:38.762 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:38.762 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:38.762 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+10:58:38.762 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:38.763 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+10:58:38.763 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+10:58:38.764 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+10:58:38.764 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+10:58:39.065 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+10:58:39.066 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+17:05:41.965 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+17:07:01.310 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+17:07:47.290 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6Mywicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMwMzEzODQsImV4cCI6MTc1MzMzMTM4NH0.NPDOKMg07I7lr1Q5EzEye_TsNubwOAhckMPZbInzTLA
+17:07:47.290 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6Mywicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMwMzEzODQsImV4cCI6MTc1MzMzMTM4NH0.NPDOKMg07I7lr1Q5EzEye_TsNubwOAhckMPZbInzTLA
+17:07:47.290 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6Mywicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMwMzEzODQsImV4cCI6MTc1MzMzMTM4NH0.NPDOKMg07I7lr1Q5EzEye_TsNubwOAhckMPZbInzTLA
+17:07:47.290 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBleGFtcGxlLmNvbSIsInVzZXJJZCI6Mywicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTMwMzEzODQsImV4cCI6MTc1MzMzMTM4NH0.NPDOKMg07I7lr1Q5EzEye_TsNubwOAhckMPZbInzTLA
+17:07:47.306 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:07:47.325 [http-nio-8080-exec-1] ERROR com.REACT.backend.Jwt.JwtUtils - JWT token is expired: JWT expired 198483324 milliseconds ago at 2025-07-24T04:29:44.000Z. Current time: 2025-07-26T11:37:47.324Z. Allowed clock skew: 0 milliseconds.
+17:07:47.325 [http-nio-8080-exec-1] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+17:07:47.331 [http-nio-8080-exec-1] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+17:07:58.136 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM0NTc2ODUsImV4cCI6MTc1Mzc1NzY4NX0.5uvZDuNTK4iQPFjg_stk3UufRvbyFI28YT4xaK5sCPI
+17:07:58.136 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM0NTc2ODUsImV4cCI6MTc1Mzc1NzY4NX0.5uvZDuNTK4iQPFjg_stk3UufRvbyFI28YT4xaK5sCPI
+17:07:58.137 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM0NTc2ODUsImV4cCI6MTc1Mzc1NzY4NX0.5uvZDuNTK4iQPFjg_stk3UufRvbyFI28YT4xaK5sCPI
+17:07:58.137 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM0NTc2ODUsImV4cCI6MTc1Mzc1NzY4NX0.5uvZDuNTK4iQPFjg_stk3UufRvbyFI28YT4xaK5sCPI
+17:07:58.137 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:07:58.139 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+17:07:58.139 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:07:58.140 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: vishnu.jadhav@example.com
+17:07:58.140 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: vishnu.jadhav@example.com
+17:07:58.337 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: vishnu.jadhav@example.com
+17:07:58.338 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: vishnu.jadhav@example.com
+17:07:58.745 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:07:58.748 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user vishnu.jadhav@example.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM1Mjk4NzgsImV4cCI6MTc1MzgyOTg3OH0.po-DjnO4WcM9IBs8aolDdKRGG3CRPDpiWi0Zm7wDl8I
+17:08:21.168 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM1Mjk4NzgsImV4cCI6MTc1MzgyOTg3OH0.po-DjnO4WcM9IBs8aolDdKRGG3CRPDpiWi0Zm7wDl8I
+17:08:21.169 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM1Mjk4NzgsImV4cCI6MTc1MzgyOTg3OH0.po-DjnO4WcM9IBs8aolDdKRGG3CRPDpiWi0Zm7wDl8I
+17:08:21.169 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM1Mjk4NzgsImV4cCI6MTc1MzgyOTg3OH0.po-DjnO4WcM9IBs8aolDdKRGG3CRPDpiWi0Zm7wDl8I
+17:08:21.169 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNobnUuamFkaGF2QGV4YW1wbGUuY29tIiwidXNlcklkIjozNSwicm9sZSI6IkFNQlVMQU5DRV9EUklWRVIiLCJpYXQiOjE3NTM1Mjk4NzgsImV4cCI6MTc1MzgyOTg3OH0.po-DjnO4WcM9IBs8aolDdKRGG3CRPDpiWi0Zm7wDl8I
+17:08:21.169 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:08:21.170 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+17:08:21.170 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+17:08:21.171 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: vishnu.jadhav@example.com
+17:08:21.171 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: vishnu.jadhav@example.com
+17:08:21.285 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: vishnu.jadhav@example.com
+17:08:21.286 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: vishnu.jadhav@example.com
+17:21:19.349 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:28:51.879 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:29:13.104 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:37:02.601 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+18:37:02.601 [http-nio-8080-exec-2] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+18:37:02.601 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+18:37:02.601 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+18:37:03.711 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:37:03.720 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user pranav.mukharji@fire.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1MjIzLCJleHAiOjE3NTM4MzUyMjN9.okzOKN5IMdh0hcqWZd-E3OLVycEzo9pRr0jT-vUhuoY
+18:38:19.213 [http-nio-8080-exec-4] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:38:21.979 [http-nio-8080-exec-6] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:40:30.385 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:40:49.119 [http-nio-8080-exec-2] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:41:14.765 [http-nio-8080-exec-3] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:41:40.836 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+18:41:40.837 [http-nio-8080-exec-4] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+18:41:40.837 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+18:41:40.837 [http-nio-8080-exec-4] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+18:41:41.189 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:41:41.195 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user pranav.mukharji@fire.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:41:58.474 [http-nio-8080-exec-5] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:42:51.393 [http-nio-8080-exec-6] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:43:17.401 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:43:26.876 [http-nio-8080-exec-2] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:44:12.583 [http-nio-8080-exec-3] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:44:40.006 [http-nio-8080-exec-4] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:45:17.228 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWJ1bGFuY2UxQGV4YW1wbGUuY29tIiwidXNlcklkIjozLCJyb2xlIjoiQU1CVUxBTkNFX0RSSVZFUiIsImlhdCI6MTc1MzI0ODc3NSwiZXhwIjoxNzUzNTQ4Nzc1fQ.PAtzGnyJsI0yLZMHwv_0u7_mTgWeITESrrb0AnteDHg
+18:45:17.228 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWJ1bGFuY2UxQGV4YW1wbGUuY29tIiwidXNlcklkIjozLCJyb2xlIjoiQU1CVUxBTkNFX0RSSVZFUiIsImlhdCI6MTc1MzI0ODc3NSwiZXhwIjoxNzUzNTQ4Nzc1fQ.PAtzGnyJsI0yLZMHwv_0u7_mTgWeITESrrb0AnteDHg
+18:45:17.228 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWJ1bGFuY2UxQGV4YW1wbGUuY29tIiwidXNlcklkIjozLCJyb2xlIjoiQU1CVUxBTkNFX0RSSVZFUiIsImlhdCI6MTc1MzI0ODc3NSwiZXhwIjoxNzUzNTQ4Nzc1fQ.PAtzGnyJsI0yLZMHwv_0u7_mTgWeITESrrb0AnteDHg
+18:45:17.228 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWJ1bGFuY2UxQGV4YW1wbGUuY29tIiwidXNlcklkIjozLCJyb2xlIjoiQU1CVUxBTkNFX0RSSVZFUiIsImlhdCI6MTc1MzI0ODc3NSwiZXhwIjoxNzUzNTQ4Nzc1fQ.PAtzGnyJsI0yLZMHwv_0u7_mTgWeITESrrb0AnteDHg
+18:45:17.243 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:45:17.256 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:45:17.256 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:45:17.257 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: ambulance1@example.com
+18:45:17.257 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: ambulance1@example.com
+18:45:17.436 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: ambulance1@example.com
+18:45:17.437 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: ambulance1@example.com
+18:45:29.110 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:45:29.111 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:45:29.111 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:45:29.111 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:45:29.111 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:45:29.113 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:45:29.113 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:45:29.114 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:45:29.114 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:45:29.232 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:45:29.233 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:47:08.377 [http-nio-8080-exec-10] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:47:15.780 [http-nio-8080-exec-1] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:48:10.778 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:48:33.645 [http-nio-8080-exec-2] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:48:41.097 [http-nio-8080-exec-3] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:49:04.396 [http-nio-8080-exec-4] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:49:05.234 [http-nio-8080-exec-5] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:54:48.695 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:54:53.462 [http-nio-8080-exec-1] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+18:55:13.374 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:13.374 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:13.374 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:13.374 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:13.409 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:55:13.429 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:55:13.429 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:55:13.429 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:55:13.429 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:55:13.565 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:55:13.565 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:55:46.199 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:46.199 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:46.199 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:46.199 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:55:46.200 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:55:46.201 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:55:46.202 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:55:46.203 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:55:46.203 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:55:46.319 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:55:46.319 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:56:43.942 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:56:43.942 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:56:43.942 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:56:43.942 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:56:43.942 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:56:43.944 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:56:43.944 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:56:43.945 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:56:43.945 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:56:44.043 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:56:44.043 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:57:50.099 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+18:57:55.202 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:57:55.202 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:57:55.202 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:57:55.202 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:57:55.219 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:57:55.237 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:57:55.237 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:57:55.237 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:57:55.237 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:57:55.375 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:57:55.375 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:58:01.352 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:01.353 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:01.353 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:01.353 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:01.353 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:01.354 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:58:01.354 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:01.355 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:58:01.355 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:58:01.445 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:58:01.446 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:58:04.618 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:04.618 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:04.618 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:04.618 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:04.618 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:04.620 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:58:04.620 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:04.621 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:58:04.621 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:58:04.709 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:58:04.710 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:58:10.699 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:10.700 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:10.700 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:10.700 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:10.700 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:10.702 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:58:10.702 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:10.702 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:58:10.702 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:58:10.831 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:58:10.832 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:58:14.872 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:14.872 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:14.872 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:14.872 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:14.872 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:14.873 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:58:14.874 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:14.874 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:58:14.874 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:58:14.988 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:58:14.988 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+18:58:20.070 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:20.070 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:20.070 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:20.070 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+18:58:20.070 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:20.070 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+18:58:20.071 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+18:58:20.071 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+18:58:20.071 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+18:58:20.181 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+18:58:20.181 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:02:25.537 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:25.537 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:25.538 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:25.538 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:25.538 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:02:25.539 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:02:25.539 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:02:25.539 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:02:25.539 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:02:25.641 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:02:25.642 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:02:30.485 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:30.486 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:30.486 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:30.486 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:02:30.486 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:02:30.487 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:02:30.487 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:02:30.488 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:02:30.488 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:02:30.569 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:02:30.569 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:03:11.983 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:11.983 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:11.983 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:11.983 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:11.984 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:03:11.985 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:03:11.985 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:03:11.986 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:03:11.986 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:03:12.081 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:03:12.081 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:03:40.454 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:40.454 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:40.454 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:40.454 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:03:40.455 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:03:40.455 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:03:40.455 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:03:40.456 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:03:40.456 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:03:40.642 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:03:40.642 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:03.548 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:05:07.709 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:07.709 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:07.709 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:07.709 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:07.724 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:07.745 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:07.746 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:07.746 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:07.746 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:07.861 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:07.862 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:14.738 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:14.738 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:14.738 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:14.738 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:14.739 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:14.740 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:14.740 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:14.741 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:14.741 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:14.858 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:14.859 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:20.267 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:20.267 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:20.267 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:20.267 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:20.267 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:20.268 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:20.268 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:20.269 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:20.269 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:20.359 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:20.359 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:29.897 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:29.897 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:29.897 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:29.897 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:29.897 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:29.899 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:29.899 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:29.900 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:29.900 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:30.000 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:30.000 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:36.755 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:36.755 [http-nio-8080-exec-7] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:36.755 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:36.756 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:36.756 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:36.757 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:36.757 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:36.758 [http-nio-8080-exec-7] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:36.758 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:36.878 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:36.878 [http-nio-8080-exec-7] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:05:54.968 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:54.968 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:54.968 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:54.969 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:05:54.969 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:54.969 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:05:54.969 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:05:54.970 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:05:54.970 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:05:55.099 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:05:55.100 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:08:06.378 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+19:08:06.379 [http-nio-8080-exec-2] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+19:08:06.379 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+19:08:06.379 [http-nio-8080-exec-2] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+19:08:56.235 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:10:27.527 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:27.527 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:27.527 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:27.527 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:27.543 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:27.562 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:10:27.562 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:27.562 [http-nio-8080-exec-1] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:10:27.562 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:10:27.709 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:10:27.710 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:10:35.418 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:35.418 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:35.418 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:35.418 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:35.418 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:35.419 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:10:35.419 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:35.420 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:10:35.420 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:10:35.511 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:10:35.512 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:10:40.325 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:40.326 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:40.326 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:40.326 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFuYXYubXVraGFyamlAZmlyZS5jb20iLCJ1c2VySWQiOjQ0LCJyb2xlIjoiRklSRV9TVEFUSU9OX0FETUlOIiwiaWF0IjoxNzUzNTM1NTAxLCJleHAiOjE3NTM4MzU1MDF9.KbzaMyl_vP8ZUScWJ-2KUsCArmgpXcyituZS0GPucbY
+19:10:40.326 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:40.328 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:10:40.328 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:10:40.329 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: pranav.mukharji@fire.com
+19:10:40.329 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: pranav.mukharji@fire.com
+19:10:40.429 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: pranav.mukharji@fire.com
+19:10:40.429 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: pranav.mukharji@fire.com
+19:13:48.432 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:13:56.366 [http-nio-8080-exec-1] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+19:13:56.366 [http-nio-8080-exec-1] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+19:13:56.366 [http-nio-8080-exec-1] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+19:13:56.366 [http-nio-8080-exec-1] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+19:14:16.973 [http-nio-8080-exec-3] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+19:14:16.973 [http-nio-8080-exec-3] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+19:14:16.973 [http-nio-8080-exec-3] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+19:14:16.973 [http-nio-8080-exec-3] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+19:14:17.274 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:14:17.280 [http-nio-8080-exec-3] DEBUG com.REACT.backend.Jwt.JwtUtils - Generated JWT for user amit.shaham@bulance.com: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:28.556 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:28.557 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:28.557 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:28.557 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:28.570 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:28.587 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:15:28.587 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:28.588 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:15:28.588 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:15:28.686 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:15:28.687 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:15:33.673 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:33.673 [http-nio-8080-exec-8] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:33.673 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:33.673 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:33.673 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:33.675 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:15:33.675 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:33.676 [http-nio-8080-exec-8] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:15:33.676 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:15:33.802 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:15:33.802 [http-nio-8080-exec-8] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:15:39.021 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:39.021 [http-nio-8080-exec-9] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:39.021 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:39.021 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:15:39.021 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:39.023 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:15:39.023 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:15:39.024 [http-nio-8080-exec-9] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:15:39.024 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:15:39.107 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:15:39.107 [http-nio-8080-exec-9] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:16:02.089 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:02.089 [http-nio-8080-exec-10] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:02.089 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:02.089 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:02.089 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:16:02.091 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:16:02.091 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:16:02.092 [http-nio-8080-exec-10] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:16:02.092 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:16:02.182 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:16:02.182 [http-nio-8080-exec-10] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:16:05.919 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:05.919 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:05.919 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:05.919 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1MDY0NzAsImV4cCI6MTc1MzgwNjQ3MH0.uHAREP2zQnq4e6LToL9quneZzEI9ntmIiWRiqIdTJ4k
+19:16:05.920 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:16:05.921 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:16:05.921 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:16:05.922 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:16:05.922 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:16:06.008 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:16:06.008 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:19:01.545 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: null
+19:19:01.546 [http-nio-8080-exec-4] WARN  com.REACT.backend.Jwt.JwtUtils - Authorization header is missing or does not start with 'Bearer '
+19:19:01.546 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: null
+19:19:01.547 [http-nio-8080-exec-4] WARN  c.REACT.backend.Jwt.AuthTokenFilter - Invalid or missing JWT token.
+19:19:01.550 [http-nio-8080-exec-4] WARN  c.R.backend.Jwt.AuthEntryPointJWT - Missing or invalid JWT: Full authentication is required to access this resource
+19:19:35.009 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:19:35.009 [http-nio-8080-exec-5] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:19:35.009 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:19:35.009 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:19:35.009 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:19:35.011 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:19:35.012 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:19:35.013 [http-nio-8080-exec-5] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:19:35.013 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:19:35.135 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:19:35.135 [http-nio-8080-exec-5] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:20:35.351 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:21:40.812 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:21:40.812 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:21:40.812 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:21:40.812 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:21:40.828 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:21:40.846 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:21:40.846 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:21:40.846 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:21:40.846 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:21:40.967 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:21:40.967 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:22:01.127 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:01.128 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:01.128 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:01.128 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:01.128 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:22:01.130 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:22:01.131 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:22:01.131 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:22:01.131 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:22:01.251 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:22:01.251 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:22:20.770 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:20.770 [http-nio-8080-exec-6] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:20.770 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:20.770 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:22:20.770 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:22:20.771 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:22:20.771 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:22:20.772 [http-nio-8080-exec-6] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:22:20.772 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:22:20.849 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:22:20.849 [http-nio-8080-exec-6] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:23:50.134 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:24:00.492 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:24:00.492 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:24:00.493 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:24:00.493 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:24:00.509 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:24:00.527 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:24:00.527 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:24:00.527 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:24:00.527 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:24:00.658 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:24:00.658 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:27:12.200 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:28:11.222 [main] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Filter 'authTokenFilter' configured for use
+19:28:48.139 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:28:48.139 [http-nio-8080-exec-2] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:28:48.139 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:28:48.139 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:28:48.154 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:28:48.172 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:28:48.172 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:28:48.172 [http-nio-8080-exec-2] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:28:48.172 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:28:48.277 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:28:48.277 [http-nio-8080-exec-2] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com
+19:30:13.756 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Authorization Header: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:30:13.756 [http-nio-8080-exec-4] INFO  com.REACT.backend.Jwt.JwtUtils - Extracted JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:30:13.756 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Token received from header: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:30:13.756 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Validating JWT token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWl0LnNoYWhhbUBidWxhbmNlLmNvbSIsInVzZXJJZCI6NDIsInJvbGUiOiJBTUJVTEFOQ0VfQURNSU4iLCJpYXQiOjE3NTM1Mzc0NTcsImV4cCI6MTc1MzgzNzQ1N30.XFzH6Ux5DzI7beKQ4m1CPMBczwNqVEFScOTi0NNvgEg
+19:30:13.756 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:30:13.757 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - JWT token is valid.
+19:30:13.757 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Signing key generated from jwtSecret
+19:30:13.758 [http-nio-8080-exec-4] DEBUG com.REACT.backend.Jwt.JwtUtils - Extracted email from JWT: amit.shaham@bulance.com
+19:30:13.758 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Decoded user email from token: amit.shaham@bulance.com
+19:30:13.851 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - User found in DB: amit.shaham@bulance.com
+19:30:13.851 [http-nio-8080-exec-4] DEBUG c.REACT.backend.Jwt.AuthTokenFilter - Security context updated with user: amit.shaham@bulance.com

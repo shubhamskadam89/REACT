@@ -1,0 +1,37 @@
+18:45:29.238 [http-nio-8080-exec-6] INFO  c.R.b.f.c.FireAdminController - Trucks by station requested by 1
+18:55:46.336 [http-nio-8080-exec-5] INFO  c.R.b.f.c.FireAdminController - Requesting all stations from DB
+18:55:46.336 [http-nio-8080-exec-5] INFO  c.R.b.f.s.i.FireStationServiceImpl - Fetching all fire stations from DB
+18:57:55.391 [http-nio-8080-exec-2] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=1
+18:57:55.391 [http-nio-8080-exec-2] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 1
+18:57:55.704 [http-nio-8080-exec-2] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: fire driver 1 | Email: fire1@example.com | Truck Reg: MH12AA0001
+18:57:55.704 [http-nio-8080-exec-2] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 1
+18:58:01.452 [http-nio-8080-exec-3] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=2
+18:58:01.452 [http-nio-8080-exec-3] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 2
+18:58:01.522 [http-nio-8080-exec-3] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: fire driver 1 | Email: fire2@example.com | Truck Reg: MH12AA0001
+18:58:01.522 [http-nio-8080-exec-3] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 2
+18:58:04.715 [http-nio-8080-exec-4] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=3
+18:58:04.716 [http-nio-8080-exec-4] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 3
+18:58:04.826 [http-nio-8080-exec-4] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: Manohar shtvarma | Email: manohar.shattrma@example.com | Truck Reg: MH155AB19234
+18:58:04.827 [http-nio-8080-exec-4] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 3
+18:58:10.836 [http-nio-8080-exec-5] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=4
+18:58:10.836 [http-nio-8080-exec-5] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 4
+18:58:10.985 [http-nio-8080-exec-5] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: fireAdmin | Email: fireAdmin@gmail.com | Truck Reg: 34567823
+18:58:10.985 [http-nio-8080-exec-5] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 4
+18:58:14.992 [http-nio-8080-exec-6] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=5
+18:58:14.993 [http-nio-8080-exec-6] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 5
+18:58:15.143 [http-nio-8080-exec-6] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: gfd | Email: 1@example.com | Truck Reg: MH155AB34
+18:58:15.143 [http-nio-8080-exec-6] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 5
+18:58:20.185 [http-nio-8080-exec-7] INFO  c.R.b.f.c.FireAdminController - Get profile request fetched for truckId=6
+18:58:20.185 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - Fetching FireTruck driver profile for truckId: 6
+18:58:20.329 [http-nio-8080-exec-7] DEBUG c.R.b.f.service.impl.FireServiceImpl - Driver found: Shani Verma | Email: shanti.vermma@gov.com | Truck Reg: MH12AA0001
+18:58:20.329 [http-nio-8080-exec-7] INFO  c.R.b.f.service.impl.FireServiceImpl - Successfully built driver profile for truckId: 6
+19:02:30.610 [http-nio-8080-exec-2] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 6
+19:03:12.085 [http-nio-8080-exec-3] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck null
+19:03:40.646 [http-nio-8080-exec-5] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8
+19:05:07.892 [http-nio-8080-exec-1] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 100
+19:05:14.863 [http-nio-8080-exec-3] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck -1
+19:05:30.004 [http-nio-8080-exec-6] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8
+19:05:36.882 [http-nio-8080-exec-7] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8
+19:05:55.102 [http-nio-8080-exec-8] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8
+19:10:35.544 [http-nio-8080-exec-4] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8
+19:10:40.435 [http-nio-8080-exec-5] INFO  c.R.b.f.c.FireAdminController - Update location request fetched for fire truck 8

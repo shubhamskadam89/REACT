@@ -1,0 +1,17 @@
+21:46:08.455 [http-nio-8080-exec-3] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+21:46:08.776 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
+21:46:08.776 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting vishnu.jadhav@example.com
+21:46:08.855 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB1122 of Vishnu Jadhav 
+21:46:09.015 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 1 requests where ambulance where involved.
+21:49:04.109 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+21:51:45.884 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+21:51:47.494 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+23:10:32.338 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
+23:23:57.567 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 1
+23:23:57.572 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 1, lat: 18.5207, long: 73.8428
+23:23:57.879 [http-nio-8080-exec-7] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Ambulance ID 1 location updated in DB.
+23:23:57.883 [http-nio-8080-exec-7] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Location broadcasted for Ambulance ID: 1
+23:24:01.953 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 2
+23:24:01.954 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 2, lat: 18.5207, long: 73.8428
+23:24:02.018 [http-nio-8080-exec-8] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Ambulance ID 2 location updated in DB.
+23:24:02.019 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Location broadcasted for Ambulance ID: 2

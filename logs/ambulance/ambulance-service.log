@@ -1,42 +1,57 @@
-11:01:24.210 [http-nio-8080-exec-6] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 1
-11:01:24.214 [http-nio-8080-exec-6] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 1, lat: 18.5207, long: 73.8428
-11:01:24.265 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Ambulance ID 1 location updated in DB.
-11:01:24.278 [http-nio-8080-exec-6] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Location broadcasted for Ambulance ID: 1
-11:04:43.828 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceDriverController - Request for all history of ambulance fetched
-11:04:43.959 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Received request to fetch ambulance booking history
-11:04:43.959 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetching booking history for ambulance ID: 1
-11:04:44.075 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found 2 bookings for ambulance ID: 1
-11:04:44.076 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 1 to response DTO
-11:04:44.133 [http-nio-8080-exec-5] DEBUG c.R.b.a.s.i.AmbulanceDriverServiceImpl - Mapping booking ID 4 to response DTO
-11:04:44.187 [http-nio-8080-exec-5] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Returning 2 booking DTOs for response
-11:11:15.201 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
-11:11:15.389 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
-11:11:15.389 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
-11:11:15.431 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
-11:11:15.510 [http-nio-8080-exec-8] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
-11:11:21.010 [http-nio-8080-exec-9] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
-11:11:21.099 [http-nio-8080-exec-9] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
-11:11:21.099 [http-nio-8080-exec-9] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
-11:11:21.138 [http-nio-8080-exec-9] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
-11:11:21.218 [http-nio-8080-exec-9] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
-11:11:56.817 [http-nio-8080-exec-10] INFO  c.R.b.a.c.AmbulanceDriverController - Status update to COMPLETE request fetched:
-11:11:56.918 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Started with COMPLETE status update process
-11:11:56.967 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found ambulance 1
-11:11:57.333 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Completed the assignment 4
-11:11:57.432 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - done updating status
-11:11:57.433 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Checking if all services for request 4 have completed
-11:11:57.542 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Service completion status - Ambulances: true, Fire: true, Police: true
-11:11:57.647 [http-nio-8080-exec-10] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Emergency request 4 marked as COMPLETED
-12:02:44.559 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceDriverController - Location fetched request for 
-12:02:44.732 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Location fetch request init
-12:02:44.732 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - found user who is requesting ambulance1@example.com
-12:02:44.779 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Found associated ambulance MH12AB9874 of ambulance 1 
-12:02:44.871 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceDriverServiceImpl - Fetched 2 requests where ambulance where involved.
-12:13:47.649 [http-nio-8080-exec-3] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 1
-12:13:47.650 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 1, lat: 18.5207, long: 73.8428
-12:13:47.710 [http-nio-8080-exec-3] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Ambulance ID 1 location updated in DB.
-12:13:47.714 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Location broadcasted for Ambulance ID: 1
-12:13:56.824 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 1
-12:13:56.824 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 1, lat: 18.5207, long: 73.8428
-12:13:56.897 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Ambulance ID 1 location updated in DB.
-12:13:56.897 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Location broadcasted for Ambulance ID: 1
+10:46:12.301 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:19.379 [http-nio-8080-exec-9] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:23.197 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:25.579 [http-nio-8080-exec-3] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:27.806 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:30.417 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:46:33.417 [http-nio-8080-exec-9] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=null fetched by admin.
+10:48:00.779 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+10:48:03.820 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=2 fetched by admin.
+10:48:04.619 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=2 fetched by admin.
+10:48:44.996 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+10:50:25.946 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+10:50:26.438 [http-nio-8080-exec-1] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 1
+10:50:26.438 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 1, Lat: 18.5304, Long: 73.8167
+10:50:26.438 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 4, Lat: 18.5304, Long: 73.8167
+10:51:09.895 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+10:51:10.280 [http-nio-8080-exec-1] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 1
+10:51:10.280 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 1, Lat: 18.5304, Long: 73.8167
+10:51:10.280 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 4, Lat: 18.5304, Long: 73.8167
+10:53:22.862 [http-nio-8080-exec-1] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+10:53:23.216 [http-nio-8080-exec-1] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 1
+10:53:23.216 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 1, Lat: 18.5304, Long: 73.8167
+10:53:23.217 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 4, Lat: 18.5304, Long: 73.8167
+10:53:27.942 [http-nio-8080-exec-3] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=2 fetched by admin.
+10:53:28.115 [http-nio-8080-exec-3] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 2
+10:53:31.201 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=3 fetched by admin.
+10:53:31.389 [http-nio-8080-exec-4] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 3
+10:53:31.389 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 5, Lat: 18.5304, Long: 73.8167
+10:53:34.879 [http-nio-8080-exec-5] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=4 fetched by admin.
+10:53:35.024 [http-nio-8080-exec-5] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 4
+10:53:38.381 [http-nio-8080-exec-6] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=5 fetched by admin.
+10:53:38.651 [http-nio-8080-exec-6] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 5
+10:53:38.651 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 10, Lat: 18.5304, Long: 73.8167
+10:53:38.651 [http-nio-8080-exec-6] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 13, Lat: 18.5304, Long: 73.8167
+10:53:43.021 [http-nio-8080-exec-7] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=6 fetched by admin.
+10:53:43.216 [http-nio-8080-exec-7] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 6
+10:53:43.216 [http-nio-8080-exec-7] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 11, Lat: 18.5304, Long: 73.8167
+10:53:48.060 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=7 fetched by admin.
+10:58:31.144 [http-nio-8080-exec-1] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Fetching ambulance with ID: 1
+10:58:31.441 [http-nio-8080-exec-1] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Returning DTO for Ambulance ID: 1
+10:58:35.528 [http-nio-8080-exec-3] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Fetching ambulance with ID: 2
+10:58:35.625 [http-nio-8080-exec-3] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Returning DTO for Ambulance ID: 2
+10:58:39.070 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Fetching ambulance with ID: 3
+10:58:39.239 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Returning DTO for Ambulance ID: 3
+17:08:21.306 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceAdminController - Get profile request fetched for ambulanceId=1
+19:15:33.824 [http-nio-8080-exec-8] INFO  c.R.b.a.c.AmbulanceAdminController - Get profile request fetched for ambulanceId=1
+19:15:39.112 [http-nio-8080-exec-9] INFO  c.R.b.a.c.AmbulanceAdminController - Get profile request fetched for ambulanceId=6
+19:16:02.187 [http-nio-8080-exec-10] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=2 fetched by admin.
+19:16:02.348 [http-nio-8080-exec-10] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 2
+19:16:06.013 [http-nio-8080-exec-2] INFO  c.R.b.a.c.AmbulanceAdminController - Request for all history of ambulance id=1 fetched by admin.
+19:16:06.229 [http-nio-8080-exec-2] INFO  c.R.b.a.s.impl.AmbulanceServiceImpl - Getting booking history for Ambulance ID: 1
+19:16:06.229 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 1, Lat: 18.5304, Long: 73.8167
+19:16:06.229 [http-nio-8080-exec-2] DEBUG c.R.b.a.s.impl.AmbulanceServiceImpl - Request ID: 4, Lat: 18.5304, Long: 73.8167
+19:30:13.917 [http-nio-8080-exec-4] INFO  c.R.b.a.c.AmbulanceController - Location update request fetched for ambulance 6
+19:30:13.919 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Received location update for Ambulance ID: 6, lat: 89.0, long: 179.0
+19:30:14.105 [http-nio-8080-exec-4] DEBUG c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Updated location in DB for Ambulance ID: 6
+19:30:14.110 [http-nio-8080-exec-4] INFO  c.R.b.a.s.i.AmbulanceLocationServiceImplementation - Broadcasted location for Ambulance ID: 6
