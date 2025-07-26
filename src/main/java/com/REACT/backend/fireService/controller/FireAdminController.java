@@ -1,10 +1,7 @@
 package com.REACT.backend.fireService.controller;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
-import com.REACT.backend.fireService.dto.FireStationResponseDto;
-import com.REACT.backend.fireService.dto.FireTruckDriverProfileDto;
-import com.REACT.backend.fireService.dto.FireTruckDto;
-import com.REACT.backend.fireService.dto.FireTruckLocationUpdateDto;
+import com.REACT.backend.fireService.dto.*;
 import com.REACT.backend.fireService.service.FireAdminService;
 import com.REACT.backend.fireService.service.impl.FireServiceImpl;
 import com.REACT.backend.fireService.service.impl.FireStationServiceImpl;
@@ -89,4 +86,27 @@ public class FireAdminController {
         return ResponseEntity.ok(fireStationServiceImpl.getAllFireStations());
 
     }
+
+    @GetMapping("/get/fire-station/{stationId}")
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<FireStationResponseDto> getStation(@Valid @PathVariable Long stationId){
+        log.info("Get station request fetched for fire station {}",stationId);
+        return ResponseEntity.ok(fireStationServiceImpl.getStation(stationId));
+    }
+
+    @GetMapping("/get/all-trucks")
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN')")
+    public ResponseEntity<List<FireTruckDto>> getAllTrucks(){
+        log.info("Fetching all fire trucks");
+        return ResponseEntity.ok(fireStationServiceImpl.getAllTrucks());
+    }
+
+
+    @GetMapping("get/truck/{id}")
+    @PreAuthorize("hasAuthority('FIRE_STATION_ADMIN') or hasAuthority('FIRE_DRIVER')")
+    public ResponseEntity<FireTruckDto> getTruck(@Valid @PathVariable Long id){
+        log.info("Fetching fire truck {}",id);
+        return ResponseEntity.ok(fireStationServiceImpl.getTruck(id));
+    }
+
 }

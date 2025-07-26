@@ -2,10 +2,13 @@ package com.REACT.backend.policeService.controller;
 
 import com.REACT.backend.booking.dto.BookingDto;
 import com.REACT.backend.common.dto.LocationDto;
+import com.REACT.backend.policeService.dto.PoliceOfficerResponseDto;
 import com.REACT.backend.policeService.service.PoliceAdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class PoliceAdminController {
      * @return List of booking history
      */
     @GetMapping("/station/{stationId}/history")
+    @PreAuthorize("hasAuthority('POLICE_STATION_ADMIN')")
     public ResponseEntity<List<BookingDto>> getStationHistory(@PathVariable Long stationId) {
         log.info("Fetching booking history for police station ID: {}", stationId);
         List<BookingDto> history = policeAdminService.getBookingHistoryByStation(stationId);
@@ -42,15 +46,35 @@ public class PoliceAdminController {
         return ResponseEntity.ok(location);
     }
 
-    /**
-     * Get all police units/officers assigned to a specific station
-     * @param stationId - ID of the police station
-     * @return List of police units for the station
-     */
-    @GetMapping("/station/{stationId}/units")
-    public ResponseEntity<?> getUnitsByStation(@PathVariable Long stationId) {
-        log.info("Fetching police units for station ID: {}", stationId);
-        // This can be implemented when police unit entities are fully defined
-        return ResponseEntity.ok("Police units endpoint - to be implemented when PoliceUnitEntity is completed");
+
+
+    //officers by station
+
+    @GetMapping("/station/officeers/{stationId}")
+    @PreAuthorize("hasAuthority('POLICE_STATION_ADMIN')")
+    public ResponseEntity<List<PoliceOfficerResponseDto>> getAllOfficersByStation(@Valid @PathVariable Long stationId){
+        log.info("fetched request to fetched all police officers of stations");
+        return ResponseEntity.ok(policeAdminService.getAllOfficersOfStation(stationId));
     }
+
+
+    // all police officers
+    @GetMapping("/station/officers")
+    @PreAuthorize("hasAuthority('POLICE_STATION_ADMIN')")
+    public ResponseEntity<List<PoliceOfficerResponseDto>> getAllOfficers(){
+        log.info("fetched request to fetched all police officers");
+        return ResponseEntity.ok(policeAdminService.getAllOfficers());
+    }
+
+    // get officer by id
+
+    @GetMapping("/station/officer/{id}")
+    @PreAuthorize("hasAuthority('POLICE_STATION_ADMIN') or hasAuthority('POLICE_OFFICER')")
+    public ResponseEntity<PoliceOfficerResponseDto> getOfficer(@Valid @PathVariable Long id){
+        log.info("fetched request to fetched police officer");
+        return ResponseEntity.ok(policeAdminService.getOfficer(id));
+    }
+
+
+    //
 }
