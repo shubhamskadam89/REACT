@@ -1,0 +1,226 @@
+10:38:22.212 [http-nio-8080-exec-8] INFO  c.R.b.b.c.DashboardController - Dashboard statistics requested
+10:38:23.057 [http-nio-8080-exec-8] ERROR c.R.b.b.c.DashboardController - Error generating dashboard statistics
+java.lang.RuntimeException: Failed to calculate dashboard statistics
+	at com.REACT.backend.booking.service.DashboardService.getDashboardStatistics(DashboardService.java:116)
+	at com.REACT.backend.booking.controller.DashboardController.getDashboardStats(DashboardController.java:25)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.REACT.backend.Jwt.AuthTokenFilter.doFilterInternal(AuthTokenFilter.java:77)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.springframework.dao.InvalidDataAccessApiUsageException: Argument [BUSY] of type [java.lang.String] did not match parameter type [com.REACT.backend.ambulanceService.model.AmbulanceStatus (n/a)]
+	at org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(EntityManagerFactoryUtils.java:371)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:234)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:550)
+	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:243)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:152)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:135)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:244)
+	at jdk.proxy2/jdk.proxy2.$Proxy137.countByStatus(Unknown Source)
+	at com.REACT.backend.booking.service.DashboardService.getDashboardStatistics(DashboardService.java:66)
+	... 96 common frames omitted
+Caused by: java.lang.IllegalArgumentException: Argument [BUSY] of type [java.lang.String] did not match parameter type [com.REACT.backend.ambulanceService.model.AmbulanceStatus (n/a)]
+	at org.hibernate.query.spi.QueryParameterBindingValidator.validate(QueryParameterBindingValidator.java:84)
+	at org.hibernate.query.spi.QueryParameterBindingValidator.validate(QueryParameterBindingValidator.java:31)
+	at org.hibernate.query.internal.QueryParameterBindingImpl.validate(QueryParameterBindingImpl.java:340)
+	at org.hibernate.query.internal.QueryParameterBindingImpl.setBindValue(QueryParameterBindingImpl.java:130)
+	at org.hibernate.query.spi.AbstractCommonQueryContract.setParameter(AbstractCommonQueryContract.java:825)
+	at org.hibernate.query.spi.AbstractSelectionQuery.setParameter(AbstractSelectionQuery.java:780)
+	at org.hibernate.query.sqm.internal.QuerySqmImpl.setParameter(QuerySqmImpl.java:1237)
+	at org.hibernate.query.sqm.internal.QuerySqmImpl.setParameter(QuerySqmImpl.java:129)
+	at org.springframework.data.jpa.repository.query.QueryParameterSetter$BindableQuery.setParameter(QueryParameterSetter.java:326)
+	at org.springframework.data.jpa.repository.query.QueryParameterSetter$NamedOrIndexedQueryParameterSetter.lambda$setParameter$4(QueryParameterSetter.java:117)
+	at org.springframework.data.jpa.repository.query.QueryParameterSetter$ErrorHandling$1.execute(QueryParameterSetter.java:140)
+	at org.springframework.data.jpa.repository.query.QueryParameterSetter$NamedOrIndexedQueryParameterSetter.setParameter(QueryParameterSetter.java:117)
+	at org.springframework.data.jpa.repository.query.ParameterBinder.bind(ParameterBinder.java:84)
+	at org.springframework.data.jpa.repository.query.ParameterBinder.bind(ParameterBinder.java:76)
+	at org.springframework.data.jpa.repository.query.ParameterBinder.bindAndPrepare(ParameterBinder.java:98)
+	at org.springframework.data.jpa.repository.query.AbstractStringBasedJpaQuery.doCreateQuery(AbstractStringBasedJpaQuery.java:106)
+	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.createQuery(AbstractJpaQuery.java:239)
+	at org.springframework.data.jpa.repository.query.JpaQueryExecution$SingleEntityExecution.doExecute(JpaQueryExecution.java:223)
+	at org.springframework.data.jpa.repository.query.JpaQueryExecution.execute(JpaQueryExecution.java:92)
+	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.doExecute(AbstractJpaQuery.java:149)
+	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.execute(AbstractJpaQuery.java:137)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:136)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:120)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:164)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:143)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:391)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137)
+	... 104 common frames omitted
+10:43:28.665 [http-nio-8080-exec-1] INFO  c.R.b.b.c.DashboardController - Dashboard statistics requested
+10:43:29.925 [http-nio-8080-exec-1] INFO  c.R.b.b.c.DashboardController - Dashboard statistics generated successfully
+10:48:59.114 [http-nio-8080-exec-5] INFO  c.R.b.b.controller.BookingController - Request received to fetch all bookings
+10:48:59.114 [http-nio-8080-exec-5] INFO  c.R.b.b.service.BookingServiceImpl - Fetching all bookings from database
+10:48:59.273 [http-nio-8080-exec-5] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 1 total bookings
+10:48:59.273 [http-nio-8080-exec-5] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 1 bookings
+10:49:48.849 [http-nio-8080-exec-6] INFO  c.R.b.b.controller.BookingController - Request received to fetch ambulance service bookings
+10:49:48.849 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Fetching ambulance service bookings from database
+10:49:49.018 [http-nio-8080-exec-6] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 1 ambulance bookings
+10:49:49.019 [http-nio-8080-exec-6] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 1 ambulance bookings
+10:50:19.067 [http-nio-8080-exec-7] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: user1@example.com
+10:50:19.068 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - 🚨 New booking request received from userId 1 for issue 'Fire Api Check'
+10:50:19.068 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Police required: 1 officers near [18.5304, 73.8167]
+10:50:19.291 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Police assignment: [Shivajinagar Police Station=1]
+10:50:19.427 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:2
+10:50:19.427 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+10:50:19.427 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status N/A || Fire brigade Assignment statusN/A
+10:50:19.470 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 2
+10:50:19.470 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+10:50:19.470 [http-nio-8080-exec-7] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user user1@example.com. Returning response.
+10:50:36.204 [http-nio-8080-exec-8] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: user1@example.com
+10:50:36.205 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - 🚨 New booking request received from userId 1 for issue 'Fire Api Check'
+10:50:36.205 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Fire truck required: 1 units near [18.5304, 73.8167]
+10:50:36.544 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:3
+10:50:36.548 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+10:50:36.549 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status N/A || Fire brigade Assignment statusFULL
+10:50:36.595 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 3
+10:50:36.596 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+10:50:36.596 [http-nio-8080-exec-8] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user user1@example.com. Returning response.
+10:50:55.428 [http-nio-8080-exec-9] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: user1@example.com
+10:50:55.429 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - 🚨 New booking request received from userId 1 for issue 'Fire Api Check'
+10:50:55.429 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.5304, 73.8167]
+10:50:55.624 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [1]
+10:50:55.724 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:4
+10:50:55.726 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+10:50:55.726 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusN/A
+10:50:55.770 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 4
+10:50:55.771 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+10:50:55.771 [http-nio-8080-exec-9] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user user1@example.com. Returning response.
+10:51:00.121 [http-nio-8080-exec-10] INFO  c.R.b.b.controller.BookingController - Request received to fetch all bookings
+10:51:00.121 [http-nio-8080-exec-10] INFO  c.R.b.b.service.BookingServiceImpl - Fetching all bookings from database
+10:51:00.264 [http-nio-8080-exec-10] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 4 total bookings
+10:51:00.265 [http-nio-8080-exec-10] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 4 bookings
+10:51:17.373 [http-nio-8080-exec-2] INFO  c.R.b.b.controller.BookingController - Request received to fetch ambulance service bookings
+10:51:17.373 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Fetching ambulance service bookings from database
+10:51:17.508 [http-nio-8080-exec-2] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 2 ambulance bookings
+10:51:17.508 [http-nio-8080-exec-2] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 2 ambulance bookings
+10:51:38.144 [http-nio-8080-exec-1] INFO  c.R.b.b.controller.BookingController - Request received to fetch fire service bookings
+10:51:38.145 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Fetching fire service bookings from database
+10:51:38.311 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 2 fire service bookings
+10:51:38.311 [http-nio-8080-exec-1] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 2 fire service bookings
+10:52:11.973 [http-nio-8080-exec-3] INFO  c.R.b.b.controller.BookingController - Request received to fetch police service bookings
+10:52:11.974 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Fetching police service bookings from database
+10:52:12.110 [http-nio-8080-exec-3] INFO  c.R.b.b.service.BookingServiceImpl - Successfully retrieved 2 police service bookings
+10:52:12.111 [http-nio-8080-exec-3] INFO  c.R.b.b.controller.BookingController - Successfully retrieved 2 police service bookings
+10:52:53.286 [http-nio-8080-exec-4] DEBUG c.R.b.b.service.BookingServiceImpl - User requested booking history []
+10:52:53.357 [http-nio-8080-exec-4] INFO  c.R.b.b.c.BookingUserController - Bookings for userId 3 requested
+10:53:18.189 [http-nio-8080-exec-5] DEBUG c.R.b.b.service.BookingServiceImpl - User requested booking history []
+10:53:18.241 [http-nio-8080-exec-5] INFO  c.R.b.b.c.BookingUserController - Bookings for userId 3 requested
+10:53:22.169 [http-nio-8080-exec-6] DEBUG c.R.b.b.service.BookingServiceImpl - User requested booking history [EmergencyRequestEntity(id=4, requestedBy=AppUser(userId=1, role=USER, userFullName=user1, userEmail=user1@example.com, phoneNumber=9876543210, governmentId=PESI827E0, userPassword=$2a$10$GP8yeYK30WB5R4BOuYkPRuP3oWsrAChttTayja8nGiY1EK6ToIni2, verified=true, securityQuestion=PET_NAME, securityAnswer=$2a$10$YAYAKT20RzQ9sDXrR1sdWuM...SNQN.Gc16X/ETZSqjcps9GxSaom), driver=null, ambulance=null, isForSelf=false, victimPhoneNumber=9876543210, issueType=Fire Api Check, needAmbulance=true, needPolice=false, requestedPoliceCount=0, needFireBrigade=false, requestedFireTruckCount=0, requestedAmbulancesCount=1, notes=API Check, latitude=18.5304, longitude=73.8167, emergencyRequestStatus=PENDING, createdAt=2025-07-23T05:20:55.672065Z, assignedPoliceMap={}, assignedAmbulances=[com.REACT.backend.ambulanceService.model.AmbulanceEntity@3c], ambulanceStatusMap={com.REACT.backend.ambulanceService.model.AmbulanceEntity@3c=AmbulanceStatus.EN_ROUTE}, assignedFireTruckEntities=[], fireTruckStatusMap={}), EmergencyRequestEntity(id=3, requestedBy=AppUser(userId=1, role=USER, userFullName=user1, userEmail=user1@example.com, phoneNumber=9876543210, governmentId=PESI827E0, userPassword=$2a$10$GP8yeYK30WB5R4BOuYkPRuP3oWsrAChttTayja8nGiY1EK6ToIni2, verified=true, securityQuestion=PET_NAME, securityAnswer=$2a$10$YAYAKT20RzQ9sDXrR1sdWuM...SNQN.Gc16X/ETZSqjcps9GxSaom), driver=null, ambulance=null, isForSelf=false, victimPhoneNumber=9876543210, issueType=Fire Api Check, needAmbulance=false, needPolice=false, requestedPoliceCount=0, needFireBrigade=true, requestedFireTruckCount=1, requestedAmbulancesCount=0, notes=API Check, latitude=18.5304, longitude=73.8167, emergencyRequestStatus=PENDING, createdAt=2025-07-23T05:20:36.483630Z, assignedPoliceMap={}, assignedAmbulances=[], ambulanceStatusMap={}, assignedFireTruckEntities=[com.REACT.backend.fireService.model.FireTruckEntity@43d3630], fireTruckStatusMap={com.REACT.backend.fireService.model.FireTruckEntity@43d3630=EN_ROUTE}), EmergencyRequestEntity(id=2, requestedBy=AppUser(userId=1, role=USER, userFullName=user1, userEmail=user1@example.com, phoneNumber=9876543210, governmentId=PESI827E0, userPassword=$2a$10$GP8yeYK30WB5R4BOuYkPRuP3oWsrAChttTayja8nGiY1EK6ToIni2, verified=true, securityQuestion=PET_NAME, securityAnswer=$2a$10$YAYAKT20RzQ9sDXrR1sdWuM...SNQN.Gc16X/ETZSqjcps9GxSaom), driver=null, ambulance=null, isForSelf=false, victimPhoneNumber=9876543210, issueType=Fire Api Check, needAmbulance=false, needPolice=true, requestedPoliceCount=1, needFireBrigade=false, requestedFireTruckCount=0, requestedAmbulancesCount=0, notes=API Check, latitude=18.5304, longitude=73.8167, emergencyRequestStatus=PENDING, createdAt=2025-07-23T05:20:19.373593Z, assignedPoliceMap={PoliceStationEntity(id=1, stationName=Shivajinagar Police Station, location=POINT (73.843 18.5305), availableOfficers=46)=1}, assignedAmbulances=[], ambulanceStatusMap={}, assignedFireTruckEntities=[], fireTruckStatusMap={}), EmergencyRequestEntity(id=1, requestedBy=AppUser(userId=1, role=USER, userFullName=user1, userEmail=user1@example.com, phoneNumber=9876543210, governmentId=PESI827E0, userPassword=$2a$10$GP8yeYK30WB5R4BOuYkPRuP3oWsrAChttTayja8nGiY1EK6ToIni2, verified=true, securityQuestion=PET_NAME, securityAnswer=$2a$10$YAYAKT20RzQ9sDXrR1sdWuM...SNQN.Gc16X/ETZSqjcps9GxSaom), driver=null, ambulance=null, isForSelf=false, victimPhoneNumber=9876543210, issueType=Fire Api Check, needAmbulance=true, needPolice=true, requestedPoliceCount=1, needFireBrigade=true, requestedFireTruckCount=1, requestedAmbulancesCount=1, notes=API Check, latitude=18.5304, longitude=73.8167, emergencyRequestStatus=COMPLETED, createdAt=2025-07-23T03:31:38.005790Z, assignedPoliceMap={PoliceStationEntity(id=1, stationName=Shivajinagar Police Station, location=POINT (73.843 18.5305), availableOfficers=46)=0}, assignedAmbulances=[com.REACT.backend.ambulanceService.model.AmbulanceEntity@3c], ambulanceStatusMap={com.REACT.backend.ambulanceService.model.AmbulanceEntity@3c=AmbulanceStatus.COMPLETED}, assignedFireTruckEntities=[com.REACT.backend.fireService.model.FireTruckEntity@43d3630], fireTruckStatusMap={com.REACT.backend.fireService.model.FireTruckEntity@43d3630=COMPLETED})]
+10:53:23.239 [http-nio-8080-exec-6] INFO  c.R.b.b.c.BookingUserController - Bookings for userId 1 requested
+10:54:24.332 [http-nio-8080-exec-8] INFO  c.R.b.b.c.BookingUserController - Booking with 1 requested ny the user
+10:54:30.351 [http-nio-8080-exec-9] INFO  c.R.b.b.c.BookingUserController - Booking with 2 requested ny the user
+10:54:34.377 [http-nio-8080-exec-10] INFO  c.R.b.b.c.BookingUserController - Booking with 3 requested ny the user
+10:54:38.180 [http-nio-8080-exec-2] INFO  c.R.b.b.c.BookingUserController - Booking with 4 requested ny the user
+12:10:09.250 [http-nio-8080-exec-1] INFO  c.R.b.b.controller.BookingController - Booking request fetched from user with email: user1@example.com
+12:10:09.252 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - 🚨 New booking request received from userId 1 for issue 'Fire Api Check'
+12:10:09.252 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance required: Searching for 1 ambulances near [18.5304, 73.8167]
+12:10:09.619 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Ambulances assigned: [3]
+12:10:09.724 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Emergency Request saved with id:5
+12:10:09.725 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Status update for each service
+12:10:09.725 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Ambulance assignment status FULL || Fire brigade Assignment statusN/A
+12:10:09.775 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Booking log saved with id 5
+12:10:09.775 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Started building booking Response dto
+12:10:09.775 [http-nio-8080-exec-1] INFO  c.R.b.b.service.BookingServiceImpl - Booking process completed successfully for user user1@example.com. Returning response.

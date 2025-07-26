@@ -1,0 +1,18 @@
+01:12:32.790 [http-nio-8080-exec-8] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+01:12:41.419 [http-nio-8080-exec-10] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 1
+01:12:41.419 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 1
+01:12:41.586 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Shivajinagar Police Station
+01:12:41.791 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 3 bookings for police station ID: 1
+12:43:45.253 [http-nio-8080-exec-4] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+12:44:20.337 [http-nio-8080-exec-8] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+15:44:29.553 [http-nio-8080-exec-5] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+15:44:45.322 [http-nio-8080-exec-7] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 1
+15:44:45.323 [http-nio-8080-exec-7] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 1
+15:44:45.399 [http-nio-8080-exec-7] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Shivajinagar Police Station
+15:44:45.586 [http-nio-8080-exec-7] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 3 bookings for police station ID: 1
+17:16:36.059 [http-nio-8080-exec-9] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+17:16:37.341 [http-nio-8080-exec-6] INFO  c.R.b.p.c.PoliceOfficerController - Assignment history request received from police officer
+17:16:40.930 [http-nio-8080-exec-10] INFO  c.R.b.p.c.PoliceAdminController - Fetching booking history for police station ID: 1
+17:16:40.930 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Fetching booking history for police station ID: 1
+17:16:40.986 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found police station: Shivajinagar Police Station
+17:16:41.192 [http-nio-8080-exec-10] INFO  c.R.b.p.s.i.PoliceAdminServiceImpl - Found 3 bookings for police station ID: 1
