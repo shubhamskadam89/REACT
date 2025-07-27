@@ -75,6 +75,16 @@ interface UserBooking {
   needFireBrigade: boolean;
 }
 
+interface UserProfile {
+  id: number;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  governmentId: string;
+  verified: boolean;
+  role: string;
+}
+
 interface UserStats {
   totalEmergencies: number;
   resolvedEmergencies: number;
@@ -87,6 +97,7 @@ export default function Index() {
   const [city, setCity] = useState("...");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [userBookings, setUserBookings] = useState<UserBooking[]>([]);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [statsError, setStatsError] = useState<string | null>(null);
@@ -121,9 +132,9 @@ export default function Index() {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch user-specific booking data
+  // Fetch user-specific data (profile and bookings)
   useEffect(() => {
-    const fetchUserBookings = async () => {
+    const fetchUserData = async () => {
       setStatsLoading(true);
       setStatsError(null);
       try {
@@ -132,7 +143,24 @@ export default function Index() {
           throw new Error("No authentication token found");
         }
 
-        // Extract userId from JWT token
+        const headers: HeadersInit = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        };
+
+        // Fetch user profile
+        const profileRes = await fetch(`http://localhost:8080/api/user/profile`, {
+          headers
+        });
+        
+        if (!profileRes.ok) {
+          throw new Error("Failed to fetch user profile");
+        }
+        
+        const profile: UserProfile = await profileRes.json();
+        setUserProfile(profile);
+
+        // Extract userId from JWT token for bookings
         const payload = JSON.parse(atob(token.split('.')[1]));
         const userId = payload.userId;
         
@@ -140,20 +168,16 @@ export default function Index() {
           throw new Error("User ID not found in token");
         }
 
-        const headers: HeadersInit = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        };
-
-        const res = await fetch(`http://localhost:8080/user/bookings/${userId}`, {
+        // Fetch user bookings
+        const bookingsRes = await fetch(`http://localhost:8080/user/bookings/${userId}`, {
           headers
         });
         
-        if (!res.ok) {
+        if (!bookingsRes.ok) {
           throw new Error("Failed to fetch user bookings");
         }
         
-        const bookings: UserBooking[] = await res.json();
+        const bookings: UserBooking[] = await bookingsRes.json();
         setUserBookings(bookings);
 
         // Calculate user statistics
@@ -173,13 +197,13 @@ export default function Index() {
 
       } catch (err: any) {
         setStatsError(err.message || "Failed to load user data");
-        console.error("Error fetching user bookings:", err);
+        console.error("Error fetching user data:", err);
       } finally {
         setStatsLoading(false);
       }
     };
 
-    fetchUserBookings();
+    fetchUserData();
   }, []);
 
   const handleSOSClick = () => {
@@ -216,6 +240,8 @@ export default function Index() {
 
   // Get user name from auth context or localStorage
   const getUserName = () => {
+    // Use real user profile data if available
+    if (userProfile?.fullName) return userProfile.fullName;
     if (user?.email) return user.email.split('@')[0];
     if (user?.userType && user.userType !== 'CITIZEN') {
       return user.userType.charAt(0).toUpperCase() + user.userType.slice(1).toLowerCase();
@@ -259,21 +285,28 @@ export default function Index() {
                     <h1 className="text-2xl font-bold text-gray-900">REACT User Dashboard</h1>
                     <p className="text-sm text-gray-500">Emergency Services Portal</p>
                   </div>
-                </div>
+          </div>
               </div>
             </div>
             <div className="flex items-center space-x-6">
               <div className="text-sm text-gray-600">
-                <div>Welcome, {getUserName()}</div>
+                <div className="flex items-center">
+                  Welcome, {getUserName()}
+                  {userProfile?.verified && (
+                    <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
                 <div>Last updated: {currentTime.toLocaleTimeString()}</div>
               </div>
               <div className="flex items-center space-x-3">
-                <button
-                  onClick={handleLogout}
+            <button
+              onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 px-4 py-2 rounded-md text-sm font-medium border border-red-200 hover:bg-red-50 transition-colors"
-                >
-                  Logout
-                </button>
+            >
+              Logout
+            </button>
                 <button 
                   onClick={() => navigate('/profile')}
                   className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium hover:bg-blue-600 transition-colors"
@@ -316,7 +349,7 @@ export default function Index() {
               >
                 <div className={`w-16 h-16 ${action.color} rounded-xl flex items-center justify-center text-white mb-6`}>
                   {action.icon}
-                </div>
+          </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{action.title}</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">{action.description}</p>
               </button>
@@ -325,7 +358,9 @@ export default function Index() {
         </div>
 
         {/* Summary Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Your Emergency Statistics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
             <div className="flex items-center justify-between">
               <div>
@@ -370,7 +405,7 @@ export default function Index() {
           </div>
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
             <div className="flex items-center justify-between">
-              <div>
+                <div>
                 <p className="text-base font-medium text-gray-600 mb-2">Avg Response</p>
                 <p className="text-4xl font-bold text-gray-900">
                   {statsLoading ? (
@@ -385,13 +420,14 @@ export default function Index() {
                 {statsError && (
                   <p className="text-xs text-red-500 mt-1">Using fallback data</p>
                 )}
-              </div>
+                </div>
               <div className="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center">
                 <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </main>

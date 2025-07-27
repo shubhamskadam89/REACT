@@ -13,6 +13,8 @@ interface LiveMapProps {
   patientCoords: Coords;
   ambulanceCoords?: Coords;
   fireTruckCoords?: Coords;
+  onAmbulanceArrival?: () => void;
+  onFireTruckArrival?: () => void;
 }
 
 const homeSVG = `
@@ -43,7 +45,7 @@ const fireTruckSVG = `
   </svg>
 `;
 
-export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoords }: LiveMapProps) {
+export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoords, onAmbulanceArrival, onFireTruckArrival }: LiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const ambulanceMarkerRef = useRef<mapboxgl.Marker | null>(null);
@@ -114,9 +116,9 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
     }
 
     // Fetch route
-    fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${ambulanceCoords.longitude},${ambulanceCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
-      .then(res => res.json())
-      .then(data => {
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${ambulanceCoords.longitude},${ambulanceCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
+        .then(res => res.json())
+        .then(data => {
         const route = data.routes[0].geometry.coordinates;
         setAmbulanceRoute(route);
         setAmbulanceCurrentIndex(0);
@@ -124,21 +126,21 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
 
         // Add route layer
         mapRef.current!.addSource('ambulanceRoute', {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
             geometry: data.routes[0].geometry
-          }
-        });
+            }
+          });
 
         mapRef.current!.addLayer({
           id: 'ambulanceRoute',
-          type: 'line',
+            type: 'line',
           source: 'ambulanceRoute',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': '#080500', 'line-width': 3 }
-        });
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': '#080500', 'line-width': 3 }
+          });
 
         // Create ambulance marker
         const ambulanceEl = document.createElement('div');
@@ -178,9 +180,9 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
     }
 
     // Fetch route
-    fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${fireTruckCoords.longitude},${fireTruckCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
-      .then(res => res.json())
-      .then(data => {
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${fireTruckCoords.longitude},${fireTruckCoords.latitude};${patientCoords.longitude},${patientCoords.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
+        .then(res => res.json())
+        .then(data => {
         const route = data.routes[0].geometry.coordinates;
         setFireTruckRoute(route);
         setFireTruckCurrentIndex(0);
@@ -188,25 +190,25 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
 
         // Add route layer
         mapRef.current!.addSource('fireTruckRoute', {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
             geometry: data.routes[0].geometry
-          }
-        });
+            }
+          });
 
         mapRef.current!.addLayer({
           id: 'fireTruckRoute',
-          type: 'line',
+            type: 'line',
           source: 'fireTruckRoute',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: {
-            'line-color': '#e53935',
-            'line-width': 3,
-            'line-dasharray': [2, 4]
-          }
-        });
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: {
+              'line-color': '#e53935',
+              'line-width': 3,
+              'line-dasharray': [2, 4]
+            }
+          });
 
         // Create fire truck marker
         const fireTruckEl = document.createElement('div');
@@ -233,6 +235,7 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
           ambulanceAnimationRef.current = null;
           setAmbulanceArrived(true);
           setShowAmbulanceDialog(true);
+          onAmbulanceArrival?.();
           return prevIndex;
         }
 
@@ -257,6 +260,7 @@ export default function LiveMap({ patientCoords, ambulanceCoords, fireTruckCoord
           fireTruckAnimationRef.current = null;
           setFireTruckArrived(true);
           setShowFireTruckDialog(true);
+          onFireTruckArrival?.();
           return prevIndex;
         }
 

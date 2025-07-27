@@ -86,6 +86,8 @@ export default function Tracking() {
   const [fireTruckStatus, setFireTruckStatus] = useState("");
   const [ambulanceStatus, setAmbulanceStatus] = useState("");
   const [notes, setNotes] = useState("");
+  const [ambulanceArrived, setAmbulanceArrived] = useState(false);
+  const [fireTruckArrived, setFireTruckArrived] = useState(false);
 
   // Hardcoded hospital location
   const hospitalCoords = { latitude: 18.5310, longitude: 73.8446 };
@@ -102,6 +104,17 @@ export default function Tracking() {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
+
+  // Function to update vehicle status when they arrive
+  const handleVehicleArrival = (vehicleType: 'ambulance' | 'fireTruck') => {
+    if (vehicleType === 'ambulance') {
+      setAmbulanceArrived(true);
+      setAmbulanceStatus('Reached');
+    } else if (vehicleType === 'fireTruck') {
+      setFireTruckArrived(true);
+      setFireTruckStatus('Reached');
+    }
+  };
 
   useEffect(() => {
     const lastBooking = JSON.parse(localStorage.getItem('lastBooking') || '{}');
@@ -131,6 +144,8 @@ export default function Tracking() {
           patientCoords={userCoords}
           ambulanceCoords={ambulances.length > 0 && ambulances[0].latitude && ambulances[0].longitude ? { latitude: ambulances[0].latitude, longitude: ambulances[0].longitude } : undefined}
           fireTruckCoords={fireTrucks.length > 0 && fireTrucks[0].latitude && fireTrucks[0].longitude ? { latitude: fireTrucks[0].latitude, longitude: fireTrucks[0].longitude } : undefined}
+          onAmbulanceArrival={() => handleVehicleArrival('ambulance')}
+          onFireTruckArrival={() => handleVehicleArrival('fireTruck')}
         />
         {/* Ambulance icons on map */}
         <div className="absolute top-4 right-4 sm:top-12 sm:right-16 z-10">
@@ -209,7 +224,8 @@ export default function Tracking() {
                       {ambulances.length > 0 ? (
                         <>
                           <b>Driver:</b> {ambulances[0].driverName || "-"}<br />
-                          <b>Reg:</b> {ambulances[0].regNumber || "-"}
+                          <b>Reg:</b> {ambulances[0].regNumber || "-"}<br />
+                          <b>Status:</b> {ambulanceArrived ? "Reached" : (ambulanceStatus || "Enroute")}<br />
                           {ambulances[0].driverPhone && (
                             <a
                               href={`tel:${ambulances[0].driverPhone}`}
@@ -282,8 +298,9 @@ export default function Tracking() {
                     <div className="text-black text-xs font-normal mb-4">No fire truck assigned.</div>
                   ) : fireTrucks.map((truck, idx) => (
                     <div key={truck.id || idx} className="text-black text-xs font-normal mb-2 flex items-center gap-2">
+                      <b>Driver:</b> {truck.driverName || "-"}<br />
                       <b>Truck id:</b> {truck.regNumber || truck.id}<br />
-                      <b>Status:</b> {truck.status}<br />
+                      <b>Status:</b> {fireTruckArrived ? "Reached" : (truck.status || "Enroute")}<br />
                       {truck.driverPhoneNumber && (
                         <a
                           href={`tel:${truck.driverPhoneNumber}`}

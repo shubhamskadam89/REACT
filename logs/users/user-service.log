@@ -1,0 +1,12 @@
+09:24:10.184 [http-nio-8080-exec-9] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+09:24:10.190 [http-nio-8080-exec-9] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51
+09:24:18.115 [http-nio-8080-exec-8] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+09:24:18.115 [http-nio-8080-exec-8] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51
+09:24:36.052 [http-nio-8080-exec-4] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+09:24:36.052 [http-nio-8080-exec-4] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51
+09:28:50.905 [http-nio-8080-exec-7] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+09:28:50.905 [http-nio-8080-exec-7] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51
+09:35:24.741 [http-nio-8080-exec-4] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+09:35:24.741 [http-nio-8080-exec-4] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51
+10:12:19.255 [http-nio-8080-exec-2] INFO  c.R.b.u.controller.UserController - UserProfileDto fetched:
+10:12:19.266 [http-nio-8080-exec-2] INFO  c.R.b.u.service.impl.UserServiceImpl - User found with email=rati@gmail.com and userId=51

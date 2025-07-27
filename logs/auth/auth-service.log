@@ -27,3 +27,6 @@
 02:43:21.322 [http-nio-8080-exec-9] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail rati@gmail.com
 02:43:21.322 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login attempt for rati@gmail.com
 02:43:21.538 [http-nio-8080-exec-9] INFO  c.R.backend.auth.service.AuthService - Login successful for rati@gmail.com
+09:15:40.243 [http-nio-8080-exec-1] INFO  c.R.b.auth.Controller.AuthController - Login requested fetched for userEmail rati@gmail.com
+09:15:40.243 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login attempt for rati@gmail.com
+09:15:40.811 [http-nio-8080-exec-1] INFO  c.R.backend.auth.service.AuthService - Login successful for rati@gmail.com
