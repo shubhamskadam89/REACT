@@ -30,6 +30,7 @@ public interface FireTruckRepository extends JpaRepository<FireTruckEntity, Long
     List<FireTruckEntity> findByFireStationEntityId(Long stationId);
 
     FireTruckEntity findByDriver(FireTruckDriver driver);
+
     
     @Query("SELECT COUNT(f) FROM FireTruckEntity f WHERE f.status = :status")
     long countByStatus(@Param("status") FireTruckStatus status);

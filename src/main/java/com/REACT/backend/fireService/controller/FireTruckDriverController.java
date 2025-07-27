@@ -1,9 +1,12 @@
 package com.REACT.backend.fireService.controller;
 
 
+import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
+import com.REACT.backend.ambulanceService.dto.LocationUpdateByDriver;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.common.util.LoggedUserUtil;
+import com.REACT.backend.fireService.dto.FireTruckDriverProfileDto;
 import com.REACT.backend.fireService.dto.FireTruckLocationUpdateDto;
 import com.REACT.backend.fireService.service.FireService;
 import com.REACT.backend.fireService.service.impl.FireServiceImpl;
@@ -60,6 +63,21 @@ public class FireTruckDriverController {
         log.info("Status update COMPLETE request fetched:");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();
         return ResponseEntity.ok(fireService.completeBooking(driver));
+    }
+
+
+    @GetMapping("/me")
+    @PreAuthorize(("hasAuthority('FIRE_DRIVER')"))
+    public ResponseEntity<FireTruckDriverProfileDto> getMe(){
+        log.info("Getting details of logged user");
+        return ResponseEntity.ok(fireService.getMe());
+    }
+
+    @PatchMapping("/update-location")
+    public ResponseEntity<String> updateLocation(@RequestBody LocationUpdateByDriver dto){
+        log.info("Location chnage request fetched for the current user");
+
+        return ResponseEntity.ok(fireService.updateLocation(dto));
     }
 
 

@@ -104,8 +104,12 @@ public class AmbulanceServiceImpl implements AmbulanceService {
         // Step 3: Get user (AppUser) from that driver
         AppUser driverUser = driver.getDriver(); // no need to re-fetch — already available
 
+
+
+
         // Step 4: Build DTO
         return AmbulanceDriverProfileDto.builder()
+                .userID(driverUser.getUserId())
                 .name(driverUser.getUserFullName())
                 .email(driverUser.getUserEmail())
                 .mobile(driverUser.getPhoneNumber())

@@ -2,6 +2,7 @@ package com.REACT.backend.policeService.service;
 
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
+import com.REACT.backend.policeService.dto.PoliceOfficerResponseDto;
 
 public interface PoliceOfficerService {
 
@@ -18,4 +19,6 @@ public interface PoliceOfficerService {
      * @return Assignment completion details with duration
      */
     CompleteAssignmentResponseDto completeAssignment(Object officer);
+
+    PoliceOfficerResponseDto getMe();
 }

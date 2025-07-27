@@ -2,15 +2,15 @@ package com.REACT.backend.policeService.dto;
 
 
 import com.REACT.backend.users.model.PoliceOfficer;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
-
+@Builder
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class PoliceOfficerResponseDto {
 
+    private long userId;
     private String name;
     private long policeId;
     private String policeStationName;
@@ -19,6 +19,7 @@ public class PoliceOfficerResponseDto {
     private String govId;
 
     public PoliceOfficerResponseDto(PoliceOfficer officer){
+        this.userId = officer.getPoliceOfficer().getUserId();
         this.name = officer.getFullName();
         this.policeId = officer.getId();
         this.policeStationName = officer.getPoliceStation().getStationName();

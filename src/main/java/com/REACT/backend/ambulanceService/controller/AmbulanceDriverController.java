@@ -1,6 +1,9 @@
 package com.REACT.backend.ambulanceService.controller;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceBookingHistoryResponseDto;
+import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
+import com.REACT.backend.ambulanceService.dto.AmbulanceLocationUpdateDto;
+import com.REACT.backend.ambulanceService.dto.LocationUpdateByDriver;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.ambulanceService.service.AmbulanceService;
 import com.REACT.backend.ambulanceService.service.impl.AmbulanceDriverServiceImpl;
@@ -60,6 +63,22 @@ public class AmbulanceDriverController {
         log.info("Status update to COMPLETE request fetched:");
         Object driver = loggedUserUtil.getCurrentLoggedUserDetails();
         return ResponseEntity.ok(service.completeBooking(driver));
+    }
+
+
+
+    @GetMapping("/me")
+    @PreAuthorize(("hasAuthority('AMBULANCE_DRIVER')"))
+    public ResponseEntity<AmbulanceDriverProfileDto> getMe(){
+        log.info("Getting details of logged user");
+        return ResponseEntity.ok(service.getMe());
+    }
+
+    @PatchMapping("/update-location")
+    @PreAuthorize(("hasAuthority('AMBULANCE_DRIVER')"))
+    public ResponseEntity<String> updateLoc(@RequestBody LocationUpdateByDriver dto){
+        log.info("Update location request fetched for current ambulance");
+        return ResponseEntity.ok(service.updateLocation(dto));
     }
 
 }

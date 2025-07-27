@@ -1,6 +1,8 @@
 package com.REACT.backend.ambulanceService.service.impl;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceBookingHistoryResponseDto;
+import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
+import com.REACT.backend.ambulanceService.dto.LocationUpdateByDriver;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
@@ -9,6 +11,8 @@ import com.REACT.backend.booking.model.EmergencyRequestEntity;
 import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.common.exception.ResourceNotFoundException;
+import com.REACT.backend.common.util.LocationUtils;
+import com.REACT.backend.common.util.LoggedUserUtil;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import com.REACT.backend.fireService.model.FireTruckStatus;
@@ -27,6 +31,8 @@ public class AmbulanceDriverServiceImpl {
 
     private final EmergencyRequestRepository emergencyRequestRepo;
     private final AmbulanceRepository ambulanceRepository;
+    private final LoggedUserUtil loggedUserUtil;
+    private final LocationUtils locationUtils;
 
     public List<AmbulanceBookingHistoryResponseDto> getAllHistory(Object obj) {
         log.info("Received request to fetch ambulance booking history");
@@ -174,6 +180,33 @@ public class AmbulanceDriverServiceImpl {
             emergencyRequestRepo.save(requestEntity);
             log.info("Emergency request {} marked as COMPLETED", requestEntity.getId());
         }
+    }
+
+
+
+    public AmbulanceDriverProfileDto getMe(){
+        AppUser user = loggedUserUtil.getCurrentUser();
+
+        return AmbulanceDriverProfileDto
+                .builder()
+                .email(user.getUserEmail())
+                .govId(user.getGovernmentId()).userID(user.getUserId())
+                .ambulanceRegNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
+                .licenseNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
+                .name(user.getUserFullName())
+                .mobile(user.getPhoneNumber())
+                .build();
+    }
+
+    public String updateLocation(LocationUpdateByDriver dto){
+        AppUser user = loggedUserUtil.getCurrentUser();
+        AmbulanceEntity entity =  ambulanceRepository.findByDriver(user);
+        entity.setLocation(
+                locationUtils.createPoint(dto.getLatitude(), dto.getLongitude())
+        );
+
+        ambulanceRepository.save(entity);
+        return "Location updated ";
     }
 
 }

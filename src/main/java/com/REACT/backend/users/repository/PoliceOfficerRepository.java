@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PoliceOfficerRepository  extends JpaRepository<PoliceOfficer,Long> {
-    Optional<?> findByPoliceOfficer(AppUser user);
+//    Optional<?> findByPoliceOfficer(AppUser user);
     List<PoliceOfficer> findByPoliceStation(PoliceStationEntity policeStation);
+
+    PoliceOfficer findByPoliceOfficer(AppUser user);
 }

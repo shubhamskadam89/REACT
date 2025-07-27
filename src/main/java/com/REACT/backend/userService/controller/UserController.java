@@ -17,7 +17,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/profile")
     public ResponseEntity<UserProfileDto> getProfile(){
         log.info("UserProfileDto fetched:");

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FaFireExtinguisher, FaPhoneAlt, FaStar, FaCheckCircle, FaTruck, FaTrophy, FaGasPump, FaWater, FaTools } from 'react-icons/fa';
-import { MdAccessTime, MdCloud, MdAssignment, MdLocationOn } from 'react-icons/md';
+import { FaFireExtinguisher, FaPhoneAlt } from 'react-icons/fa';
+import { MdLocationOn } from 'react-icons/md';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserIcon, HomeIcon, ClockIcon, MapIcon as MapOutlineIcon } from '@heroicons/react/24/outline';
+import { UserIcon, HomeIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibWFpdHJreWVlMjkiLCJhIjoiY20wdjhtbXhvMWRkYTJxb3UwYmo2NXRlZCJ9.BIf7Ebj0qCJtAV9HE-utBQ';
 
@@ -20,6 +20,16 @@ function getProfileFromJWT() {
     };
   } catch {
     return null;
+  }
+}
+
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch {
+    return {};
   }
 }
 
@@ -79,27 +89,16 @@ export default function FireTruckDriverPage() {
   const [routeInfo, setRouteInfo] = useState(null);
   const [activePage, setActivePage] = useState('dashboard');
 
-  const [shiftStartTime] = useState(new Date('2025-01-07T08:00:00'));
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [vehicleStatus] = useState({
-    fuelLevel: 85,
-    waterLevel: 92,
-    equipmentStatus: 'Ready',
-    lastMaintenance: '2025-01-05'
-  });
-  const [weatherInfo] = useState({
-    temperature: 24,
-    condition: 'Clear',
-    humidity: 65,
-    windSpeed: 12
-  });
-  const [performanceMetrics] = useState({
-    totalCalls: 47,
-    completedToday: 3,
-    averageResponseTime: '4.2 min',
-    rating: 4.9,
-    totalDistance: '89 km'
-  });
+  // Profile states
+  const [profile, setProfile] = useState(getProfileFromJWT() || mockProfile);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState('');
+
+  // Location update functionality
+  const [locationUpdateLoading, setLocationUpdateLoading] = useState(false);
+  const [locationUpdateMessage, setLocationUpdateMessage] = useState('');
+  const [autoLocationUpdate, setAutoLocationUpdate] = useState(false);
+  const [locationUpdateInterval, setLocationUpdateInterval] = useState(null);
 
   // Custom animated cursor
   const cursorX = useMotionValue(-100);
@@ -108,6 +107,69 @@ export default function FireTruckDriverPage() {
 
   const cursorXSpring = useSpring(cursorX, { damping: 25, stiffness: 700 });
   const cursorYSpring = useSpring(cursorY, { damping: 25, stiffness: 700 });
+
+  // Fetch profile from API
+  const fetchProfile = async () => {
+    console.log('Fetching profile from API...');
+    console.log('JWT token:', localStorage.getItem('jwt') || localStorage.getItem('token'));
+    
+    setProfileLoading(true);
+    setProfileError('');
+    
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setProfileError('Authentication token not found. Please login again.');
+        toast.error('Authentication token not found. Please login again.');
+        setProfileLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:8080/fire/truck-driver/v1/me', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const profileData = await response.json();
+        console.log('Profile data received:', profileData);
+        
+        setProfile({
+          id: profileData.userId || profile.id,
+          name: profileData.name || profile.name,
+          phone: profileData.mobile || profile.phone,
+          email: profileData.email,
+          licenseNumber: profileData.licenseNumber,
+          govId: profileData.govId,
+          fireTruckRegNumber: profileData.fireTruckRegNumber,
+          role: profileData.role,
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name || 'User')}&background=1a202c&color=fff&size=128`
+        });
+        
+        toast.success('Profile updated successfully!');
+      } else {
+        const errorData = await response.json();
+        setProfileError(errorData.message || 'Failed to fetch profile');
+        toast.error(errorData.message || 'Failed to fetch profile');
+      }
+    } catch (err) {
+      console.error('Error fetching profile:', err);
+      setProfileError('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  // Fetch profile when profile page is active
+  useEffect(() => {
+    if (activePage === 'profile') {
+      fetchProfile();
+    }
+  }, [activePage]);
 
   useEffect(() => {
     const moveCursor = (e) => {
@@ -121,13 +183,6 @@ export default function FireTruckDriverPage() {
 
   const handleCursorEnter = () => setCursorVariant('hover');
   const handleCursorLeave = () => setCursorVariant('default');
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -191,6 +246,95 @@ export default function FireTruckDriverPage() {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
+
+  // Update location with live coordinates
+  const handleLocationUpdate = async (latitude, longitude) => {
+    setLocationUpdateLoading(true);
+    setLocationUpdateMessage('');
+    try {
+      const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+      if (!token) {
+        setLocationUpdateMessage('Authentication token not found. Please login again.');
+        return;
+      }
+
+      // Get truck ID from JWT token
+      const userInfo = decodeJWT(token);
+      const truckId = userInfo.userId || userInfo.id;
+
+      if (!truckId) {
+        setLocationUpdateMessage('Truck ID not found in token.');
+        return;
+      }
+
+      // Format coordinates to 4 decimal places
+      const formattedLatitude = parseFloat(latitude).toFixed(4);
+      const formattedLongitude = parseFloat(longitude).toFixed(4);
+
+      const res = await fetch('http://localhost:8080/fire/truck-driver/v1/update-location', {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          truckId: truckId,
+          latitude: parseFloat(formattedLatitude),
+          longitude: parseFloat(formattedLongitude)
+        })
+      });
+
+      if (res.ok) {
+        setLocationUpdateMessage('Location updated successfully!');
+        toast.success('Location updated successfully!');
+      } else {
+        const errorData = await res.json();
+        setLocationUpdateMessage(errorData.message || 'Failed to update location');
+        toast.error(errorData.message || 'Failed to update location');
+      }
+    } catch (err) {
+      setLocationUpdateMessage('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLocationUpdateLoading(false);
+    }
+  };
+
+  // Toggle automatic location updates
+  const toggleAutoLocationUpdate = () => {
+    if (autoLocationUpdate) {
+      // Stop automatic updates
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+        setLocationUpdateInterval(null);
+      }
+      setAutoLocationUpdate(false);
+      toast.info('Automatic location updates stopped');
+    } else {
+      // Start automatic updates
+      if (userLocation) {
+        const interval = setInterval(() => {
+          if (userLocation) {
+            handleLocationUpdate(userLocation.latitude, userLocation.longitude);
+          }
+        }, 30000); // Update every 30 seconds
+        setLocationUpdateInterval(interval);
+        setAutoLocationUpdate(true);
+        toast.success('Automatic location updates started (every 30 seconds)');
+      } else {
+        toast.error('Location not available. Please enable location services.');
+      }
+    }
+  };
+
+  // Cleanup location update interval on unmount
+  useEffect(() => {
+    return () => {
+      if (locationUpdateInterval) {
+        clearInterval(locationUpdateInterval);
+      }
+    };
+  }, [locationUpdateInterval]);
 
   const handleComplete = async () => {
     setSliderAnimating(false);
@@ -323,13 +467,6 @@ export default function FireTruckDriverPage() {
   }, [appointment, userLocation, routeInfo, MAPBOX_TOKEN]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
     if (window.mapboxgl) return;
     const script = document.createElement('script');
     script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
@@ -350,24 +487,6 @@ export default function FireTruckDriverPage() {
     localStorage.removeItem('token');
     window.location.href = '/login';
   };
-
-  const StatCard = ({ title, value, icon, className = '', iconClassName = '' }) => (
-    <motion.div
-      className={`bg-white/10 backdrop-blur-md rounded-lg p-4 shadow-lg border border-white/20 flex items-center justify-between ${className}`}
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      whileHover="hover"
-      onMouseEnter={handleCursorEnter}
-      onMouseLeave={handleCursorLeave}
-    >
-      <div>
-        <p className="text-sm text-white/80 font-medium">{title}</p>
-        <p className="text-xl font-bold text-white">{value}</p>
-      </div>
-      <div className={`text-3xl ${iconClassName}`}>{icon}</div>
-    </motion.div>
-  );
 
   return (
     <div className="min-h-screen flex flex-col bg-black font-inter text-white relative overflow-hidden">
@@ -402,13 +521,7 @@ export default function FireTruckDriverPage() {
       </motion.div>
 
       {/* React Logo */}
-      <div className="fixed top-4 left-4 z-50">
-        <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
-          <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.276 0-.56.06-.83.18C3.627 2.678 4.718 5.578 6.004 8.762c-1.721 3.36-3.168 6.51-3.168 8.018 0 1.297 1.134 2.53 3.206 2.53 1.72 0 3.63-.98 5.54-2.73 1.91 1.75 3.82 2.73 5.54 2.73 2.072 0 3.206-1.233 3.206-2.53 0-1.508-1.447-4.658-3.168-8.018 1.286-3.184 2.377-6.084 2.886-7.268-.27-.12-.554-.18-.83-.18z"/>
-          </svg>
-        </div>
-      </div>
+
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
@@ -485,89 +598,64 @@ export default function FireTruckDriverPage() {
                 </button>
               </div>
 
-              {/* Top Status Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <StatCard
-                  title="Current Status"
-                  value={completed ? 'Completed' : 'Active'}
-                  icon={completed ? <FaCheckCircle /> : <FaFireExtinguisher />}
-                  iconClassName={completed ? "text-green-600" : "text-red-600"}
-                  className="bg-gray-100 border-gray-200"
-                />
-                <StatCard
-                  title="Avg Response Time"
-                  value={performanceMetrics.averageResponseTime}
-                  icon={<MdAccessTime />}
-                  iconClassName="text-blue-600"
-                  className="bg-gray-100 border-gray-200"
-                />
-                <StatCard
-                  title="Rating"
-                  value={performanceMetrics.rating}
-                  icon={<FaStar />}
-                  iconClassName="text-yellow-500"
-                  className="bg-gray-100 border-gray-200"
-                />
-              </div>
-
-              {/* Vehicle Status */}
+              {/* Location Management */}
               <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6" variants={itemVariants}>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <FaTruck className="text-xl text-blue-600" />
-                  Vehicle Status
+                  <MdLocationOn className="text-xl text-red-600" />
+                  Location Management
                 </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <motion.div variants={itemVariants}>
-                    <div className="text-2xl mb-1 text-green-600">⛽</div>
-                    <p className="text-sm text-gray-600">Fuel Level</p>
-                    <p className="font-bold">{vehicleStatus.fuelLevel}%</p>
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <div className="text-2xl mb-1 text-blue-600">💧</div>
-                    <p className="text-sm text-gray-600">Water Level</p>
-                    <p className="font-bold">{vehicleStatus.waterLevel}%</p>
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <div className="text-2xl mb-1 text-gray-700">🔧</div>
-                    <p className="text-sm text-gray-600">Equipment</p>
-                    <p className="font-bold">{vehicleStatus.equipmentStatus}</p>
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <div className="text-2xl mb-1 text-gray-700">🗓️</div>
-                    <p className="text-sm text-gray-600">Last Service</p>
-                    <p className="font-bold">{vehicleStatus.lastMaintenance}</p>
-                  </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-1">Current Location:</div>
+                      <div className="font-mono text-base text-gray-700">
+                        {userLocation ? `${userLocation.latitude.toFixed(4)}, ${userLocation.longitude.toFixed(4)}` : 'Getting location...'}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => userLocation && handleLocationUpdate(userLocation.latitude, userLocation.longitude)}
+                        disabled={locationUpdateLoading || !userLocation}
+                        className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50 transition-all duration-200 shadow"
+                        onMouseEnter={handleCursorEnter}
+                        onMouseLeave={handleCursorLeave}
+                      >
+                        {locationUpdateLoading ? 'Updating...' : 'Update Location'}
+                      </button>
+                      <button
+                        onClick={toggleAutoLocationUpdate}
+                        disabled={!userLocation}
+                        className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow ${
+                          autoLocationUpdate 
+                            ? 'bg-green-600 text-white hover:bg-green-700' 
+                            : 'bg-gray-600 text-white hover:bg-gray-700'
+                        } ${!userLocation ? 'opacity-50' : ''}`}
+                        onMouseEnter={handleCursorEnter}
+                        onMouseLeave={handleCursorLeave}
+                      >
+                        {autoLocationUpdate ? 'Stop Auto' : 'Start Auto'}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-1">Auto Update Status:</div>
+                      <div className={`font-semibold ${autoLocationUpdate ? 'text-green-600' : 'text-gray-600'}`}>
+                        {autoLocationUpdate ? 'Active (every 30 seconds)' : 'Inactive'}
+                      </div>
+                    </div>
+                    {locationUpdateMessage && (
+                      <div className={`p-3 rounded-md text-sm ${
+                        locationUpdateMessage.includes('success') 
+                          ? 'bg-green-100 text-green-700 border border-green-200' 
+                          : 'bg-red-100 text-red-700 border border-red-200'
+                      }`}>
+                        {locationUpdateMessage}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </motion.div>
-
-              {/* Weather & Performance */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6" variants={itemVariants}>
-                  <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <MdCloud className="text-xl text-blue-600" />
-                    Weather Conditions
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-medium">Temperature:</span> {weatherInfo.temperature}°C</p>
-                    <p><span className="font-medium">Condition:</span> {weatherInfo.condition}</p>
-                    <p><span className="font-medium">Humidity:</span> {weatherInfo.humidity}%</p>
-                    <p><span className="font-medium">Wind:</span> {weatherInfo.windSpeed} km/h</p>
-                  </div>
-                </motion.div>
-
-                <motion.div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6" variants={itemVariants}>
-                  <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <MdAssignment className="text-xl text-blue-600" />
-                    Today's Performance
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-medium">Total Calls:</span> {performanceMetrics.totalCalls}</p>
-                    <p><span className="font-medium">Completed Today:</span> {performanceMetrics.completedToday}</p>
-                    <p><span className="font-medium">Shift Started:</span> {shiftStartTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
-                    <p><span className="font-medium">Current Time:</span> {currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
-                  </div>
-                </motion.div>
-              </div>
 
               {error && <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 w-full text-center">{error}</div>}
               {loading && <div className="mb-4 text-blue-600 text-center">Loading...</div>}
@@ -767,16 +855,80 @@ export default function FireTruckDriverPage() {
             </motion.div>
           )}
           {activePage === 'profile' && (
-            <motion.div className="bg-white rounded-xl shadow p-6 max-w-md mx-auto" variants={containerVariants} initial="hidden" animate="visible">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Profile</h2>
-              <div className="flex flex-col items-center gap-4">
-                <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-500 shadow-md" />
-                <div className="font-bold text-lg text-gray-900">{profile.name}</div>
-                <div className="text-gray-600 flex items-center gap-1"><FaPhoneAlt className="inline mr-1 text-blue-500" />{profile.phone}</div>
+            <motion.div className="bg-white rounded-xl shadow p-6 max-w-2xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-800">Profile</h2>
+                <button
+                  onClick={fetchProfile}
+                  disabled={profileLoading}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 disabled:opacity-50 transition-colors duration-200 shadow-md"
+                  onMouseEnter={handleCursorEnter}
+                  onMouseLeave={handleCursorLeave}
+                >
+                  {profileLoading ? 'Refreshing...' : 'Refresh Profile'}
+                </button>
+              </div>
+              
+              {profileError && (
+                <div className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200">
+                  {profileError}
+                </div>
+              )}
+              
+              {profileLoading && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <span className="ml-2 text-gray-600">Loading profile...</span>
+                </div>
+              )}
+              
+              {!profileLoading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col items-center gap-4">
+                    <img src={profile.avatar} alt="avatar" className="w-24 h-24 rounded-full border-2 border-blue-500 shadow-md" />
+                    <div className="text-center">
+                      <div className="font-bold text-lg text-gray-900">{profile.name}</div>
+                      <div className="text-gray-600 flex items-center justify-center gap-1 mt-1">
+                        <FaPhoneAlt className="text-blue-500" />
+                        {profile.phone}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-2">Personal Information</div>
+                      <div className="space-y-2 text-sm">
+                        <div><span className="font-medium">Email:</span> {profile.email || 'N/A'}</div>
+                        <div><span className="font-medium">Role:</span> {profile.role || 'N/A'}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-2">License & ID</div>
+                      <div className="space-y-2 text-sm">
+                        <div><span className="font-medium">License Number:</span> {profile.licenseNumber || 'N/A'}</div>
+                        <div><span className="font-medium">Government ID:</span> {profile.govId || 'N/A'}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="font-semibold text-gray-800 mb-2">Vehicle Information</div>
+                      <div className="space-y-2 text-sm">
+                        <div><span className="font-medium">Fire Truck Reg Number:</span> {profile.fireTruckRegNumber || 'N/A'}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <div className="mt-6 flex justify-center">
                 <motion.button
-                  className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
+                  className="bg-blue-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onMouseEnter={handleCursorEnter}
+                  onMouseLeave={handleCursorLeave}
                 >
                   Edit Profile
                 </motion.button>

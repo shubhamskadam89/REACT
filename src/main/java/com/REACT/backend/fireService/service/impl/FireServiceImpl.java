@@ -1,6 +1,7 @@
 package com.REACT.backend.fireService.service.impl;
 
 import com.REACT.backend.ambulanceService.dto.AmbulanceDriverProfileDto;
+import com.REACT.backend.ambulanceService.dto.LocationUpdateByDriver;
 import com.REACT.backend.ambulanceService.model.AmbulanceEntity;
 import com.REACT.backend.ambulanceService.model.AmbulanceStatus;
 import com.REACT.backend.booking.model.EmergencyRequestEntity;
@@ -9,6 +10,8 @@ import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.common.exception.ResourceNotFoundException;
+import com.REACT.backend.common.util.LocationUtils;
+import com.REACT.backend.common.util.LoggedUserUtil;
 import com.REACT.backend.fireService.dto.FireTruckDriverProfileDto;
 import com.REACT.backend.fireService.model.FireTruckEntity;
 import com.REACT.backend.fireService.model.FireTruckStatus;
@@ -37,6 +40,9 @@ public class FireServiceImpl  implements FireService {
     private final FireTruckDriverRepository fireTruckDriverRepository;
     private final AppUserRepository appUserRepository;
     private final EmergencyRequestRepository emergencyRequestRepo;
+
+    private final LoggedUserUtil loggedUserUtil;
+    private final LocationUtils locationUtils;
 
 
     public LocationDto getLocationOfCurrentBooking(Object driverObject) {
@@ -180,18 +186,55 @@ public class FireServiceImpl  implements FireService {
 
 
         FireTruckDriverProfileDto profile = FireTruckDriverProfileDto.builder()
+                .userId(user.getUserId())
                 .name(user.getUserFullName())
                 .email(user.getUserEmail())
                 .mobile(user.getPhoneNumber())
                 .licenseNumber(driver.getLicenseNumber())
                 .govId(user.getGovernmentId())
                 .Role(user.getRole().toString())
-                .ambulanceRegNumber(fireTruck.getVehicleRegNumber())
+                .fireTruckRegNumber(fireTruck.getVehicleRegNumber())
                 .build();
 
 
         log.info("Successfully built driver profile for truckId: {}", truckId);
         return profile;
+    }
+
+
+    public FireTruckDriverProfileDto getMe(){
+        AppUser user = loggedUserUtil.getCurrentUser();
+//         .ambulanceRegNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
+//                .licenseNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
+
+        FireTruckDriverProfileDto profile = FireTruckDriverProfileDto.builder()
+                .userId(user.getUserId())
+                .name(user.getUserFullName())
+                .email(user.getUserEmail())
+                .mobile(user.getPhoneNumber())
+                .fireTruckRegNumber(fireTruckDriverRepository.findByDriver(user).getFireTruckEntity().getVehicleRegNumber())
+                .govId(user.getGovernmentId())
+                .Role(user.getRole().toString())
+                .licenseNumber(fireTruckDriverRepository.findByDriver(user).getLicenseNumber())
+                .build();
+
+        return profile;
+    }
+
+
+    public  String updateLocation(LocationUpdateByDriver dto){
+        AppUser user  = loggedUserUtil.getCurrentUser();
+
+        FireTruckDriver driver = fireTruckDriverRepository.findByDriver(user);
+        FireTruckEntity entity = fireTruckRepository.findByDriver(driver);
+
+        entity.setLocation(
+                locationUtils.createPoint(dto.getLatitude(),dto.getLongitude())
+        );
+        fireTruckRepository.save(entity);
+
+        return "Location Updated successfully";
+
     }
 
 }

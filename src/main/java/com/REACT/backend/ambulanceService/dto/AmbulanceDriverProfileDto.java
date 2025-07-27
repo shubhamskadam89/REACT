@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class AmbulanceDriverProfileDto {
+
+    private long userID;
     private String name;
     private String email;
     private String mobile;

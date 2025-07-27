@@ -50,7 +50,7 @@ public class PoliceAdminController {
 
     //officers by station
 
-    @GetMapping("/station/officeers/{stationId}")
+    @GetMapping("/station/officers/{stationId}")
     @PreAuthorize("hasAuthority('POLICE_STATION_ADMIN')")
     public ResponseEntity<List<PoliceOfficerResponseDto>> getAllOfficersByStation(@Valid @PathVariable Long stationId){
         log.info("fetched request to fetched all police officers of stations");

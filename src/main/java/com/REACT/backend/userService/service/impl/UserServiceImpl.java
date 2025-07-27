@@ -31,10 +31,6 @@ public class UserServiceImpl implements UserService {
 
             log.info("User found with email={} and userId={}", user.getUserEmail(), user.getUserId());
 
-            if (user.getRole() != Role.USER) {
-                log.error("Unauthorized role access attempt. Required=USER, Actual={}", user.getRole());
-                throw new SecurityException("Only users with role USER can access this endpoint");
-            }
 
             return UserProfileDto.from(user);
         } catch (SecurityException ex) {

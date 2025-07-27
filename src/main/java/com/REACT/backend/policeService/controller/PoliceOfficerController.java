@@ -3,6 +3,8 @@ package com.REACT.backend.policeService.controller;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
 import com.REACT.backend.common.util.LoggedUserUtil;
+import com.REACT.backend.fireService.dto.FireTruckDriverProfileDto;
+import com.REACT.backend.policeService.dto.PoliceOfficerResponseDto;
 import com.REACT.backend.policeService.service.PoliceOfficerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +56,12 @@ public class PoliceOfficerController {
         Object officer = loggedUserUtil.getCurrentLoggedUserDetails();
         // This can be implemented later when you need detailed history
         return ResponseEntity.ok("Assignment history - to be implemented");
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize(("hasAuthority('POLICE_OFFICER')"))
+    public ResponseEntity<PoliceOfficerResponseDto> getMe(){
+        log.info("Getting details of logged user");
+        return ResponseEntity.ok(policeOfficerService.getMe());
     }
 }

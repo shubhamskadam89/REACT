@@ -5,11 +5,14 @@ import com.REACT.backend.booking.repository.EmergencyRequestRepository;
 import com.REACT.backend.booking.service.BookingServiceImpl;
 import com.REACT.backend.common.dto.CompleteAssignmentResponseDto;
 import com.REACT.backend.common.dto.LocationDto;
+import com.REACT.backend.common.util.LoggedUserUtil;
+import com.REACT.backend.policeService.dto.PoliceOfficerResponseDto;
 import com.REACT.backend.policeService.model.PoliceStationEntity;
 import com.REACT.backend.policeService.repository.PoliceStationRepository;
 import com.REACT.backend.policeService.service.PoliceOfficerService;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.PoliceOfficer;
+import com.REACT.backend.users.repository.PoliceOfficerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,9 @@ public class PoliceOfficerServiceImpl implements PoliceOfficerService {
     private final EmergencyRequestRepository emergencyRequestRepository;
     private final PoliceStationRepository policeStationRepository;
     private final BookingServiceImpl bookingService;
+    private final PoliceOfficerRepository policeOfficerRepository;
 
+    private final LoggedUserUtil loggedUserUtil;
     @Override
     public LocationDto getLocationOfCurrentBooking(Object officerObject) {
         log.info("Fetching location for current police assignment");
@@ -107,6 +112,24 @@ public class PoliceOfficerServiceImpl implements PoliceOfficerService {
                 .completedAt(Instant.now())
                 .duration(minutes)
                 .build();
+    }
+
+    @Override
+    public PoliceOfficerResponseDto getMe() {
+
+        log.info("fetching current police officers details");
+        AppUser user = loggedUserUtil.getCurrentUser();
+//
+        return PoliceOfficerResponseDto.builder()
+                .policeId(policeOfficerRepository.findByPoliceOfficer(user).getId())
+                .email(user.getUserEmail())
+                .govId(user.getGovernmentId())
+                .name(user.getUserFullName())
+                .policeStationName(policeOfficerRepository.findByPoliceOfficer(user).getPoliceStation().getStationName())
+                .phoneNumber(user.getPhoneNumber())
+                .userId(user.getUserId())
+                .build();
+
     }
 
     private void checkAndCompleteBooking(EmergencyRequestEntity requestEntity) {
