@@ -44,8 +44,10 @@ public class LoggedUserUtil {
         return switch (appUser.getRole()) {
             case AMBULANCE_DRIVER -> ambulanceDriverRepository.findByDriver(appUser)
                     .orElseThrow(() -> new RuntimeException("Ambulance driver details not found"));
-            case POLICE_OFFICER -> policeOfficerRepository.findByPoliceOfficer(appUser);
-            case FIRE_DRIVER -> fireTruckDriverRepository.findByDriver(appUser);
+            case POLICE_OFFICER -> policeOfficerRepository.findByPoliceOfficer(appUser)
+             .orElseThrow(() -> new RuntimeException("Police details not found"));
+            case FIRE_DRIVER -> fireTruckDriverRepository.findByDriver(appUser)
+                    .orElseThrow(() -> new RuntimeException("Truck driver details not found"));
             default -> throw new RuntimeException("Unsupported role: " + appUser.getRole());
         };
     }

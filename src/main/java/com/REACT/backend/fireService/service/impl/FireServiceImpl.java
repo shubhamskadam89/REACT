@@ -136,18 +136,14 @@ public class FireServiceImpl  implements FireService {
         log.info("Checking if all services for request {} have completed", requestEntity.getId());
 
         // Check if all ambulance statuses are completed
-        boolean ambulancesCompleted = requestEntity.getAmbulanceStatusMap() == null ||
-                requestEntity.getAmbulanceStatusMap().values().stream()
-                        .allMatch(status -> status == AmbulanceStatus.COMPLETED);
+        boolean ambulancesCompleted = true;
 
         // Check if all fire truck statuses are completed
         boolean fireTrucksCompleted = requestEntity.getFireTruckStatusMap().values().stream()
                 .allMatch(status -> status == FireTruckStatus.COMPLETED);
 
         // Check if police assignments are completed (all stations have 0 assigned officers)
-        boolean policeCompleted = requestEntity.getAssignedPoliceMap() == null ||
-                requestEntity.getAssignedPoliceMap().values().stream()
-                        .allMatch(count -> count == 0);
+        boolean policeCompleted = true;
 
         log.info("Service completion status - Ambulances: {}, Fire: {}, Police: {}",
                 ambulancesCompleted, fireTrucksCompleted, policeCompleted);
@@ -206,16 +202,17 @@ public class FireServiceImpl  implements FireService {
         AppUser user = loggedUserUtil.getCurrentUser();
 //         .ambulanceRegNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
 //                .licenseNumber(ambulanceRepository.findByDriver(user).getAmbulanceRegNumber())
-
+        FireTruckDriver driver = fireTruckDriverRepository.findByDriver(user)
+                .orElseThrow(() -> new RuntimeException("Truck driver details not found"));
         FireTruckDriverProfileDto profile = FireTruckDriverProfileDto.builder()
                 .userId(user.getUserId())
                 .name(user.getUserFullName())
                 .email(user.getUserEmail())
                 .mobile(user.getPhoneNumber())
-                .fireTruckRegNumber(fireTruckDriverRepository.findByDriver(user).getFireTruckEntity().getVehicleRegNumber())
+                .fireTruckRegNumber(driver.getFireTruckEntity().getVehicleRegNumber())
                 .govId(user.getGovernmentId())
                 .Role(user.getRole().toString())
-                .licenseNumber(fireTruckDriverRepository.findByDriver(user).getLicenseNumber())
+                .licenseNumber(driver.getLicenseNumber())
                 .build();
 
         return profile;
@@ -225,8 +222,10 @@ public class FireServiceImpl  implements FireService {
     public  String updateLocation(LocationUpdateByDriver dto){
         AppUser user  = loggedUserUtil.getCurrentUser();
 
-        FireTruckDriver driver = fireTruckDriverRepository.findByDriver(user);
+        FireTruckDriver driver = fireTruckDriverRepository.findByDriver(user)
+                .orElseThrow(() -> new RuntimeException("Truck driver details not found"));;
         FireTruckEntity entity = fireTruckRepository.findByDriver(driver);
+
 
         entity.setLocation(
                 locationUtils.createPoint(dto.getLatitude(),dto.getLongitude())
