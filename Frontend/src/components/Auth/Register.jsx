@@ -4,11 +4,14 @@ import LoginImage from '../../assets/login.png';
 import AmbulanceGif from '../../assets/background.gif';
 
 const roles = [
-  { value: 'USER', label: 'User (Requester)' },
+  { value: 'USER', label: 'User (Default Requester)' },
   { value: 'AMBULANCE_DRIVER', label: 'Ambulance Driver' },
   { value: 'FIRE_DRIVER', label: 'Fire Truck Driver' },
   { value: 'POLICE_OFFICER', label: 'Police Officer' },
+  { value: 'FIRE_STATION_ADMIN', label: 'Fire Station Admin' },
   { value: 'ADMIN', label: 'Admin' },
+  { value: 'AMBULANCE_ADMIN', label: 'Ambulance Admin' },
+  { value: 'POLICE_STATION_ADMIN', label: 'Police Station Admin' },
 ];
 
 export default function Register() {
@@ -46,12 +49,12 @@ export default function Register() {
     securityAnswer: '',
   });
 
-  // Regex patterns
+  // Regex patterns - updated to match backend DTO validations
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[6-9]\d{9}$/;
-  const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/;
-  const licenseRegex = /^[A-Z]{2}[0-9]{2}\s?[0-9]{11}$/i;
-  const vehicleRegRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/i;
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+  const licenseRegex = /^[A-Z]{2}-[A-Z]+-\d{4}$/i; // Format: STATE-TYPE-NUMBER (e.g., MH-FIRE-0234)
+  const vehicleRegRegex = /^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/i; // Format: STATE + 2 digits + 2 letters + 4 digits (e.g., MH15BA3254)
 
   const validateField = (name, value) => {
     let error = '';
@@ -70,22 +73,22 @@ export default function Register() {
         break;
       case 'governmentId':
         if (!value.trim()) error = 'Government ID is required.';
-        else if (!aadharRegex.test(value)) error = 'Enter 12-digit Aadhar (e.g., 1234 5678 9012).';
+        else if (!panRegex.test(value)) error = 'Enter valid PAN number (e.g., ABCDE1234F).';
         break;
       case 'password':
         if (!value.trim()) error = 'Password is required.';
         else if (value.length < 6) error = 'Password must be at least 6 characters long.';
         break;
       case 'licenseNumber':
-        if (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER') {
+        if (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER' || form.role === 'ADMIN') {
           if (!value.trim()) error = 'License Number is required.';
-          else if (!licenseRegex.test(value)) error = 'Enter valid Indian License (e.g., KA01 20200012345).';
+          else if (!licenseRegex.test(value)) error = 'Enter valid License (e.g., MH-FIRE-0234).';
         }
         break;
       case 'vehicleRegNumber':
-        if (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER') {
+        if (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER' || form.role === 'ADMIN') {
           if (!value.trim()) error = 'Vehicle Registration is required.';
-          else if (!vehicleRegRegex.test(value)) error = 'Enter valid Indian Reg (e.g., KA01AB1234).';
+          else if (!vehicleRegRegex.test(value)) error = 'Enter valid Vehicle Reg (e.g., MH15BA3254).';
         }
         break;
       case 'hospitalID':
@@ -95,7 +98,7 @@ export default function Register() {
         }
         break;
       case 'fireStationId':
-        if (form.role === 'FIRE_DRIVER') {
+        if (form.role === 'FIRE_DRIVER' || form.role === 'ADMIN') {
           if (!value.toString().trim()) error = 'Fire Station ID is required.';
           else if (isNaN(Number(value)) || Number(value) <= 0) error = 'Fire Station ID must be a positive number.';
         }
@@ -138,7 +141,10 @@ export default function Register() {
       fieldsToValidate.push('licenseNumber', 'vehicleRegNumber', 'fireStationId');
     } else if (form.role === 'POLICE_OFFICER') {
       fieldsToValidate.push('policeStationId');
+    } else if (form.role === 'ADMIN') {
+      fieldsToValidate.push('licenseNumber', 'vehicleRegNumber', 'fireStationId');
     }
+    // Other admin roles (FIRE_STATION_ADMIN, AMBULANCE_ADMIN, POLICE_STATION_ADMIN) don't need additional fields
 
     for (const fieldName of fieldsToValidate) {
       // Ensure specific ID fields are not empty if role applies
@@ -148,7 +154,7 @@ export default function Register() {
         continue;
       }
       // Ensure license/vehicle fields are not empty if role applies
-      if ((fieldName === 'licenseNumber' || fieldName === 'vehicleRegNumber') && (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER') && !form[fieldName]) {
+      if ((fieldName === 'licenseNumber' || fieldName === 'vehicleRegNumber') && (form.role === 'AMBULANCE_DRIVER' || form.role === 'FIRE_DRIVER' || form.role === 'ADMIN') && !form[fieldName]) {
           setFormErrors(prev => ({ ...prev, [fieldName]: `${fieldName.replace(/([A-Z])/g, ' $1').trim()} is required.` }));
           isValid = false;
           continue;
@@ -187,20 +193,35 @@ export default function Register() {
         body = { ...form, policeStationId: Number(form.policeStationId) };
         break;
       case 'ADMIN':
-        endpoint = 'http://localhost:8080/auth/register/admin';
-        body = { ...form };
+        endpoint = 'http://localhost:8080/auth/register';
+        body = { ...form, fireStationId: Number(form.fireStationId) };
         break;
       default:
+        // All other roles (USER, FIRE_STATION_ADMIN, AMBULANCE_ADMIN, POLICE_STATION_ADMIN) 
+        // use the general registration endpoint
+        endpoint = 'http://localhost:8080/auth/register';
         body = { ...form };
         break;
     }
 
     // Clean up unnecessary fields based on role before sending
     const cleanedBody = { ...body };
-    if (form.role !== 'AMBULANCE_DRIVER') { delete cleanedBody.licenseNumber; delete cleanedBody.vehicleRegNumber; delete cleanedBody.hospitalID; }
-    if (form.role !== 'FIRE_DRIVER') { delete cleanedBody.licenseNumber; delete cleanedBody.vehicleRegNumber; delete cleanedBody.fireStationId; }
+    if (form.role !== 'AMBULANCE_DRIVER') { delete cleanedBody.hospitalID; }
+    if (form.role !== 'FIRE_DRIVER' && form.role !== 'ADMIN') { delete cleanedBody.fireStationId; }
     if (form.role !== 'POLICE_OFFICER') { delete cleanedBody.policeStationId; }
-    if (form.role === 'USER' || form.role === 'ADMIN') { delete cleanedBody.licenseNumber; delete cleanedBody.vehicleRegNumber; delete cleanedBody.hospitalID; delete cleanedBody.fireStationId; delete cleanedBody.policeStationId; }
+    // Only include license and vehicle reg for specific roles
+    if (!['AMBULANCE_DRIVER', 'FIRE_DRIVER', 'ADMIN'].includes(form.role)) { 
+      delete cleanedBody.licenseNumber; 
+      delete cleanedBody.vehicleRegNumber; 
+    }
+    // Other admin roles (USER, FIRE_STATION_ADMIN, AMBULANCE_ADMIN, POLICE_STATION_ADMIN) don't need driver-specific fields
+    if (['USER', 'FIRE_STATION_ADMIN', 'AMBULANCE_ADMIN', 'POLICE_STATION_ADMIN'].includes(form.role)) { 
+      delete cleanedBody.licenseNumber; 
+      delete cleanedBody.vehicleRegNumber; 
+      delete cleanedBody.hospitalID; 
+      delete cleanedBody.fireStationId; 
+      delete cleanedBody.policeStationId; 
+    }
 
     try {
       const res = await fetch(endpoint, {
@@ -217,7 +238,8 @@ export default function Register() {
           fireStationId: '', policeStationId: '', securityQuestion: 'PET_NAME', securityAnswer: '',
         });
         setFormErrors({});
-        if (form.role === 'ADMIN') {
+        // Redirect based on role after successful registration
+        if (['ADMIN', 'FIRE_STATION_ADMIN', 'AMBULANCE_ADMIN', 'POLICE_STATION_ADMIN'].includes(form.role)) {
           setTimeout(() => navigate('/admin-dashboard'), 1500);
         } else {
             setTimeout(() => navigate('/'), 1500);
@@ -283,141 +305,165 @@ export default function Register() {
       
       {/* Main container for the form */}
       <div className="flex w-full max-w-4xl bg-white/10 rounded-xl shadow-2xl overflow-hidden relative z-10 border border-white/20 glow-effect">
-        {/* Left Image (hidden on small screens) */}
+         {/* Left Image (hidden on small screens) */}
         <div className="hidden md:flex flex-col justify-center items-center bg-white/10 p-8 w-1/2">
-          <img src={LoginImage} alt="Register Visual" className="w-64 h-64 object-contain rounded-xl shadow-md" />
-        </div>
+           <img src={LoginImage} alt="Register Visual" className="w-64 h-64 object-contain rounded-xl shadow-md" />
+         </div>
         
-        {/* Right Form */}
-        <div className="flex-1 flex flex-col justify-center p-8">
+         {/* Right Form */}
+         <div className="flex-1 flex flex-col justify-center p-8">
           <div className="bg-white/10 p-6 rounded-lg shadow-xl w-full max-w-sm border border-gray-100 mx-auto">
             <h2 className="text-2xl font-bold text-center mb-6 text-white">Register</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+             <form onSubmit={handleSubmit} className="space-y-4">
+               <div>
                 <label className="block mb-1 font-medium text-white">Full Name<br />
-                  <input name="fullName" value={form.fullName} onChange={handleChange} onBlur={handleBlur} required maxLength="100" className={inputClass('fullName')} />
-                  {formErrors.fullName && <p className="mt-1 text-sm text-red-600">{formErrors.fullName}</p>}
-                </label>
-              </div>
-              <div>
+                   <input name="fullName" value={form.fullName} onChange={handleChange} onBlur={handleBlur} required maxLength="100" className={inputClass('fullName')} />
+                   {formErrors.fullName && <p className="mt-1 text-sm text-red-600">{formErrors.fullName}</p>}
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Email<br />
-                  <input name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur} required className={inputClass('email')} />
-                  {formErrors.email && <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>}
-                </label>
-              </div>
-              <div>
+                   <input name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur} required className={inputClass('email')} />
+                   {formErrors.email && <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>}
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Phone Number<br />
-                  <input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('phoneNumber')} />
-                  {formErrors.phoneNumber && <p className="mt-1 text-sm text-red-600">{formErrors.phoneNumber}</p>}
-                </label>
-              </div>
-              <div>
-                <label className="block mb-1 font-medium text-white">Government ID (Aadhar)<br />
-                  <input name="governmentId" value={form.governmentId} onChange={handleChange} onBlur={handleBlur} required maxLength="14" className={inputClass('governmentId')} />
-                  {formErrors.governmentId && <p className="mt-1 text-sm text-red-600">{formErrors.governmentId}</p>}
-                </label>
-              </div>
-              <div>
+                   <input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('phoneNumber')} />
+                   {formErrors.phoneNumber && <p className="mt-1 text-sm text-red-600">{formErrors.phoneNumber}</p>}
+                 </label>
+               </div>
+               <div>
+                <label className="block mb-1 font-medium text-white">Government ID (PAN)<br />
+                   <input name="governmentId" value={form.governmentId} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('governmentId')} placeholder="ABCDE1234F" />
+                   {formErrors.governmentId && <p className="mt-1 text-sm text-red-600">{formErrors.governmentId}</p>}
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Password<br />
-                  <input name="password" type="password" value={form.password} onChange={handleChange} onBlur={handleBlur} required minLength="6" className={inputClass('password')} />
-                  {formErrors.password && <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>}
-                </label>
-              </div>
-              <div>
+                   <input name="password" type="password" value={form.password} onChange={handleChange} onBlur={handleBlur} required minLength="6" className={inputClass('password')} />
+                   {formErrors.password && <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>}
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Security Question<br />
-                  <select name="securityQuestion" value={form.securityQuestion} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityQuestion')}>
-                    {securityQuestions.map((q) => (
-                      <option key={q.value} value={q.value}>{q.label}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div>
+                   <select name="securityQuestion" value={form.securityQuestion} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityQuestion')}>
+                     {securityQuestions.map((q) => (
+                       <option key={q.value} value={q.value}>{q.label}</option>
+                     ))}
+                   </select>
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Security Answer<br />
-                  <input name="securityAnswer" value={form.securityAnswer} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityAnswer')} />
-                  {formErrors.securityAnswer && <p className="mt-1 text-sm text-red-600">{formErrors.securityAnswer}</p>}
-                </label>
-              </div>
-              <div>
+                   <input name="securityAnswer" value={form.securityAnswer} onChange={handleChange} onBlur={handleBlur} required className={inputClass('securityAnswer')} />
+                   {formErrors.securityAnswer && <p className="mt-1 text-sm text-red-600">{formErrors.securityAnswer}</p>}
+                 </label>
+               </div>
+               <div>
                 <label className="block mb-1 font-medium text-white">Register as:<br />
-                  <select name="role" value={form.role} onChange={handleChange} className={inputClass('role')}>
-                    {roles.map((role) => (
-                      <option key={role.value} value={role.value}>{role.label}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+                   <select name="role" value={form.role} onChange={handleChange} className={inputClass('role')}>
+                     {roles.map((role) => (
+                       <option key={role.value} value={role.value}>{role.label}</option>
+                     ))}
+                   </select>
+                 </label>
+               </div>
               
-              {/* Ambulance Driver fields */}
-              {form.role === 'AMBULANCE_DRIVER' && (
-                <>
-                  <div>
+               {/* Ambulance Driver fields */}
+               {form.role === 'AMBULANCE_DRIVER' && (
+                 <>
+                   <div>
                     <label className="block mb-1 font-medium text-white">License Number<br />
-                      <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} />
-                      {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
-                    </label>
-                  </div>
-                  <div>
+                       <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} placeholder="KA01 20200012345" />
+                       {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
                     <label className="block mb-1 font-medium text-white">Vehicle Registration Number<br />
-                      <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} />
-                      {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
-                    </label>
-                  </div>
-                  <div>
+                       <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} placeholder="MH12AB1234" />
+                       {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
                     <label className="block mb-1 font-medium text-white">Hospital ID<br />
-                      <input name="hospitalID" type="number" value={form.hospitalID} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('hospitalID')} />
-                      {formErrors.hospitalID && <p className="mt-1 text-sm text-red-600">{formErrors.hospitalID}</p>}
-                    </label>
-                  </div>
-                </>
-              )}
+                       <input name="hospitalID" type="number" value={form.hospitalID} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('hospitalID')} />
+                       {formErrors.hospitalID && <p className="mt-1 text-sm text-red-600">{formErrors.hospitalID}</p>}
+                     </label>
+                   </div>
+                 </>
+               )}
               
-              {/* Fire Driver fields */}
-              {form.role === 'FIRE_DRIVER' && (
-                <>
-                  <div>
+               {/* Fire Driver fields */}
+               {form.role === 'FIRE_DRIVER' && (
+                 <>
+                   <div>
                     <label className="block mb-1 font-medium text-white">License Number<br />
-                      <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} />
-                      {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
-                    </label>
-                  </div>
-                  <div>
+                       <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="17" className={inputClass('licenseNumber')} placeholder="KA01 20200012345" />
+                       {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
                     <label className="block mb-1 font-medium text-white">Vehicle Registration Number<br />
-                      <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} />
-                      {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
-                    </label>
-                  </div>
-                  <div>
+                       <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} placeholder="MH12AB1234" />
+                       {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
                     <label className="block mb-1 font-medium text-white">Fire Station ID<br />
-                      <input name="fireStationId" type="number" value={form.fireStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('fireStationId')} />
-                      {formErrors.fireStationId && <p className="mt-1 text-sm text-red-600">{formErrors.fireStationId}</p>}
-                    </label>
-                  </div>
-                </>
-              )}
+                       <input name="fireStationId" type="number" value={form.fireStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('fireStationId')} />
+                       {formErrors.fireStationId && <p className="mt-1 text-sm text-red-600">{formErrors.fireStationId}</p>}
+                     </label>
+                   </div>
+                 </>
+               )}
               
-              {/* Police Officer fields */}
-              {form.role === 'POLICE_OFFICER' && (
-                <div>
+               {/* Police Officer fields */}
+               {form.role === 'POLICE_OFFICER' && (
+                 <div>
                   <label className="block mb-1 font-medium text-white">Police Station ID<br />
-                    <input name="policeStationId" type="number" value={form.policeStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('policeStationId')} />
-                    {formErrors.policeStationId && <p className="mt-1 text-sm text-red-600">{formErrors.policeStationId}</p>}
-                  </label>
-                </div>
-              )}
+                     <input name="policeStationId" type="number" value={form.policeStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('policeStationId')} />
+                     {formErrors.policeStationId && <p className="mt-1 text-sm text-red-600">{formErrors.policeStationId}</p>}
+                   </label>
+                 </div>
+               )}
+               
+               {/* Admin fields */}
+               {form.role === 'ADMIN' && (
+                 <>
+                   <div>
+                    <label className="block mb-1 font-medium text-white">License Number<br />
+                       <input name="licenseNumber" value={form.licenseNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="20" className={inputClass('licenseNumber')} placeholder="MH-FIRE-0234" />
+                       {formErrors.licenseNumber && <p className="mt-1 text-sm text-red-600">{formErrors.licenseNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
+                    <label className="block mb-1 font-medium text-white">Vehicle Registration Number<br />
+                       <input name="vehicleRegNumber" value={form.vehicleRegNumber} onChange={handleChange} onBlur={handleBlur} required maxLength="10" className={inputClass('vehicleRegNumber')} placeholder="MH15BA3254" />
+                       {formErrors.vehicleRegNumber && <p className="mt-1 text-sm text-red-600">{formErrors.vehicleRegNumber}</p>}
+                     </label>
+                   </div>
+                   <div>
+                    <label className="block mb-1 font-medium text-white">Fire Station ID<br />
+                       <input name="fireStationId" type="number" value={form.fireStationId} onChange={handleChange} onBlur={handleBlur} required min="1" className={inputClass('fireStationId')} />
+                       {formErrors.fireStationId && <p className="mt-1 text-sm text-red-600">{formErrors.fireStationId}</p>}
+                     </label>
+                   </div>
+                 </>
+               )}
               
-              <button type="submit" disabled={loading} className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors shadow-md">
-                {loading ? 'Registering...' : 'Register'}
-              </button>
-            </form>
-            {message && <p className={`mt-4 text-center text-sm transition-opacity duration-300 ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
-            <div className="mt-4 text-center">
+               <button type="submit" disabled={loading} className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors shadow-md">
+                 {loading ? 'Registering...' : 'Register'}
+               </button>
+             </form>
+             {message && <p className={`mt-4 text-center text-sm transition-opacity duration-300 ${message.includes('success') ? 'text-green-600' : 'text-red-500'}`}>{message}</p>}
+             <div className="mt-4 text-center">
               <span className="text-white">Already have an account? </span>
-              <a href="/" className="text-blue-600 hover:underline">Login</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+               <a href="/" className="text-blue-600 hover:underline">Login</a>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   );
+ }

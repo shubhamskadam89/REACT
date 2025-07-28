@@ -75,12 +75,12 @@ const navIconVariants = {
 function SectionHeader({ icon, title }) {
   return (
     <motion.h2
-      className="flex items-center gap-3 text-2xl md:text-3xl font-bold mb-6 text-gray-800 border-b-2 border-indigo-200 pb-2"
+      className="flex items-center gap-3 text-2xl md:text-3xl font-bold mb-6 text-gray-800 border-b-2 border-gray-200 pb-2"
       variants={headerVariants}
       initial="hidden"
       animate="visible"
     >
-      <span className="text-indigo-600 text-3xl">{icon}</span>
+      <span className="text-blue-500 text-3xl">{icon}</span>
       {title}
     </motion.h2>
   );
@@ -110,7 +110,9 @@ export default function AmbulanceDashboard() {
     password: '',
     licenseNumber: '',
     vehicleRegNumber: '',
-    hospitalID: '',
+    securityQuestion: 'PET_NAME',
+    securityAnswer: '',
+    fireStationId: '',
   });
   const [locationForm, setLocationForm] = useState({
     ambulanceId: '',
@@ -146,6 +148,17 @@ export default function AmbulanceDashboard() {
   const [dashboardStats, setDashboardStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const [statsError, setStatsError] = useState('');
+  const [profileData, setProfileData] = useState({
+    name: 'Ambulance Driver Name',
+    badge: 'A-2024-001',
+    rank: 'Senior Driver',
+    department: 'Emergency Response',
+    experience: '10 years',
+    email: 'driver@ambulance.gov',
+    phone: '+1 (555) 123-4567'
+  });
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState(null);
 
   // New state for individual input errors
   const [formErrors, setFormErrors] = useState({
@@ -156,7 +169,8 @@ export default function AmbulanceDashboard() {
     password: '',
     licenseNumber: '',
     vehicleRegNumber: '',
-    hospitalID: '',
+    securityAnswer: '',
+    fireStationId: '',
   });
   const [locationFormErrors, setLocationFormErrors] = useState({
     ambulanceId: '',
@@ -167,9 +181,9 @@ export default function AmbulanceDashboard() {
   // Regex patterns
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[6-9]\d{9}$/;
-  const aadharRegex = /^\d{4}\s?\d{4}\s?\d{4}$/; // Added optional space for Aadhar
-  const licenseRegex = /^[A-Z]{2}[0-9]{2}\s?[0-9]{11}$/i; // Case-insensitive for license plate, optional space
-  const vehicleRegRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/i; // Case-insensitive for vehicle reg, allows 1 or 2 digits after state code
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/; // PAN format
+  const licenseRegex = /^[A-Z]{2}-[A-Z]+-\d{4}$/i; // Format: STATE-TYPE-NUMBER (e.g., MH-FIRE-0234)
+  const vehicleRegRegex = /^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/i; // Format: STATE + 2 digits + 2 letters + 4 digits (e.g., MH15BA3254)
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -258,6 +272,13 @@ export default function AmbulanceDashboard() {
     }
   }, [activeTab]);
 
+  // Fetch profile data when profile tab is active
+  useEffect(() => {
+    if (activeTab === 'profile') {
+      fetchAmbulanceDriverProfile();
+    }
+  }, [activeTab]);
+
   const validateField = (name, value) => {
     let error = '';
     switch (name) {
@@ -275,7 +296,7 @@ export default function AmbulanceDashboard() {
         break;
       case 'governmentId':
         if (!value.trim()) error = 'Government ID is required.';
-        else if (!aadharRegex.test(value)) error = 'Enter 12-digit Aadhar (e.g., 1234 5678 9012).';
+        else if (!panRegex.test(value)) error = 'Enter valid PAN number (e.g., ABCDE1234F).';
         break;
       case 'password':
         if (!value.trim()) error = 'Password is required.';
@@ -283,15 +304,18 @@ export default function AmbulanceDashboard() {
         break;
       case 'licenseNumber':
         if (!value.trim()) error = 'License Number is required.';
-        else if (!licenseRegex.test(value)) error = 'Enter valid Indian License (e.g., KA01 20200012345).';
+        else if (!licenseRegex.test(value)) error = 'Enter valid License (e.g., MH-FIRE-0234).';
         break;
       case 'vehicleRegNumber':
         if (!value.trim()) error = 'Vehicle Registration is required.';
-        else if (!vehicleRegRegex.test(value)) error = 'Enter valid Indian Reg (e.g., KA01AB1234).';
+        else if (!vehicleRegRegex.test(value)) error = 'Enter valid Vehicle Reg (e.g., MH15BA3254).';
         break;
-      case 'hospitalID':
-        if (!value) error = 'Hospital ID is required.'; // Allow 0 for empty field, validate onBlur/submit
-        else if (isNaN(Number(value)) || Number(value) <= 0) error = 'Hospital ID must be a positive number.';
+      case 'fireStationId':
+        if (!value) error = 'Fire Station ID is required.'; // Allow 0 for empty field, validate onBlur/submit
+        else if (isNaN(Number(value)) || Number(value) <= 0) error = 'Fire Station ID must be a positive number.';
+        break;
+      case 'securityAnswer':
+        if (!value.trim()) error = 'Security Answer is required.';
         break;
       default:
         break;
@@ -349,11 +373,11 @@ export default function AmbulanceDashboard() {
   const validateAllRegistrationFields = () => {
     let isValid = true;
     for (const key in form) {
-      if (key !== 'hospitalID' && !form[key].trim()) { // Check for empty strings for text fields
+      if (key !== 'fireStationId' && key !== 'securityQuestion' && !form[key].trim()) { // Check for empty strings for text fields
           setFormErrors(prev => ({ ...prev, [key]: `${key.replace(/([A-Z])/g, ' $1').trim()} is required.` }));
           isValid = false;
-      } else if (key === 'hospitalID' && (isNaN(Number(form[key])) || Number(form[key]) <= 0)) {
-          setFormErrors(prev => ({ ...prev, [key]: 'Hospital ID must be a positive number.' }));
+      } else if (key === 'fireStationId' && (isNaN(Number(form[key])) || Number(form[key]) <= 0)) {
+          setFormErrors(prev => ({ ...prev, [key]: 'Fire Station ID must be a positive number.' }));
           isValid = false;
       } else if (!validateField(key, form[key])) { // Run specific regex/length validation
         isValid = false;
@@ -371,8 +395,8 @@ export default function AmbulanceDashboard() {
     }
     setLoading(true);
     try {
-      const body = { ...form, hospitalID: Number(form.hospitalID) };
-      const res = await fetch('http://localhost:8080/auth/register/ambulance-driver', {
+      const body = { ...form, fireStationId: Number(form.fireStationId) };
+      const res = await fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -595,58 +619,98 @@ export default function AmbulanceDashboard() {
     }
   };
 
-  const QuickActionCard = ({ title, description, icon, onClick, gradient }) => (
+  const fetchAmbulanceDriverProfile = async () => {
+    setProfileLoading(true);
+    setProfileError(null);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8080/ambulance-driver/v1/me', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProfileData({
+          name: data.name || 'Ambulance Driver Name',
+          badge: data.badgeNumber || 'N/A',
+          rank: data.rank || 'N/A',
+          department: data.department || 'N/A',
+          experience: data.experience || 'N/A',
+          email: data.email || 'N/A',
+          phone: data.phone || 'N/A'
+        });
+      } else {
+        const errorData = await response.json();
+        setProfileError(errorData.message || 'Failed to fetch profile data');
+        toast.error('Failed to fetch profile data');
+      }
+    } catch (error) {
+      console.error('Error fetching ambulance driver profile:', error);
+      setProfileError('Failed to fetch profile data');
+      toast.error('Failed to fetch profile data');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const QuickActionCard = ({ title, description, icon, onClick, bgColorClass }) => (
     <motion.div
-      className={`bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group relative overflow-hidden`}
       onClick={onClick}
+      className={`${bgColorClass} p-6 rounded-lg cursor-pointer flex items-center space-x-4 text-gray-800 relative overflow-hidden transition-all duration-200`}
       variants={cardVariants}
       initial="hidden"
       animate="visible"
       whileHover="hover"
       whileTap={{ scale: 0.98 }}
     >
-      <div className={`text-4xl mb-4 ${gradient} bg-clip-text text-transparent`}>
+      <div className="text-3xl relative z-10 text-gray-600">
         {icon}
       </div>
-      <h3 className="font-semibold text-lg text-gray-800 mb-1">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
+      <div className="relative z-10">
+        <h3 className="font-semibold">{title}</h3>
+        <p className="text-sm opacity-90">{description}</p>
+      </div>
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"
+        className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
+        whileHover={{ opacity: 0.7 }}
       ></motion.div>
     </motion.div>
   );
 
-  const StatCard = ({ title, value, icon, gradient }) => (
+  const StatCard = ({ title, value, subtitle, bgColorClass, icon }) => (
     <motion.div
-      className={`p-6 rounded-xl shadow-lg text-white group relative overflow-hidden`}
+      className={`${bgColorClass} p-6 rounded-lg shadow-md text-gray-800 relative overflow-hidden flex items-center justify-between`}
       variants={cardVariants}
       initial="hidden"
       animate="visible"
       whileHover="hover"
     >
-      <div className={`absolute inset-0 ${gradient} opacity-90 rounded-xl`}></div>
-      <div className="flex items-center relative z-10">
+      <div className="relative z-10">
         <motion.div
-          className="text-4xl mr-4 opacity-75"
+          className="text-4xl text-blue-600 opacity-75"
           initial={{ rotate: 0 }}
-          whileHover={{ rotate: 12 }}
-          transition={{ duration: 0.3 }}
+          whileHover={{ rotate: 8 }}
+          transition={{ duration: 0.2 }}
         >
           {icon}
         </motion.div>
-        <div>
-          <p className="text-sm opacity-90">{title}</p>
-          <p className="text-3xl font-bold">{value}</p>
-        </div>
+      </div>
+      <div className="text-right relative z-10">
+        <h3 className="text-3xl font-bold">{value}</h3>
+        <p className="text-sm opacity-90">{title}</p>
+        {subtitle && <p className="text-xs opacity-80">{subtitle}</p>}
       </div>
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"
+        className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
+        whileHover={{ opacity: 0.7 }}
       ></motion.div>
     </motion.div>
   );
@@ -656,7 +720,7 @@ export default function AmbulanceDashboard() {
   const userInfo = decodeJWT(jwt);
 
   return (
-    <div className="min-h-screen bg-gray-100 font-inter text-gray-800">
+    <div className="min-h-screen bg-gray-50 font-inter text-gray-800">
       {/* Google Fonts Preconnect and Import (Add this to your public/index.html or a global CSS file) */}
       {/* For demonstration, added directly here. In a real project, use <link> in HTML or @import in global CSS. */}
       <style>
@@ -669,25 +733,25 @@ export default function AmbulanceDashboard() {
       </style>
 
       {/* Header */}
-      <div className="bg-white shadow-lg border-b border-gray-200">
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <ReactLogo />
               <div>
-                <h1 className="text-3xl font-bold text-indigo-700">Ambulance Admin Dashboard</h1>
-                <p className="text-gray-600 mt-1">Emergency Medical Services Management</p>
+                <h1 className="text-3xl font-bold text-gray-800">Ambulance Admin Dashboard</h1>
+                <p className="text-gray-500">Emergency Medical Services Management</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <p className="text-sm text-gray-700 font-medium">Ambulance Administrator</p>
-                <p className="text-xs text-gray-500 mt-0.5">Last updated: {new Date().toLocaleTimeString()}</p>
+                <p className="text-sm text-gray-600">Ambulance Administrator</p>
+                <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString()}</p>
               </div>
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => navigate('/')}
-                  className="text-gray-600 hover:text-indigo-700 text-sm font-medium transition-colors p-2 rounded-md hover:bg-gray-100"
+                  className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                 >
                   Home
                 </button>
@@ -696,11 +760,11 @@ export default function AmbulanceDashboard() {
                     localStorage.removeItem('jwt');
                     navigate('/login');
                   }}
-                  className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors p-2 rounded-md hover:bg-red-50"
+                  className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                 >
                   Logout
                 </button>
-                <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold hover:bg-blue-600 transition">
                   <TruckIcon className="h-6 w-6" />
                 </div>
               </div>
@@ -709,7 +773,7 @@ export default function AmbulanceDashboard() {
         </div>
       </div>
       {/* Navigation Tabs */}
-      <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex space-x-8">
             {[
@@ -726,8 +790,8 @@ export default function AmbulanceDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center group
                   ${activeTab === tab.id
-                    ? 'border-indigo-600 text-indigo-700'
-                    : 'border-transparent text-gray-600 hover:text-indigo-600 hover:border-indigo-300'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-600 hover:text-blue-500 hover:border-blue-300'
                   }`}
                 initial="rest"
                 whileHover="hover"
@@ -755,60 +819,60 @@ export default function AmbulanceDashboard() {
         {activeTab === 'overview' && (
           <motion.div className="space-y-10" variants={itemVariants}>
             {/* Quick Actions */}
-            <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+            <div>
               <SectionHeader icon={<ClipboardDocumentCheckIcon />} title="Quick Actions" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <QuickActionCard
                   title="Register Driver"
                   description="Add a new ambulance driver to the system."
-                  icon={<UserGroupIcon />}
+                  icon={<UserGroupIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('register')}
-                  gradient="from-indigo-500 to-blue-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Update Location"
                   description="Manually update an ambulance's current location."
-                  icon={<MapPinIcon />}
+                  icon={<MapPinIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('vehicles')}
-                  gradient="from-green-500 to-emerald-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="View Emergencies"
                   description="Monitor all active and resolved emergency calls."
-                  icon={<ExclamationCircleIcon />}
+                  icon={<ExclamationCircleIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('emergencies')}
-                  gradient="from-red-500 to-rose-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Driver Rankings"
                   description="Analyze performance and efficiency of drivers."
-                  icon={<TrophyIcon />}
+                  icon={<TrophyIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('rankings')}
-                  gradient="from-amber-500 to-orange-600"
+                  bgColorClass="bg-white"
                 />
                 <QuickActionCard
                   title="Profile Management"
                   description="Manage your ambulance service administrator profile."
-                  icon={<UserCircleIcon />}
+                  icon={<UserCircleIcon className="h-6 w-6" />}
                   onClick={() => setActiveTab('profile')}
-                  gradient="from-purple-500 to-fuchsia-600"
+                  bgColorClass="bg-white"
                 />
                  <QuickActionCard
                   title="Ambulance History"
                   description="View past requests and completed bookings."
-                  icon={<CalendarDaysIcon />}
+                  icon={<CalendarDaysIcon className="h-6 w-6" />}
                   onClick={() => { setActiveTab('vehicles'); handleFetchHistory(); }}
-                  gradient="from-teal-500 to-cyan-600"
+                  bgColorClass="bg-white"
                 />
               </div>
             </div>
 
             {/* Statistics */}
-            <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+            <div>
               <SectionHeader icon={<CurrencyDollarIcon />} title="Dashboard Statistics" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statsLoading ? (
-                  <motion.div className="col-span-4 text-center py-8 text-indigo-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading statistics...</motion.div>
+                  <motion.div className="col-span-4 text-center py-8 text-blue-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>Loading statistics...</motion.div>
                 ) : statsError ? (
                   <motion.div className="col-span-4 text-center py-8 text-red-600 font-semibold" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{statsError}</motion.div>
                 ) : dashboardStats ? (
@@ -816,26 +880,30 @@ export default function AmbulanceDashboard() {
                     <StatCard
                       title="Total Ambulances"
                       value={dashboardStats.total_ambulances}
+                      subtitle="Active ambulances"
+                      bgColorClass="bg-white"
                       icon={<TruckIcon />}
-                      gradient="from-indigo-500 to-indigo-700"
                     />
                     <StatCard
                       title="Available Ambulances"
                       value={dashboardStats.available_ambulances}
+                      subtitle="Ready for service"
+                      bgColorClass="bg-white"
                       icon={<UserGroupIcon />}
-                      gradient="from-emerald-500 to-green-700"
                     />
                     <StatCard
                       title="Total Bookings"
                       value={dashboardStats.ambulance_bookings}
+                      subtitle="Today's calls"
+                      bgColorClass="bg-white"
                       icon={<ExclamationCircleIcon />}
-                      gradient="from-rose-500 to-red-700"
                     />
                     <StatCard
                       title="Avg Completion Time"
                       value={`${dashboardStats.average_completion_time_minutes} min`}
+                      subtitle="Emergency response"
+                      bgColorClass="bg-white"
                       icon={<ClockIcon />}
-                      gradient="from-purple-500 to-purple-700"
                     />
                   </>
                 ) : null}
@@ -843,44 +911,46 @@ export default function AmbulanceDashboard() {
             </div>
 
             {/* Recent Emergencies */}
-            <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+            <div>
               <SectionHeader icon={<ExclamationCircleIcon />} title="Recent Emergencies" />
               {emergenciesLoading ? (
-                <motion.div className="text-center py-8 text-indigo-600 font-semibold" variants={itemVariants}>Loading emergencies...</motion.div>
+                <motion.div className="text-center py-8 text-blue-600 font-semibold" variants={itemVariants}>Loading emergencies...</motion.div>
               ) : emergenciesError ? (
                 <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>{emergenciesError}</motion.div>
               ) : recentEmergencies.length === 0 ? (
                 <motion.div className="text-center py-8 text-gray-500" variants={itemVariants}>No recent emergencies found.</motion.div>
               ) : (
-                <div className="overflow-x-auto">
-                  <motion.table className="min-w-full divide-y divide-gray-200" initial="hidden" animate="visible" variants={containerVariants}>
-                    <motion.thead className="bg-gray-100" variants={itemVariants}>
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Issue</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created At</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Victim Phone</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lat</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lng</th>
-                      </tr>
-                    </motion.thead>
-                    <motion.tbody className="bg-white divide-y divide-gray-200">
-                      {recentEmergencies.map((em, index) => (
-                        <motion.tr key={em.booking_id} className="hover:bg-gray-50" variants={itemVariants}>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.booking_id}</td>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.issue_type}</td>
-                          <td className="px-4 py-2 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${em.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{em.status}</span>
-                          </td>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{new Date(em.created_at).toLocaleString()}</td>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.victim_phone_number}</td>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.pickup_latitude}</td>
-                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.pickup_longitude}</td>
-                        </motion.tr>
-                      ))}
-                    </motion.tbody>
-                  </motion.table>
+                <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <motion.table className="min-w-full divide-y divide-gray-200" initial="hidden" animate="visible" variants={containerVariants}>
+                      <motion.thead className="bg-gray-50" variants={itemVariants}>
+                        <tr>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Issue</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created At</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Victim Phone</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lat</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Pickup Lng</th>
+                        </tr>
+                      </motion.thead>
+                      <motion.tbody className="bg-white divide-y divide-gray-200">
+                        {recentEmergencies.map((em, index) => (
+                          <motion.tr key={em.booking_id} className="hover:bg-gray-50" variants={itemVariants}>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.booking_id}</td>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.issue_type}</td>
+                            <td className="px-4 py-2 whitespace-nowrap">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${em.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{em.status}</span>
+                            </td>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{new Date(em.created_at).toLocaleString()}</td>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.victim_phone_number}</td>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.pickup_latitude}</td>
+                            <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800">{em.pickup_longitude}</td>
+                          </motion.tr>
+                        ))}
+                      </motion.tbody>
+                    </motion.table>
+                  </div>
                 </div>
               )}
             </div>
@@ -888,14 +958,14 @@ export default function AmbulanceDashboard() {
         )}
 
         {activeTab === 'drivers' && (
-          <motion.div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
+          <motion.div className="bg-white rounded-lg shadow-md p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
             <SectionHeader icon={<UserGroupIcon />} title="Ambulance Drivers" />
             <motion.div className="mb-6 flex flex-col md:flex-row md:items-center gap-4" variants={itemVariants}>
               <button
                 type="button"
                 onClick={handleFetchAllDrivers}
                 disabled={allDriversLoading}
-                className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+                className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
               >
                 {allDriversLoading ? (
                   <>
@@ -918,7 +988,7 @@ export default function AmbulanceDashboard() {
             </motion.div>
             <div className="overflow-x-auto">
               <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                <motion.thead className="bg-gray-100" variants={itemVariants}>
+                <motion.thead className="bg-gray-50" variants={itemVariants}>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Driver</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">License</th>
@@ -933,7 +1003,7 @@ export default function AmbulanceDashboard() {
                 <motion.tbody className="bg-white divide-y divide-gray-200">
                   {allDriversLoading ? (
                     <motion.tr variants={itemVariants}>
-                      <td colSpan="8" className="text-center py-4 text-indigo-600">Loading drivers...</td>
+                      <td colSpan="8" className="text-center py-4 text-blue-600">Loading drivers...</td>
                     </motion.tr>
                   ) : allDrivers.length === 0 ? (
                     <motion.tr variants={itemVariants}>
@@ -963,7 +1033,7 @@ export default function AmbulanceDashboard() {
 
         {activeTab === 'vehicles' && (
           <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
-            <div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200">
+            <div className="bg-white rounded-lg shadow-md p-8 border border-gray-200">
               <SectionHeader icon={<TruckIcon />} title="Ambulance & Location Management" />
 
               {/* Fetch Location Section */}
@@ -987,7 +1057,7 @@ export default function AmbulanceDashboard() {
                     type="button"
                     onClick={handleFetchLocation}
                     disabled={fetchLoading}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
                   >
                     {fetchLoading ? (
                       <>
@@ -1046,7 +1116,7 @@ export default function AmbulanceDashboard() {
                     type="button"
                     onClick={handleFetchByHospital}
                     disabled={hospitalFetchLoading}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
                   >
                     {hospitalFetchLoading ? (
                       <>
@@ -1171,7 +1241,7 @@ export default function AmbulanceDashboard() {
                   <motion.button
                     type="submit"
                     disabled={loading}
-                    className="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
+                    className="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
                     variants={itemVariants}
                   >
                     {loading ? (
@@ -1214,7 +1284,7 @@ export default function AmbulanceDashboard() {
                     type="button"
                     onClick={handleFetchHistory}
                     disabled={historyLoading}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
                   >
                     {historyLoading ? (
                       <>
@@ -1332,10 +1402,10 @@ export default function AmbulanceDashboard() {
         )}
 
         {activeTab === 'emergencies' && (
-          <motion.div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
+          <motion.div className="bg-white rounded-lg shadow-md p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
             <SectionHeader icon={<ExclamationCircleIcon />} title="Recent Emergencies" />
             {emergenciesLoading ? (
-              <motion.div className="text-center py-8 text-indigo-600 font-semibold" variants={itemVariants}>Loading emergencies...</motion.div>
+              <motion.div className="text-center py-8 text-blue-600 font-semibold" variants={itemVariants}>Loading emergencies...</motion.div>
             ) : emergenciesError ? (
               <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>{emergenciesError}</motion.div>
             ) : recentEmergencies.length === 0 ? (
@@ -1343,7 +1413,7 @@ export default function AmbulanceDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                  <motion.thead className="bg-gray-100" variants={itemVariants}>
+                  <motion.thead className="bg-gray-50" variants={itemVariants}>
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Issue</th>
@@ -1376,16 +1446,16 @@ export default function AmbulanceDashboard() {
         )}
 
         {activeTab === 'rankings' && (
-          <motion.div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
+          <motion.div className="bg-white rounded-lg shadow-md p-8 border border-gray-200" variants={containerVariants} initial="hidden" animate="visible">
             <SectionHeader icon={<TrophyIcon />} title="Ambulance Rankings" />
             {ambulancesLoading ? (
-              <motion.div className="text-center py-8 text-indigo-600 font-semibold" variants={itemVariants}>Loading rankings...</motion.div>
+              <motion.div className="text-center py-8 text-blue-600 font-semibold" variants={itemVariants}>Loading rankings...</motion.div>
             ) : ambulancesError ? (
               <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>{ambulancesError}</motion.div>
             ) : (
               <div className="overflow-x-auto">
                 <motion.table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" initial="hidden" animate="visible" variants={containerVariants}>
-                  <motion.thead className="bg-gray-100" variants={itemVariants}>
+                  <motion.thead className="bg-gray-50" variants={itemVariants}>
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">#</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Reg Number</th>
@@ -1403,17 +1473,17 @@ export default function AmbulanceDashboard() {
                         <td colSpan={8} className="text-center py-8 text-gray-500">No ambulances found.</td>
                       </motion.tr>
                     ) : ambulances.map((amb, idx) => (
-                      <motion.tr key={amb.id} className="hover:bg-blue-50 transition" variants={itemVariants}>
+                      <motion.tr key={amb.id} className="hover:bg-gray-50 transition" variants={itemVariants}>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm text-gray-800">{idx + 1}</td>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm text-gray-900">{amb.regNumber}</td>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm text-gray-900">{amb.driverName}</td>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm text-gray-900">{amb.driverPhone}</td>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full
-                            ${amb.status === 'AVAILABLE' ? 'bg-green-200 text-green-900 border border-green-400' :
-                              amb.status === 'ON_CALL' ? 'bg-yellow-200 text-yellow-900 border border-yellow-400' :
-                              amb.status === 'MAINTENANCE' ? 'bg-purple-200 text-purple-900 border border-purple-400' :
-                              'bg-gray-200 text-gray-900 border border-gray-400'}
+                            ${amb.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
+                              amb.status === 'ON_CALL' ? 'bg-yellow-100 text-yellow-800' :
+                              amb.status === 'MAINTENANCE' ? 'bg-purple-100 text-purple-800' :
+                              'bg-gray-100 text-gray-800'}
                           `}>{amb.status}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm text-gray-700">{Number(amb.latitude).toFixed(4)}</td>
@@ -1430,38 +1500,68 @@ export default function AmbulanceDashboard() {
 
         {activeTab === 'profile' && (
           <motion.div className="max-w-4xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
-            <div className="bg-white rounded-lg shadow-xl p-8 border border-gray-200">
+            <div className="bg-white rounded-lg shadow-md p-8 border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <SectionHeader icon={<UserCircleIcon />} title="Ambulance Service Profile" />
-                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors p-2 rounded-md hover:bg-gray-100">Edit Profile</button>
+                <button className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors p-2 rounded-md hover:bg-gray-100">Edit Profile</button>
               </div>
+
+              {profileLoading && (
+                <motion.div className="text-center py-8 text-blue-600 font-semibold" variants={itemVariants}>
+                  Loading profile data...
+                </motion.div>
+              )}
+
+              {profileError && (
+                <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>
+                  {profileError}
+                </motion.div>
+              )}
+
+              {!profileLoading && !profileError && (
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Service Information */}
                 <motion.div variants={itemVariants}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
+                      <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
                         <TruckIcon className="h-8 w-8" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{userInfo.role || 'N/A'}</h4>
-                        <p className="text-sm text-gray-600">{userInfo.sub || 'N/A'}</p>
+                        <h4 className="font-semibold text-gray-900">{profileData.name}</h4>
+                        <p className="text-sm text-gray-600">Badge: {profileData.badge}</p>
                       </div>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 border border-gray-200 rounded-lg p-4">
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-700">User ID:</span>
+                        <span className="text-gray-600">User ID:</span>
                         <span className="font-medium text-gray-800">{userInfo.userId || 'N/A'}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-700">Email:</span>
-                        <span className="font-medium text-gray-800">{userInfo.sub || 'N/A'}</span>
+                        <span className="text-gray-600">Email:</span>
+                        <span className="font-medium text-gray-800">{profileData.email || 'N/A'}</span>
                       </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-700">Role:</span>
+                      <div className="flex justify-between py-2">
+                        <span className="text-gray-600">Role:</span>
                         <span className="font-medium text-gray-800">{userInfo.role || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between py-2 border-t border-gray-100 mt-4">
+                        <span className="text-gray-600">Rank:</span>
+                        <span className="font-medium text-gray-800">{profileData.rank || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-gray-600">Department:</span>
+                        <span className="font-medium text-gray-800">{profileData.department || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-gray-600">Experience:</span>
+                        <span className="font-medium text-gray-800">{profileData.experience || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-gray-600">Phone:</span>
+                        <span className="font-medium text-gray-800">{profileData.phone || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
@@ -1469,23 +1569,40 @@ export default function AmbulanceDashboard() {
 
                 {/* Performance Metrics */}
                 <motion.div variants={itemVariants}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Statistics</h3>
                   <div className="space-y-4">
-                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                      <h4 className="font-semibold text-blue-800">Response Efficiency</h4>
-                      <p className="text-sm text-blue-700">98% of emergencies responded within 5 minutes</p>
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-blue-700 font-medium">Emergencies Responded</span>
+                        <span className="text-2xl font-bold text-blue-700">156</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">This month</p>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                      <h4 className="font-semibold text-green-800">Patient Satisfaction</h4>
-                      <p className="text-sm text-green-700">4.8/5 average rating from patients</p>
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-green-700 font-medium">Response Time</span>
+                        <span className="text-2xl font-bold text-green-700">4.2 min</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">Average</p>
                     </div>
-                    <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-                      <h4 className="font-semibold text-purple-800">Safety Record</h4>
-                      <p className="text-sm text-purple-700">Zero major incidents in the last 12 months</p>
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-yellow-700 font-medium">Patient Satisfaction</span>
+                        <span className="text-2xl font-bold text-yellow-700">4.8/5</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">Average rating</p>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-purple-700 font-medium">Service Hours</span>
+                        <span className="text-2xl font-bold text-purple-700">1,890</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">This year</p>
                     </div>
                   </div>
                 </motion.div>
               </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -1494,8 +1611,8 @@ export default function AmbulanceDashboard() {
           <motion.div className="max-w-2xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
             <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
               <div className="text-center mb-8">
-                <SectionHeader icon={<PlusCircleIcon />} title="Register Ambulance Driver" />
-                <p className="text-gray-600">Add a new ambulance driver to the emergency response team</p>
+                <SectionHeader icon={<PlusCircleIcon />} title="Register Admin" />
+                <p className="text-gray-600">Add a new admin user to the emergency response system</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -1559,7 +1676,7 @@ export default function AmbulanceDashboard() {
                     {formErrors.phoneNumber && <p className="mt-1 text-sm text-red-600">{formErrors.phoneNumber}</p>}
                   </motion.div>
                   <motion.div variants={itemVariants}>
-                    <label htmlFor="governmentId" className="block text-sm font-medium text-gray-700 mb-2">Government ID (Aadhar)</label>
+                    <label htmlFor="governmentId" className="block text-sm font-medium text-gray-700 mb-2">Government ID (PAN)</label>
                     <div className="relative">
                       <input
                         id="governmentId"
@@ -1569,8 +1686,8 @@ export default function AmbulanceDashboard() {
                         onBlur={handleBlur}
                         required
                         className={`w-full px-4 py-3 pl-10 border ${formErrors.governmentId ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
-                        placeholder="e.g., 1234 5678 9012"
-                        maxLength="14" // 12 digits + 2 optional spaces
+                        placeholder="e.g., ABCDE1234F"
+                        maxLength="10"
                       />
                       <IdentificationIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>
@@ -1590,8 +1707,8 @@ export default function AmbulanceDashboard() {
                         onBlur={handleBlur}
                         required
                         className={`w-full px-4 py-3 pl-10 border ${formErrors.licenseNumber ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
-                        placeholder="e.g., KA01 20200012345"
-                        maxLength="17" // e.g., KA01 20200012345 is 17 chars
+                        placeholder="e.g., MH-FIRE-0234"
+                        maxLength="20"
                       />
                       <IdentificationIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>
@@ -1608,8 +1725,8 @@ export default function AmbulanceDashboard() {
                         onBlur={handleBlur}
                         required
                         className={`w-full px-4 py-3 pl-10 border ${formErrors.vehicleRegNumber ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
-                        placeholder="e.g., KA01AB1234"
-                        maxLength="10" // e.g., KA01AB1234 is 10 chars
+                        placeholder="e.g., MH15BA3254"
+                        maxLength="10"
                       />
                       <TruckIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>
@@ -1638,23 +1755,61 @@ export default function AmbulanceDashboard() {
                     {formErrors.password && <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>}
                   </motion.div>
                   <motion.div variants={itemVariants}>
-                    <label htmlFor="hospitalID" className="block text-sm font-medium text-gray-700 mb-2">Hospital ID</label>
+                    <label htmlFor="fireStationId" className="block text-sm font-medium text-gray-700 mb-2">Fire Station ID</label>
                     <div className="relative">
                       <input
-                        id="hospitalID"
-                        name="hospitalID"
-                        value={form.hospitalID}
+                        id="fireStationId"
+                        name="fireStationId"
+                        value={form.fireStationId}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         type="number"
                         required
-                        className={`w-full px-4 py-3 pl-10 border ${formErrors.hospitalID ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
-                        placeholder="Enter hospital ID"
+                        className={`w-full px-4 py-3 pl-10 border ${formErrors.fireStationId ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
+                        placeholder="Enter fire station ID"
                         min="1"
                       />
                       <BuildingOfficeIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>
-                    {formErrors.hospitalID && <p className="mt-1 text-sm text-red-600">{formErrors.hospitalID}</p>}
+                    {formErrors.fireStationId && <p className="mt-1 text-sm text-red-600">{formErrors.fireStationId}</p>}
+                  </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="securityQuestion" className="block text-sm font-medium text-gray-700 mb-2">Security Question</label>
+                    <div className="relative">
+                      <select
+                        id="securityQuestion"
+                        name="securityQuestion"
+                        value={form.securityQuestion}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 pl-10 border ${formErrors.securityQuestion ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
+                      >
+                        <option value="PET_NAME">What is your pet's name?</option>
+                        <option value="BIRTH_CITY">In which city were you born?</option>
+                        <option value="FAVORITE_TEACHER">Who was your favorite teacher?</option>
+                        <option value="MOTHER_MAIDEN_NAME">What is your mother's maiden name?</option>
+                      </select>
+                      <KeyIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <label htmlFor="securityAnswer" className="block text-sm font-medium text-gray-700 mb-2">Security Answer</label>
+                    <div className="relative">
+                      <input
+                        id="securityAnswer"
+                        name="securityAnswer"
+                        value={form.securityAnswer}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        required
+                        className={`w-full px-4 py-3 pl-10 border ${formErrors.securityAnswer ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm`}
+                        placeholder="Enter security answer"
+                      />
+                      <KeyIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                    {formErrors.securityAnswer && <p className="mt-1 text-sm text-red-600">{formErrors.securityAnswer}</p>}
                   </motion.div>
                 </div>
 
@@ -1675,7 +1830,7 @@ export default function AmbulanceDashboard() {
                   ) : (
                     <>
                       <PlusCircleIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                      Register Ambulance Driver
+                      Register Admin
                     </>
                   )}
                 </motion.button>

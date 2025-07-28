@@ -32,6 +32,11 @@ function Login() {
       if (!userInfo) {
         throw new Error('Invalid token format');
       }
+      
+      // Debug logging to check the role
+      console.log('User info from token:', userInfo);
+      console.log('User role:', userInfo.role);
+      console.log('Role type:', typeof userInfo.role);
       if (userInfo.role === 'FIRE_DRIVER') {
         setPendingFireDriverUser(userInfo);
         setFireDriverChoice('pending');
@@ -39,20 +44,45 @@ function Login() {
         return;
       }
       // Navigate based on user role
-      switch (userInfo.role) {
-        case 'USER':
+      console.log('About to navigate based on role:', userInfo.role);
+      // Normalize the role to handle case sensitivity
+      const normalizedRole = userInfo.role?.toUpperCase();
+      console.log('Normalized role:', normalizedRole);
+      switch (normalizedRole) {
+        case 'USER': // default requester
+          console.log('Navigating to user-dashboard');
           navigate('/user-dashboard');
           break;
-        case 'AMBULANCE_DRIVER':
-          navigate('/ambulance-driver'); // Direct to driver dashboard
+        case 'AMBULANCE_DRIVER': // Assigned to ambulance
+          console.log('Navigating to ambulance-driver');
+          navigate('/ambulance-driver');
+          break;
+        case 'FIRE_DRIVER': // Handles fire truck
+          console.log('Navigating to fire-truck-driver');
+          navigate('/fire-truck-driver');
           break;
         case 'POLICE_OFFICER':
+          console.log('Navigating to police-dashboard');
           navigate('/police-dashboard');
           break;
+        case 'FIRE_STATION_ADMIN':
+          console.log('Navigating to fire-admin-dashboard');
+          navigate('/fire-admin-dashboard');
+          break;
         case 'ADMIN':
+          console.log('Navigating to admin-dashboard');
           navigate('/admin-dashboard');
           break;
+        case 'AMBULANCE_ADMIN':
+          console.log('Navigating to ambulance-admin-dashboard');
+          navigate('/ambulance-admin-dashboard');
+          break;
+        case 'POLICE_STATION_ADMIN':
+          console.log('Navigating to police-admin-dashboard');
+          navigate('/police-admin-dashboard');
+          break;
         default:
+          console.log('No matching role found, navigating to user-dashboard. Role was:', userInfo.role);
           navigate('/user-dashboard');
       }
     } catch (err) {

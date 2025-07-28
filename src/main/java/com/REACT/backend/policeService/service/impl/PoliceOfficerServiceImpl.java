@@ -13,6 +13,7 @@ import com.REACT.backend.policeService.service.PoliceOfficerService;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.PoliceOfficer;
 import com.REACT.backend.users.repository.PoliceOfficerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,7 @@ public class PoliceOfficerServiceImpl implements PoliceOfficerService {
                 .build();
     }
 
+    @Transactional
     @Override
     public CompleteAssignmentResponseDto completeAssignment(Object officerObject) {
         log.info("Starting police assignment completion process");
@@ -119,19 +121,22 @@ public class PoliceOfficerServiceImpl implements PoliceOfficerService {
 
         log.info("fetching current police officers details");
         AppUser user = loggedUserUtil.getCurrentUser();
+        PoliceOfficer policeOfficer = policeOfficerRepository.findByPoliceOfficer(user)
+                .orElseThrow(() -> new RuntimeException("Police Officer details not found"));
 //
         return PoliceOfficerResponseDto.builder()
-                .policeId(policeOfficerRepository.findByPoliceOfficer(user).getId())
+                .policeId(policeOfficer.getId())
                 .email(user.getUserEmail())
                 .govId(user.getGovernmentId())
                 .name(user.getUserFullName())
-                .policeStationName(policeOfficerRepository.findByPoliceOfficer(user).getPoliceStation().getStationName())
+                .policeStationName(policeOfficer.getPoliceStation().getStationName())
                 .phoneNumber(user.getPhoneNumber())
                 .userId(user.getUserId())
                 .build();
 
     }
 
+    @Transactional
     private void checkAndCompleteBooking(EmergencyRequestEntity requestEntity) {
         log.info("Checking if all services for request {} have completed", requestEntity.getId());
 

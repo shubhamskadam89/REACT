@@ -16,6 +16,7 @@ import com.REACT.backend.common.util.LoggedUserUtil;
 import com.REACT.backend.users.AppUser;
 import com.REACT.backend.users.model.AmbulanceDriver;
 import com.REACT.backend.fireService.model.FireTruckStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -112,7 +113,7 @@ public class AmbulanceDriverServiceImpl {
 
     }
 
-
+    @Transactional
     public CompleteAssignmentResponseDto completeBooking(Object obj){
         log.info("Started with COMPLETE status update process");
         if (!(obj instanceof AmbulanceDriver driver)) {
@@ -123,8 +124,7 @@ public class AmbulanceDriverServiceImpl {
         AppUser appUser = driver.getDriver();
         AmbulanceEntity ambulance = ambulanceRepository.findByDriver(appUser);
         log.info("found ambulance {}",ambulance.getId());
-        ambulance.setStatus(AmbulanceStatus.AVAILABLE);
-        ambulanceRepository.save(ambulance);
+
         List<EmergencyRequestEntity> entity = emergencyRequestRepo.findByAssignedAmbulance(ambulance);
 
         EmergencyRequestEntity thisEntity = entity.stream()
@@ -134,6 +134,8 @@ public class AmbulanceDriverServiceImpl {
                     log.warn("No EN_ROUTE request found for ambulance ID {}", ambulance.getId());
                     return new ResourceNotFoundException("No active EN_ROUTE booking found for completion.");
                 });
+        ambulance.setStatus(AmbulanceStatus.AVAILABLE);
+        ambulanceRepository.save(ambulance);
 
         log.info("Completed the assignment {}",thisEntity.getId());
         if (thisEntity.getAmbulanceStatusMap() == null) {
@@ -154,6 +156,7 @@ public class AmbulanceDriverServiceImpl {
                 .build();
     }
 
+    @Transactional
     private void checkAndCompleteBooking(EmergencyRequestEntity requestEntity) {
         log.info("Checking if all services for request {} have completed", requestEntity.getId());
 

@@ -19,7 +19,8 @@ import {
   TrophyIcon,
   ClipboardDocumentListIcon,
   MagnifyingGlassIcon,
-  PencilIcon
+  PencilIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
 function decodeJWT(token) {
@@ -104,6 +105,8 @@ export default function FireDashboard() {
     email: 'sarah.johnson@fire.gov',
     phone: '+1 (555) 987-6543'
   });
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState(null);
   const [reportTruckHistory, setReportTruckHistory] = useState([]);
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
@@ -114,6 +117,33 @@ export default function FireDashboard() {
   const [dashboardStats, setDashboardStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const [statsError, setStatsError] = useState('');
+
+  // New state for fire station and truck management
+  const [fireStations, setFireStations] = useState([]);
+  const [fireStationsLoading, setFireStationsLoading] = useState(false);
+  const [fireStationsError, setFireStationsError] = useState('');
+  const [selectedDriverId, setSelectedDriverId] = useState('');
+  const [selectedDriverProfile, setSelectedDriverProfile] = useState(null);
+  const [selectedDriverLoading, setSelectedDriverLoading] = useState(false);
+  const [selectedDriverError, setSelectedDriverError] = useState('');
+  const [selectedTruckId, setSelectedTruckId] = useState('');
+  const [selectedTruckDetails, setSelectedTruckDetails] = useState(null);
+  const [selectedTruckLoading, setSelectedTruckLoading] = useState(false);
+  const [selectedTruckError, setSelectedTruckError] = useState('');
+  const [allTrucks, setAllTrucks] = useState([]);
+  const [allTrucksLoading, setAllTrucksLoading] = useState(false);
+  const [allTrucksError, setAllTrucksError] = useState('');
+  const [selectedStationId, setSelectedStationId] = useState('');
+  const [selectedStationDetails, setSelectedStationDetails] = useState(null);
+  const [selectedStationLoading, setSelectedStationLoading] = useState(false);
+  const [selectedStationError, setSelectedStationError] = useState('');
+  const [locationUpdateForm, setLocationUpdateForm] = useState({
+    truckId: '',
+    latitude: '',
+    longitude: ''
+  });
+  const [locationUpdateLoading, setLocationUpdateLoading] = useState(false);
+  const [locationUpdateMessage, setLocationUpdateMessage] = useState('');
 
   const [stationFormErrors, setStationFormErrors] = useState({
     name: '',
@@ -180,6 +210,13 @@ export default function FireDashboard() {
         })
         .catch(err => setFireBookingsError(err.message || 'Could not load fire bookings.'))
         .finally(() => setFireBookingsLoading(false));
+    }
+  }, [activeTab]);
+
+  // Fetch profile data when profile tab is active
+  useEffect(() => {
+    if (activeTab === 'profile') {
+      fetchFireTruckDriverProfile();
     }
   }, [activeTab]);
 
@@ -575,6 +612,284 @@ export default function FireDashboard() {
     }
   };
 
+  // Function to fetch all fire stations
+  const fetchAllFireStations = async () => {
+    setFireStationsLoading(true);
+    setFireStationsError('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setFireStationsError('Authentication token not found. Please login again.');
+      setFireStationsLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:8080/fire/admin/getAll/fireStation', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setFireStations(result);
+        if (result.length === 0) {
+          setFireStationsError('No fire stations found.');
+        }
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setFireStationsError(data.message || 'Failed to fetch fire stations.');
+      }
+    } catch (err) {
+      setFireStationsError('Network error. Please try again.');
+    } finally {
+      setFireStationsLoading(false);
+    }
+  };
+
+  // Function to fetch driver profile by ID
+  const fetchDriverProfile = async () => {
+    if (!selectedDriverId.toString().trim()) {
+      alert('Please enter a driver ID.');
+      return;
+    }
+    if (isNaN(Number(selectedDriverId)) || Number(selectedDriverId) <= 0) {
+      alert('Driver ID must be a positive number.');
+      return;
+    }
+
+    setSelectedDriverLoading(true);
+    setSelectedDriverError('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setSelectedDriverError('Authentication token not found. Please login again.');
+      setSelectedDriverLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:8080/fire/admin/profile/${selectedDriverId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setSelectedDriverProfile(result);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSelectedDriverError(data.message || 'Failed to fetch driver profile.');
+        setSelectedDriverProfile(null);
+      }
+    } catch (err) {
+      setSelectedDriverError('Network error. Please try again.');
+      setSelectedDriverProfile(null);
+    } finally {
+      setSelectedDriverLoading(false);
+    }
+  };
+
+  const fetchFireTruckDriverProfile = async () => {
+    setProfileLoading(true);
+    setProfileError(null);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8080/fire/truck-driver/v1/me', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProfileData({
+          name: data.name || 'Firefighter Name',
+          badge: data.badgeNumber || 'N/A',
+          rank: data.rank || 'N/A',
+          department: data.department || 'N/A',
+          experience: data.experience || 'N/A',
+          email: data.email || 'N/A',
+          phone: data.phone || 'N/A'
+        });
+      } else {
+        const errorData = await response.json();
+        setProfileError(errorData.message || 'Failed to fetch profile data');
+        toast.error('Failed to fetch profile data');
+      }
+    } catch (error) {
+      console.error('Error fetching fire truck driver profile:', error);
+      setProfileError('Failed to fetch profile data');
+      toast.error('Failed to fetch profile data');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  // Function to fetch truck details by ID
+  const fetchTruckDetails = async () => {
+    if (!selectedTruckId.toString().trim()) {
+      alert('Please enter a truck ID.');
+      return;
+    }
+    if (isNaN(Number(selectedTruckId)) || Number(selectedTruckId) <= 0) {
+      alert('Truck ID must be a positive number.');
+      return;
+    }
+
+    setSelectedTruckLoading(true);
+    setSelectedTruckError('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setSelectedTruckError('Authentication token not found. Please login again.');
+      setSelectedTruckLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:8080/fire/admin/get/truck/${selectedTruckId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setSelectedTruckDetails(result);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSelectedTruckError(data.message || 'Failed to fetch truck details.');
+        setSelectedTruckDetails(null);
+      }
+    } catch (err) {
+      setSelectedTruckError('Network error. Please try again.');
+      setSelectedTruckDetails(null);
+    } finally {
+      setSelectedTruckLoading(false);
+    }
+  };
+
+  // Function to fetch all trucks
+  const fetchAllTrucks = async () => {
+    setAllTrucksLoading(true);
+    setAllTrucksError('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setAllTrucksError('Authentication token not found. Please login again.');
+      setAllTrucksLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:8080/fire/admin/get/all-trucks', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setAllTrucks(result);
+        if (result.length === 0) {
+          setAllTrucksError('No trucks found.');
+        }
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setAllTrucksError(data.message || 'Failed to fetch trucks.');
+      }
+    } catch (err) {
+      setAllTrucksError('Network error. Please try again.');
+    } finally {
+      setAllTrucksLoading(false);
+    }
+  };
+
+  // Function to fetch fire station by ID
+  const fetchFireStationById = async () => {
+    if (!selectedStationId.toString().trim()) {
+      alert('Please enter a station ID.');
+      return;
+    }
+    if (isNaN(Number(selectedStationId)) || Number(selectedStationId) <= 0) {
+      alert('Station ID must be a positive number.');
+      return;
+    }
+
+    setSelectedStationLoading(true);
+    setSelectedStationError('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setSelectedStationError('Authentication token not found. Please login again.');
+      setSelectedStationLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:8080/fire/admin/get/fire-station/${selectedStationId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setSelectedStationDetails(result);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSelectedStationError(data.message || 'Failed to fetch fire station details.');
+        setSelectedStationDetails(null);
+      }
+    } catch (err) {
+      setSelectedStationError('Network error. Please try again.');
+      setSelectedStationDetails(null);
+    } finally {
+      setSelectedStationLoading(false);
+    }
+  };
+
+  // Function to update truck location (admin)
+  const handleLocationUpdate = async (e) => {
+    e.preventDefault();
+    if (!locationUpdateForm.truckId || !locationUpdateForm.latitude || !locationUpdateForm.longitude) {
+      setLocationUpdateMessage('Please fill all fields.');
+      return;
+    }
+
+    setLocationUpdateLoading(true);
+    setLocationUpdateMessage('');
+    const token = localStorage.getItem('jwt') || localStorage.getItem('token');
+    if (!token) {
+      setLocationUpdateMessage('Authentication token not found. Please login again.');
+      setLocationUpdateLoading(false);
+      return;
+    }
+    try {
+      const requestBody = {
+        ambulanceId: parseInt(locationUpdateForm.truckId),
+        latitude: parseFloat(locationUpdateForm.latitude),
+        longitude: parseFloat(locationUpdateForm.longitude)
+      };
+
+      const res = await fetch('http://localhost:8080/fire/admin/update-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (res.ok) {
+        setLocationUpdateMessage('Location updated successfully!');
+        setLocationUpdateForm({ truckId: '', latitude: '', longitude: '' });
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setLocationUpdateMessage(data.message || 'Failed to update location.');
+      }
+    } catch (err) {
+      setLocationUpdateMessage('Network error. Please try again.');
+    } finally {
+      setLocationUpdateLoading(false);
+    }
+  };
+
   const QuickActionCard = ({ title, description, icon, onClick, bgColorClass }) => (
     <motion.div
       onClick={onClick}
@@ -680,6 +995,7 @@ export default function FireDashboard() {
               { id: 'overview', name: 'Overview', icon: <ChartBarIcon className="h-5 w-5" /> },
               { id: 'stations', name: 'Stations', icon: <BuildingOfficeIcon className="h-5 w-5" /> },
               { id: 'trucks', name: 'Trucks', icon: <TruckIcon className="h-5 w-5" /> },
+              { id: 'management', name: 'Management', icon: <MagnifyingGlassIcon className="h-5 w-5" /> },
               { id: 'emergencies', name: 'Emergencies', icon: <FireIcon className="h-5 w-5" /> },
               { id: 'reports', name: 'Reports', icon: <DocumentTextIcon className="h-5 w-5" /> },
               { id: 'ranking', name: 'Rankings', icon: <TrophyIcon className="h-5 w-5" /> },
@@ -1302,6 +1618,617 @@ export default function FireDashboard() {
           </motion.div>
         )}
 
+        {activeTab === 'management' && (
+          <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
+            <SectionHeader icon={<MagnifyingGlassIcon />} title="Fire Station & Truck Management" />
+            
+            {/* All Fire Stations Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">All Fire Stations</h3>
+                <motion.button
+                  onClick={fetchAllFireStations}
+                  disabled={fireStationsLoading}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 shadow-lg transition-all duration-200 flex items-center gap-2 font-medium"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {fireStationsLoading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      <BuildingOfficeIcon className="h-5 w-5" /> Fetch All Fire Stations
+                    </>
+                  )}
+                </motion.button>
+              </div>
+              
+              {fireStationsError && (
+                <motion.div
+                  className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <InformationCircleIcon className="h-5 w-5" /> {fireStationsError}
+                </motion.div>
+              )}
+              
+              {fireStations && Array.isArray(fireStations) && fireStations.length > 0 ? (
+                <motion.div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm" variants={itemVariants}>
+                  <motion.table className="w-full text-sm bg-white" initial="hidden" animate="visible" variants={containerVariants}>
+                    <motion.thead className="bg-gradient-to-r from-blue-500 to-blue-600" variants={itemVariants}>
+                      <tr>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Station ID</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Station Name</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Latitude</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Longitude</th>
+                      </tr>
+                    </motion.thead>
+                    <motion.tbody className="bg-white">
+                      {fireStations.map((station, idx) => (
+                        <motion.tr 
+                          key={idx} 
+                          className="hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors duration-200" 
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.01 }}
+                        >
+                          <td className="px-4 py-3 font-bold text-blue-600">{station.id}</td>
+                          <td className="px-4 py-3 font-medium text-gray-800">{station.fireStationName || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-700">{station.latitude}</td>
+                          <td className="px-4 py-3 text-gray-700">{station.longitude}</td>
+                        </motion.tr>
+                      ))}
+                    </motion.tbody>
+                  </motion.table>
+                </motion.div>
+              ) : (
+                !fireStationsLoading && (
+                  <motion.div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300" variants={itemVariants}>
+                    <BuildingOfficeIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium">No fire stations data available</p>
+                    <p className="text-gray-500 text-sm mt-1">Click the button above to fetch fire station information</p>
+                  </motion.div>
+                )
+              )}
+            </motion.div>
+
+            {/* All Trucks Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">All Fire Trucks</h3>
+                <motion.button
+                  onClick={fetchAllTrucks}
+                  disabled={allTrucksLoading}
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 disabled:opacity-50 shadow-lg transition-all duration-200 flex items-center gap-2 font-medium"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {allTrucksLoading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      <TruckIcon className="h-5 w-5" /> Fetch All Trucks
+                    </>
+                  )}
+                </motion.button>
+              </div>
+              
+              {allTrucksError && (
+                <motion.div
+                  className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <InformationCircleIcon className="h-5 w-5" /> {allTrucksError}
+                </motion.div>
+              )}
+              
+              {allTrucks && Array.isArray(allTrucks) && allTrucks.length > 0 ? (
+                <motion.div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm" variants={itemVariants}>
+                  <motion.table className="w-full text-sm bg-white" initial="hidden" animate="visible" variants={containerVariants}>
+                    <motion.thead className="bg-gradient-to-r from-green-500 to-green-600" variants={itemVariants}>
+                      <tr>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Truck ID</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Registration</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Driver Name</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Phone Number</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Status</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Last Updated</th>
+                        <th className="px-4 py-3 border-b text-left text-white font-semibold">Location</th>
+                      </tr>
+                    </motion.thead>
+                    <motion.tbody className="bg-white">
+                      {allTrucks.map((truck, idx) => (
+                        <motion.tr 
+                          key={idx} 
+                          className="hover:bg-green-50 border-b border-gray-100 last:border-b-0 transition-colors duration-200" 
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.01 }}
+                        >
+                          <td className="px-4 py-3 font-bold text-green-600">{truck.id}</td>
+                          <td className="px-4 py-3 font-mono text-sm bg-gray-100 px-2 py-1 rounded text-gray-700">{truck.registrationNumber || 'N/A'}</td>
+                          <td className="px-4 py-3 font-medium text-gray-800">{truck.driverName}</td>
+                          <td className="px-4 py-3 text-gray-700">
+                            <a href={`tel:${truck.driverPhoneNumber}`} className="hover:text-green-600 transition-colors">{truck.driverPhoneNumber}</a>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              truck.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 border border-green-200' :
+                              truck.status === 'EN_ROUTE' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                              'bg-gray-100 text-gray-800 border border-gray-200'
+                            }`}>
+                              {truck.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-500">{new Date(truck.lastUpdated).toLocaleString()}</td>
+                          <td className="px-4 py-3 text-xs text-gray-500">{truck.latitude?.toFixed(4)}, {truck.longitude?.toFixed(4)}</td>
+                        </motion.tr>
+                      ))}
+                    </motion.tbody>
+                  </motion.table>
+                </motion.div>
+              ) : (
+                !allTrucksLoading && (
+                  <motion.div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300" variants={itemVariants}>
+                    <TruckIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium">No trucks data available</p>
+                    <p className="text-gray-500 text-sm mt-1">Click the button above to fetch truck information</p>
+                  </motion.div>
+                )
+              )}
+            </motion.div>
+
+            {/* Driver Profile Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Driver Profile</h3>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Enter Driver ID"
+                    value={selectedDriverId}
+                    onChange={e => setSelectedDriverId(e.target.value)}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 w-48 transition-all duration-200 shadow-sm hover:shadow-md"
+                  />
+                  <motion.button
+                    onClick={fetchDriverProfile}
+                    disabled={selectedDriverLoading}
+                    className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 disabled:opacity-50 shadow-lg transition-all duration-200 flex items-center gap-2 font-medium"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {selectedDriverLoading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <UserIcon className="h-5 w-5" /> Fetch Driver Profile
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </div>
+              
+              {selectedDriverError && (
+                <motion.div
+                  className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <InformationCircleIcon className="h-5 w-5" /> {selectedDriverError}
+                </motion.div>
+              )}
+              
+              {selectedDriverProfile ? (
+                <motion.div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-8 rounded-xl border border-purple-200 shadow-lg" variants={itemVariants}>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                      <UserIcon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold text-gray-800">{selectedDriverProfile.name}</h4>
+                      <p className="text-purple-600 font-medium">Role: {selectedDriverProfile.role}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <svg className="h-5 w-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          <span className="text-gray-600 font-medium">Email Address</span>
+                        </div>
+                        <a href={`mailto:${selectedDriverProfile.email}`} className="text-purple-600 hover:text-purple-800 font-semibold hover:underline transition-colors">
+                          {selectedDriverProfile.email}
+                        </a>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <PhoneIcon className="h-5 w-5 text-purple-500" />
+                          <span className="text-gray-600 font-medium">Phone Number</span>
+                        </div>
+                        <a href={`tel:${selectedDriverProfile.mobile}`} className="text-purple-600 hover:text-purple-800 font-semibold hover:underline transition-colors">
+                          {selectedDriverProfile.mobile}
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <ShieldCheckIcon className="h-5 w-5 text-purple-500" />
+                          <span className="text-gray-600 font-medium">License Number</span>
+                        </div>
+                        <p className="font-mono text-sm bg-gray-100 px-3 py-2 rounded text-gray-700 font-semibold">
+                          {selectedDriverProfile.licenseNumber}
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <TruckIcon className="h-5 w-5 text-purple-500" />
+                          <span className="text-gray-600 font-medium">Vehicle Registration</span>
+                        </div>
+                        <p className="font-mono text-sm bg-gray-100 px-3 py-2 rounded text-gray-700 font-semibold">
+                          {selectedDriverProfile.ambulanceRegNumber}
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <ShieldCheckIcon className="h-5 w-5 text-purple-500" />
+                          <span className="text-gray-600 font-medium">Government ID</span>
+                        </div>
+                        <p className="font-mono text-sm bg-gray-100 px-3 py-2 rounded text-gray-700 font-semibold">
+                          {selectedDriverProfile.govId}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-purple-200">
+                    <div className="flex items-center justify-center gap-2 text-purple-600">
+                      <ShieldCheckIcon className="h-5 w-5" />
+                      <span className="font-medium">Verified Fire Driver</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                !selectedDriverLoading && (
+                  <motion.div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300" variants={itemVariants}>
+                    <UserIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium">No driver profile available</p>
+                    <p className="text-gray-500 text-sm mt-1">Enter a driver ID and click the button above to fetch</p>
+                  </motion.div>
+                )
+              )}
+            </motion.div>
+
+            {/* Truck Details Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Truck Details</h3>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Enter Truck ID"
+                    value={selectedTruckId}
+                    onChange={e => setSelectedTruckId(e.target.value)}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 w-48 transition-all duration-200 shadow-sm hover:shadow-md"
+                  />
+                  <motion.button
+                    onClick={fetchTruckDetails}
+                    disabled={selectedTruckLoading}
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 shadow-lg transition-all duration-200 flex items-center gap-2 font-medium"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {selectedTruckLoading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <TruckIcon className="h-5 w-5" /> Fetch Truck Details
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </div>
+              
+              {selectedTruckError && (
+                <motion.div
+                  className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <InformationCircleIcon className="h-5 w-5" /> {selectedTruckError}
+                </motion.div>
+              )}
+              
+              {selectedTruckDetails ? (
+                <motion.div className="bg-gradient-to-br from-orange-50 to-red-50 p-8 rounded-xl border border-orange-200 shadow-lg" variants={itemVariants}>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                      <TruckIcon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold text-gray-800">Truck #{selectedTruckDetails.id}</h4>
+                      <p className="text-orange-600 font-medium">Registration: {selectedTruckDetails.registrationNumber || 'N/A'}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <UserIcon className="h-5 w-5 text-orange-500" />
+                          <span className="text-gray-600 font-medium">Driver Name</span>
+                        </div>
+                        <p className="text-gray-800 font-semibold">{selectedTruckDetails.driverName}</p>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <PhoneIcon className="h-5 w-5 text-orange-500" />
+                          <span className="text-gray-600 font-medium">Driver Phone</span>
+                        </div>
+                        <a href={`tel:${selectedTruckDetails.driverPhoneNumber}`} className="text-orange-600 hover:text-orange-800 font-semibold hover:underline transition-colors">
+                          {selectedTruckDetails.driverPhoneNumber}
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <ShieldCheckIcon className="h-5 w-5 text-orange-500" />
+                          <span className="text-gray-600 font-medium">Status</span>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          selectedTruckDetails.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 border border-green-200' :
+                          selectedTruckDetails.status === 'EN_ROUTE' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                          'bg-gray-100 text-gray-800 border border-gray-200'
+                        }`}>
+                          {selectedTruckDetails.status}
+                        </span>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <MapPinIcon className="h-5 w-5 text-orange-500" />
+                          <span className="text-gray-600 font-medium">Current Location</span>
+                        </div>
+                        <p className="text-gray-700 font-semibold">
+                          {selectedTruckDetails.latitude?.toFixed(4)}, {selectedTruckDetails.longitude?.toFixed(4)}
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
+                        <div className="flex items-center gap-3 mb-2">
+                          <ClockIcon className="h-5 w-5 text-orange-500" />
+                          <span className="text-gray-600 font-medium">Last Updated</span>
+                        </div>
+                        <p className="text-gray-700 font-semibold">
+                          {new Date(selectedTruckDetails.lastUpdated).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                !selectedTruckLoading && (
+                  <motion.div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300" variants={itemVariants}>
+                    <TruckIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium">No truck details available</p>
+                    <p className="text-gray-500 text-sm mt-1">Enter a truck ID and click the button above to fetch</p>
+                  </motion.div>
+                )
+              )}
+            </motion.div>
+
+            {/* Fire Station by ID Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Fire Station Details</h3>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Enter Station ID"
+                    value={selectedStationId}
+                    onChange={e => setSelectedStationId(e.target.value)}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-48 transition-all duration-200 shadow-sm hover:shadow-md"
+                  />
+                  <motion.button
+                    onClick={fetchFireStationById}
+                    disabled={selectedStationLoading}
+                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-indigo-700 disabled:opacity-50 shadow-lg transition-all duration-200 flex items-center gap-2 font-medium"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {selectedStationLoading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <BuildingOfficeIcon className="h-5 w-5" /> Fetch Station Details
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </div>
+              
+              {selectedStationError && (
+                <motion.div
+                  className="mb-4 p-3 rounded-md bg-red-100 text-red-700 border border-red-200 flex items-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <InformationCircleIcon className="h-5 w-5" /> {selectedStationError}
+                </motion.div>
+              )}
+              
+              {selectedStationDetails ? (
+                <motion.div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-xl border border-indigo-200 shadow-lg" variants={itemVariants}>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                      <BuildingOfficeIcon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold text-gray-800">{selectedStationDetails.fireStationName}</h4>
+                      <p className="text-indigo-600 font-medium">Station ID: {selectedStationDetails.id}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white p-6 rounded-lg shadow-sm border border-indigo-100">
+                      <div className="flex items-center gap-3 mb-4">
+                        <MapPinIcon className="h-6 w-6 text-indigo-500" />
+                        <span className="text-gray-700 font-medium text-lg">Location Coordinates</span>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Latitude:</span>
+                          <span className="font-semibold text-gray-800">{selectedStationDetails.latitude}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Longitude:</span>
+                          <span className="font-semibold text-gray-800">{selectedStationDetails.longitude}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-6 rounded-lg shadow-sm border border-indigo-100">
+                      <div className="flex items-center gap-3 mb-4">
+                        <ShieldCheckIcon className="h-6 w-6 text-indigo-500" />
+                        <span className="text-gray-700 font-medium text-lg">Station Information</span>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Station ID:</span>
+                          <span className="font-semibold text-indigo-600">{selectedStationDetails.id}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Status:</span>
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Active</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                !selectedStationLoading && (
+                  <motion.div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300" variants={itemVariants}>
+                    <BuildingOfficeIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium">No station details available</p>
+                    <p className="text-gray-500 text-sm mt-1">Enter a station ID and click the button above to fetch</p>
+                  </motion.div>
+                )
+              )}
+            </motion.div>
+
+            {/* Location Update Section */}
+            <motion.div className="bg-white rounded-lg shadow-md p-6" variants={itemVariants}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Update Truck Location (Admin)</h3>
+              </div>
+              
+              <form onSubmit={handleLocationUpdate} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Truck ID</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={locationUpdateForm.truckId}
+                      onChange={e => setLocationUpdateForm(prev => ({ ...prev, truckId: e.target.value }))}
+                      placeholder="Enter truck ID"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={locationUpdateForm.latitude}
+                      onChange={e => setLocationUpdateForm(prev => ({ ...prev, latitude: e.target.value }))}
+                      placeholder="e.g., 18.5204"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={locationUpdateForm.longitude}
+                      onChange={e => setLocationUpdateForm(prev => ({ ...prev, longitude: e.target.value }))}
+                      placeholder="e.g., 73.8567"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                    />
+                  </div>
+                </div>
+                
+                <motion.button
+                  type="submit"
+                  disabled={locationUpdateLoading}
+                  className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg hover:from-red-600 hover:to-red-700 disabled:opacity-50 shadow-lg transition-all duration-200 font-medium"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {locationUpdateLoading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg>
+                      Updating Location...
+                    </>
+                  ) : (
+                    <>
+                      <MapPinIcon className="h-5 w-5 inline mr-2" />
+                      Update Truck Location
+                    </>
+                  )}
+                </motion.button>
+              </form>
+              
+              {locationUpdateMessage && (
+                <motion.div
+                  className={`mt-4 p-3 rounded-md flex items-center gap-2 ${
+                    locationUpdateMessage.includes('success')
+                      ? 'bg-green-100 text-green-700 border border-green-200'
+                      : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {locationUpdateMessage.includes('success') ? <CheckCircleIcon className="h-5 w-5" /> : <XCircleIcon className="h-5 w-5" />}
+                  {locationUpdateMessage}
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+
         {activeTab === 'emergencies' && (
           <motion.div className="bg-white rounded-lg shadow-md p-6" variants={containerVariants} initial="hidden" animate="visible">
             <SectionHeader icon={<FireIcon />} title="Fire Emergency Requests" />
@@ -1556,6 +2483,20 @@ export default function FireDashboard() {
                 </button>
               </div>
 
+              {profileLoading && (
+                <motion.div className="text-center py-8 text-blue-600 font-semibold" variants={itemVariants}>
+                  Loading profile data...
+                </motion.div>
+              )}
+
+              {profileError && (
+                <motion.div className="text-center py-8 text-red-600 font-semibold" variants={itemVariants}>
+                  {profileError}
+                </motion.div>
+              )}
+
+              {!profileLoading && !profileError && (
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Profile Information */}
                 <motion.div variants={itemVariants}>
@@ -1638,6 +2579,7 @@ export default function FireDashboard() {
                   </div>
                 </motion.div>
               </div>
+              )}
 
               {/* Recent Achievements */}
               <motion.div className="mt-10" variants={itemVariants}>

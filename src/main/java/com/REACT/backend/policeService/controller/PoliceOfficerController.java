@@ -51,6 +51,7 @@ public class PoliceOfficerController {
      * @return List of assignment history
      */
     @GetMapping("/assignment-history")
+
     public ResponseEntity<?> getAssignmentHistory() {
         log.info("Assignment history request received from police officer");
         Object officer = loggedUserUtil.getCurrentLoggedUserDetails();
